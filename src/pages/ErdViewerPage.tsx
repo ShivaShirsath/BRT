@@ -39,11 +39,25 @@ export function ErdViewerPage(props: Props) {
           <h3>Tables ({dbfFiles.length})</h3>
           <input className="dbf-search" placeholder="Search table..." value={tableSearch} onChange={(e) => setTableSearch(e.target.value)} />
           <div className="dbf-files-list">
-            {dbfFiles.filter((t) => t.table.toLowerCase().includes(tableSearch.toLowerCase())).map((t) => (
-              <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
-                {t.table}
-              </button>
-            ))}
+            {dbfFiles
+              .filter((t) => t.table.toLowerCase().includes(tableSearch.toLowerCase()))
+              .sort((a, b) => b.recordCount - a.recordCount)
+              .map((t) => (
+                <button
+                  key={t.table}
+                  type="button"
+                  className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"}
+                  onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between'
+                  }}
+                >
+                  <span>{t.table}</span>
+                  <span style={{ fontWeight: 'bold' }}>{t.recordCount > 0 ? t.recordCount : ''}</span>
+                </button>
+              ))}
           </div>
         </aside>
         <div className="dbf-details">

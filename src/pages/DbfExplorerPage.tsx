@@ -30,7 +30,7 @@ export function DbfExplorerPage(props: Props) {
 
   const filteredFiles = dbfFiles.filter((t) =>
     t.table.toLowerCase().includes(tableSearch.toLowerCase()),
-  );
+  ).sort((a, b) => b.recordCount - a.recordCount);
 
   return (
     <section className="window-section full-height">
@@ -42,8 +42,14 @@ export function DbfExplorerPage(props: Props) {
           <input className="dbf-search" placeholder="Search table..." value={tableSearch} onChange={(e) => setTableSearch(e.target.value)} />
           <div className="dbf-files-list">
             {filteredFiles.map((t) => (
-              <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
-                {t.table} ({t.recordCount})
+              <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }} style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-between'
+              }}>
+                <span>{t.table}</span><span style={{
+                  fontWeight: 'bold'
+                }}>{t.recordCount > 0 ? t.recordCount : ''}</span>
               </button>
             ))}
           </div>
