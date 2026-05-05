@@ -313,6 +313,14 @@ th {
   margin: 0 0 10px;
 }
 
+.dbf-search {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 8px 10px;
+  margin-bottom: 8px;
+}
+
 .dbf-file {
   width: 100%;
   text-align: left;
@@ -329,6 +337,90 @@ th {
   border-color: #2563eb;
   color: #1d4ed8;
   font-weight: 700;
+}
+
+.link-btn {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  color: #2563eb;
+  text-decoration: underline;
+  cursor: pointer;
+  font: inherit;
+}
+
+.erd-graph {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.erd-center {
+  display: inline-block;
+  background: #1d4ed8;
+  color: #fff;
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.erd-related-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.erd-related-node {
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  background: #fff;
+  text-align: left;
+  padding: 8px 10px;
+  cursor: pointer;
+  display: grid;
+  gap: 2px;
+}
+
+.erd-related-node span {
+  font-weight: 600;
+  color: #0f172a;
+}
+
+.erd-related-node small {
+  color: #2563eb;
+}
+
+.active-rel-row {
+  background: #eff6ff;
+}
+
+.link-inspector {
+  margin-top: 14px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  background: #f8fafc;
+}
+
+.link-inspector h3 {
+  margin: 0 0 8px;
+}
+
+.link-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.link-columns h4 {
+  margin: 0 0 8px;
+}
+
+.active-col-row {
+  background: #dbeafe;
 }
 
 .dbf-details {
@@ -388,6 +480,14 @@ th {
   }
 
   .dbf-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .erd-related-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .link-columns {
     grid-template-columns: 1fr;
   }
 }

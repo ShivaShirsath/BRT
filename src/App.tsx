@@ -1,7 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import seed from "./data/wmarket_seed.json";
-import liveDb from "./data/wmarket_live_db.json";
 import "./App.css";
 
 type AppView =
@@ -15,11 +14,45 @@ type AppView =
   | "account-ledger"
   | "reports"
   | "dbf-explorer"
+  | "erd-viewer"
   | "settings";
 
 type AppStage = "login" | "firm-selection" | "app";
-
 type NavItem = { key: AppView; label: string };
+
+type DbfFileSummary = {
+  table: string;
+  recordCount: number;
+  fieldCount: number;
+};
+
+type DbfField = {
+  name: string;
+  type: string;
+  size: number;
+};
+
+type DbfRelation = {
+  key: string;
+  targetTable: string;
+  targetKey: string;
+  relationType: string;
+};
+
+type DbfTableResponse = {
+  source: string;
+  table: string;
+  recordCount: number;
+  fieldCount: number;
+  fields: DbfField[];
+  relations: DbfRelation[];
+  page: number;
+  pageSize: number;
+  totalPages: number;
+  rows: Record<string, unknown>[];
+};
+
+const DBF_API_BASE = import.meta.env.VITE_DBF_API_BASE ?? "http://127.0.0.1:4001/api/dbf";
 
 const NAV_ITEMS: NavItem[] = [
   { key: "dashboard", label: "Dashboard" },
@@ -32,6 +65,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: "account-ledger", label: "Account Ledger" },
   { key: "reports", label: "Reports" },
   { key: "dbf-explorer", label: "DBF Explorer" },
+  { key: "erd-viewer", label: "ERD Viewer" },
   { key: "settings", label: "Settings" },
 ];
 
@@ -108,11 +142,17 @@ function SimpleTable({ title, headers, rows }: { title: string; headers: string[
 
 function AppShell({ onLogout }: { onLogout: () => void }) {
   const [activeView, setActiveView] = useState<AppView>("dashboard");
-  const [selectedTableName, setSelectedTableName] = useState<string>(
-    liveDb.tables[0]?.table ?? "",
-  );
+
+  const [dbfFiles, setDbfFiles] = useState<DbfFileSummary[]>([]);
+  const [dbfSource, setDbfSource] = useState("");
+  const [selectedTableName, setSelectedTableName] = useState("");
+  const [tableSearch, setTableSearch] = useState("");
   const [dbfPage, setDbfPage] = useState(1);
-  const dbfPageSize = 50;
+  const [dbfTable, setDbfTable] = useState<DbfTableResponse | null>(null);
+  const [tableMetaCache, setTableMetaCache] = useState<Record<string, DbfTableResponse>>({});
+  const [selectedRelation, setSelectedRelation] = useState<DbfRelation | null>(null);
+  const [dbfLoading, setDbfLoading] = useState(false);
+  const [dbfError, setDbfError] = useState("");
 
   const customers = seed.customers;
   const suppliers = seed.suppliers;
@@ -120,14 +160,87 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
   const ledger = seed.ledger;
   const stock = seed.stock;
 
+  useEffect(() => {
+    let active = true;
+    (async () => {
+      try {
+        const res = await fetch(`${DBF_API_BASE}/files`);
+        if (!res.ok) throw new Error(`Failed to load DBF files (${res.status})`);
+        const data = (await res.json()) as { source: string; tables: DbfFileSummary[] };
+        if (!active) return;
+        setDbfFiles(data.tables);
+        setDbfSource(data.source);
+        if (data.tables.length) {
+          setSelectedTableName(data.tables[0].table);
+        }
+      } catch (err) {
+        if (!active) return;
+        setDbfError(err instanceof Error ? err.message : String(err));
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!selectedTableName) return;
+    let active = true;
+    setDbfLoading(true);
+    setDbfError("");
+
+    (async () => {
+      try {
+        const url = `${DBF_API_BASE}/table?name=${encodeURIComponent(selectedTableName)}&page=${dbfPage}&pageSize=50`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error(`Failed to load table (${res.status})`);
+        const data = (await res.json()) as DbfTableResponse;
+        if (!active) return;
+        setDbfTable(data);
+        setTableMetaCache((prev) => ({ ...prev, [data.table]: data }));
+        setSelectedRelation(data.relations[0] ?? null);
+      } catch (err) {
+        if (!active) return;
+        setDbfError(err instanceof Error ? err.message : String(err));
+      } finally {
+        if (active) setDbfLoading(false);
+      }
+    })();
+
+    return () => {
+      active = false;
+    };
+  }, [selectedTableName, dbfPage]);
+
+  useEffect(() => {
+    if (!selectedRelation?.targetTable) return;
+    if (tableMetaCache[selectedRelation.targetTable]) return;
+
+    let active = true;
+    (async () => {
+      try {
+        const url = `${DBF_API_BASE}/table?name=${encodeURIComponent(selectedRelation.targetTable)}&page=1&pageSize=1`;
+        const res = await fetch(url);
+        if (!res.ok) return;
+        const data = (await res.json()) as DbfTableResponse;
+        if (!active) return;
+        setTableMetaCache((prev) => ({ ...prev, [data.table]: data }));
+      } catch {
+        // ignore metadata prefetch errors
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [selectedRelation, tableMetaCache]);
+
   const totals = useMemo(() => {
     const inwardQty = cont.reduce((s, r) => s + Number(r.RECEIVED ?? 0), 0);
-    const outwardQty = cont.reduce((s, r) => s + Number(r.SEND ?? 0), 0);
     const netValue = ledger.reduce((s, r) => {
       const amt = Number(r.AMOUNT ?? 0);
       return s + (r.CD === "C" ? amt : -amt);
     }, 0);
-    return { inwardQty, outwardQty, netValue };
+    return { inwardQty, netValue };
   }, [cont, ledger]);
 
   const content = useMemo(() => {
@@ -144,87 +257,20 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
             title="Recent Cont Entries (Imported)"
             headers={["Date", "Sr No", "ACNO", "Received", "Send", "Sale Amt"]}
             rows={cont.slice(0, 20).map((r) => [
-              String(r.DATE ?? ""),
-              String(r.SRNO ?? ""),
-              String(r.ACNO ?? ""),
-              String(r.RECEIVED ?? ""),
-              String(r.SEND ?? ""),
-              money(r.SALE_AMT),
+              String(r.DATE ?? ""), String(r.SRNO ?? ""), String(r.ACNO ?? ""), String(r.RECEIVED ?? ""), String(r.SEND ?? ""), money(r.SALE_AMT),
             ])}
           />
         </>
       );
     }
 
-    if (activeView === "customers") {
-      return (
-        <SimpleTable
-          title="Customer Master (Imported CUST2601)"
-          headers={["ACNO", "NAME", "CITY", "PHONE", "CLBALANCE"]}
-          rows={customers.map((r) => [String(r.ACNO ?? ""), String(r.NAME ?? ""), String(r.CITY ?? ""), String(r.PHONE ?? ""), money(r.CLBALANCE)])}
-        />
-      );
-    }
-
-    if (activeView === "suppliers") {
-      return (
-        <SimpleTable
-          title="Supplier Master (Imported SUPP2601)"
-          headers={["ACNO", "NAME", "CITY", "PHONE", "CLBALANCE"]}
-          rows={suppliers.map((r) => [String(r.ACNO ?? ""), String(r.NAME ?? ""), String(r.CITY ?? ""), String(r.PHONE ?? ""), money(r.CLBALANCE)])}
-        />
-      );
-    }
-
-    if (activeView === "inward") {
-      return (
-        <SimpleTable
-          title="Inward Snapshot (from CONT2601)"
-          headers={["Date", "Challan", "Vehicle", "Received", "ACNO"]}
-          rows={cont.slice(0, 60).map((r) => [String(r.DATE ?? ""), String(r.CHALLAN_NO ?? ""), String(r.VEH_NO ?? ""), String(r.RECEIVED ?? ""), String(r.ACNO ?? "")])}
-        />
-      );
-    }
-
-    if (activeView === "outward") {
-      return (
-        <SimpleTable
-          title="Outward Snapshot (from CONT2601)"
-          headers={["Date", "Sr No", "ACNO", "Send", "Sale Amt"]}
-          rows={cont.slice(0, 60).map((r) => [String(r.DATE ?? ""), String(r.SRNO ?? ""), String(r.ACNO ?? ""), String(r.SEND ?? ""), money(r.SALE_AMT)])}
-        />
-      );
-    }
-
-    if (activeView === "challans") {
-      return (
-        <SimpleTable
-          title="Challan Flow (from CONT2601)"
-          headers={["Challan", "Date", "ACNO", "Received", "Send", "Vehicle"]}
-          rows={cont.slice(0, 80).map((r) => [String(r.CHALLAN_NO ?? ""), String(r.DATE ?? ""), String(r.ACNO ?? ""), String(r.RECEIVED ?? ""), String(r.SEND ?? ""), String(r.VEH_NO ?? "")])}
-        />
-      );
-    }
-
-    if (activeView === "stock-ledger") {
-      return (
-        <SimpleTable
-          title="Stock Ledger (Imported STOK2601)"
-          headers={["Item Code", "Item Name", "Recd Qty", "Sale Qty", "Bal Qty", "Eff Value"]}
-          rows={stock.slice(0, 120).map((r) => [String(r.RECD_ITEM ?? ""), String(r.RECD_NAME ?? ""), String(r.RECD_QTY ?? ""), String(r.SALE_QTY ?? ""), String(r.BAL_QTY ?? ""), money(r.EFF_VAL)])}
-        />
-      );
-    }
-
-    if (activeView === "account-ledger") {
-      return (
-        <SimpleTable
-          title="Account Ledger (Imported GL2601)"
-          headers={["Date", "ACNO", "Description", "CD", "Amount", "Module", "Doc"]}
-          rows={ledger.slice(0, 120).map((r) => [String(r.DATE ?? ""), String(r.ACNO ?? ""), String(r.DESC ?? ""), String(r.CD ?? ""), money(r.AMOUNT), String(r.MODULE ?? ""), String(r.DOC_NO ?? "")])}
-        />
-      );
-    }
+    if (activeView === "customers") return <SimpleTable title="Customer Master (Imported CUST2601)" headers={["ACNO", "NAME", "CITY", "PHONE", "CLBALANCE"]} rows={customers.map((r) => [String(r.ACNO ?? ""), String(r.NAME ?? ""), String(r.CITY ?? ""), String(r.PHONE ?? ""), money(r.CLBALANCE)])} />;
+    if (activeView === "suppliers") return <SimpleTable title="Supplier Master (Imported SUPP2601)" headers={["ACNO", "NAME", "CITY", "PHONE", "CLBALANCE"]} rows={suppliers.map((r) => [String(r.ACNO ?? ""), String(r.NAME ?? ""), String(r.CITY ?? ""), String(r.PHONE ?? ""), money(r.CLBALANCE)])} />;
+    if (activeView === "inward") return <SimpleTable title="Inward Snapshot (from CONT2601)" headers={["Date", "Challan", "Vehicle", "Received", "ACNO"]} rows={cont.slice(0, 60).map((r) => [String(r.DATE ?? ""), String(r.CHALLAN_NO ?? ""), String(r.VEH_NO ?? ""), String(r.RECEIVED ?? ""), String(r.ACNO ?? "")])} />;
+    if (activeView === "outward") return <SimpleTable title="Outward Snapshot (from CONT2601)" headers={["Date", "Sr No", "ACNO", "Send", "Sale Amt"]} rows={cont.slice(0, 60).map((r) => [String(r.DATE ?? ""), String(r.SRNO ?? ""), String(r.ACNO ?? ""), String(r.SEND ?? ""), money(r.SALE_AMT)])} />;
+    if (activeView === "challans") return <SimpleTable title="Challan Flow (from CONT2601)" headers={["Challan", "Date", "ACNO", "Received", "Send", "Vehicle"]} rows={cont.slice(0, 80).map((r) => [String(r.CHALLAN_NO ?? ""), String(r.DATE ?? ""), String(r.ACNO ?? ""), String(r.RECEIVED ?? ""), String(r.SEND ?? ""), String(r.VEH_NO ?? "")])} />;
+    if (activeView === "stock-ledger") return <SimpleTable title="Stock Ledger (Imported STOK2601)" headers={["Item Code", "Item Name", "Recd Qty", "Sale Qty", "Bal Qty", "Eff Value"]} rows={stock.slice(0, 120).map((r) => [String(r.RECD_ITEM ?? ""), String(r.RECD_NAME ?? ""), String(r.RECD_QTY ?? ""), String(r.SALE_QTY ?? ""), String(r.BAL_QTY ?? ""), money(r.EFF_VAL)])} />;
+    if (activeView === "account-ledger") return <SimpleTable title="Account Ledger (Imported GL2601)" headers={["Date", "ACNO", "Description", "CD", "Amount", "Module", "Doc"]} rows={ledger.slice(0, 120).map((r) => [String(r.DATE ?? ""), String(r.ACNO ?? ""), String(r.DESC ?? ""), String(r.CD ?? ""), money(r.AMOUNT), String(r.MODULE ?? ""), String(r.DOC_NO ?? "")])} />;
 
     if (activeView === "reports") {
       return (
@@ -237,23 +283,13 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
             <li>Ledger entries: {ledger.length}</li>
             <li>Stock entries: {stock.length}</li>
           </ul>
-          <h3>Live DBF Tables (Direct Read via dbffile)</h3>
+          <h3>Live DBF Catalog (Dynamic)</h3>
           <div className="table-wrap">
             <table>
-              <thead>
-                <tr>
-                  <th>Table</th>
-                  <th>Records</th>
-                  <th>Fields</th>
-                </tr>
-              </thead>
+              <thead><tr><th>Table</th><th>Records</th><th>Fields</th></tr></thead>
               <tbody>
-                {liveDb.tables.map((t) => (
-                  <tr key={t.table}>
-                    <td>{t.table}</td>
-                    <td>{t.recordCount}</td>
-                    <td>{t.fieldCount}</td>
-                  </tr>
+                {dbfFiles.map((t) => (
+                  <tr key={t.table}><td>{t.table}</td><td>{t.recordCount}</td><td>{t.fieldCount}</td></tr>
                 ))}
               </tbody>
             </table>
@@ -263,26 +299,28 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
     }
 
     if (activeView === "dbf-explorer") {
-      const selected =
-        liveDb.tables.find((t) => t.table === selectedTableName) ??
-        liveDb.tables[0];
-
+      const filteredFiles = dbfFiles.filter((t) =>
+        t.table.toLowerCase().includes(tableSearch.toLowerCase()),
+      );
       return (
         <section className="window-section">
           <h2>DBF Explorer</h2>
-          <p>
-            Source: <code>{liveDb.source}</code>
-          </p>
+          <p>Source: <code>{dbfSource || "Loading..."}</code></p>
+          {dbfError ? <p className="error-text">{dbfError}</p> : null}
           <div className="dbf-layout">
             <aside className="dbf-files">
-              <h3>Files</h3>
-              {liveDb.tables.map((t) => (
+              <h3>Files ({dbfFiles.length})</h3>
+              <input
+                className="dbf-search"
+                placeholder="Search table..."
+                value={tableSearch}
+                onChange={(e) => setTableSearch(e.target.value)}
+              />
+              {filteredFiles.map((t) => (
                 <button
                   key={t.table}
                   type="button"
-                  className={
-                    t.table === selected?.table ? "dbf-file active" : "dbf-file"
-                  }
+                  className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"}
                   onClick={() => {
                     setSelectedTableName(t.table);
                     setDbfPage(1);
@@ -293,123 +331,265 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
               ))}
             </aside>
             <div className="dbf-details">
-              {selected ? (
+              {dbfLoading ? <p>Loading table...</p> : null}
+              {!dbfLoading && dbfTable ? (
                 <>
-                  <h3>{selected.table}</h3>
-                  <p>
-                    Records: {selected.recordCount} | Fields: {selected.fieldCount}
-                  </p>
+                  <h3>{dbfTable.table}</h3>
+                  <p>Records: {dbfTable.recordCount} | Fields: {dbfTable.fieldCount}</p>
+
                   <div className="table-wrap">
                     <table>
-                      <thead>
-                        <tr>
-                          <th>Column</th>
-                          <th>Type</th>
-                          <th>Size</th>
-                        </tr>
-                      </thead>
+                      <thead><tr><th>Column</th><th>Type</th><th>Size</th></tr></thead>
                       <tbody>
-                        {selected.fields.map((f) => (
-                          <tr key={f.name}>
-                            <td>{f.name}</td>
-                            <td>{f.type}</td>
-                            <td>{f.size}</td>
+                        {dbfTable.fields.map((f) => (
+                          <tr key={f.name}><td>{f.name}</td><td>{f.type}</td><td>{f.size}</td></tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <h3>Real Data</h3>
+                  <div className="dbf-pagination">
+                    <button type="button" className="secondary-btn" disabled={dbfTable.page <= 1} onClick={() => setDbfPage((p) => Math.max(1, p - 1))}>Prev</button>
+                    <span>Page {dbfTable.page} / {dbfTable.totalPages}</span>
+                    <button type="button" className="secondary-btn" disabled={dbfTable.page >= dbfTable.totalPages} onClick={() => setDbfPage((p) => Math.min(dbfTable.totalPages, p + 1))}>Next</button>
+                  </div>
+
+                  <div className="table-wrap">
+                    <table>
+                      <thead><tr>{dbfTable.fields.map((f) => <th key={f.name}>{f.name}</th>)}</tr></thead>
+                      <tbody>
+                        {dbfTable.rows.map((row, idx) => (
+                          <tr key={idx}>
+                            {dbfTable.fields.map((f) => (
+                              <td key={f.name}>{String(row[f.name] ?? "")}</td>
+                            ))}
                           </tr>
                         ))}
                       </tbody>
                     </table>
                   </div>
-                  <h3>Real Data</h3>
-                  <div className="dbf-pagination">
-                    <button
-                      type="button"
-                      className="secondary-btn"
-                      disabled={dbfPage === 1}
-                      onClick={() => setDbfPage((p) => Math.max(1, p - 1))}
-                    >
-                      Prev
-                    </button>
-                    <span>
-                      Page {dbfPage} /{" "}
-                      {Math.max(
-                        1,
-                        Math.ceil((selected.rows?.length ?? 0) / dbfPageSize),
-                      )}
-                    </span>
-                    <button
-                      type="button"
-                      className="secondary-btn"
-                      disabled={
-                        dbfPage >=
-                        Math.ceil((selected.rows?.length ?? 0) / dbfPageSize)
-                      }
-                      onClick={() =>
-                        setDbfPage((p) =>
-                          Math.min(
-                            Math.ceil((selected.rows?.length ?? 0) / dbfPageSize),
-                            p + 1,
-                          ),
-                        )
-                      }
-                    >
-                      Next
-                    </button>
-                  </div>
+
+                  <h3>Inferred Relations</h3>
                   <div className="table-wrap">
                     <table>
-                      <thead>
-                        <tr>
-                          {selected.fields.map((f) => (
-                            <th key={f.name}>{f.name}</th>
-                          ))}
-                        </tr>
-                      </thead>
+                      <thead><tr><th>Key</th><th>Target Table</th><th>Target Key</th><th>Type</th></tr></thead>
                       <tbody>
-                        {selected.rows
-                          .slice((dbfPage - 1) * dbfPageSize, dbfPage * dbfPageSize)
-                          .map((row, idx) => (
-                            <tr key={idx}>
-                              {selected.fields.map((f) => (
-                                <td key={f.name}>{String(row[f.name] ?? "")}</td>
-                              ))}
-                            </tr>
-                          ))}
+                        {dbfTable.relations.length ? dbfTable.relations.map((r, idx) => (
+                          <tr key={`${r.key}-${r.targetTable}-${idx}`}>
+                            <td>{r.key}</td>
+                            <td>
+                              <button
+                                type="button"
+                                className="link-btn"
+                                onClick={() => {
+                                  setSelectedTableName(r.targetTable);
+                                  setDbfPage(1);
+                                }}
+                              >
+                                {r.targetTable}
+                              </button>
+                            </td>
+                            <td>{r.targetKey}</td>
+                            <td>{r.relationType}</td>
+                          </tr>
+                        )) : <tr><td colSpan={4}>No inferred relations found.</td></tr>}
                       </tbody>
                     </table>
                   </div>
+                </>
+              ) : null}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    if (activeView === "erd-viewer") {
+      const selected = dbfTable;
+      const graphNodes =
+        selected
+          ? [
+              { table: selected.table, kind: "center" as const },
+              ...selected.relations.map((r) => ({
+                table: r.targetTable,
+                kind: "related" as const,
+                key: r.key,
+              })),
+            ]
+          : [];
+
+      return (
+        <section className="window-section">
+          <h2>ERD Viewer</h2>
+          <p>
+            Pick a table from DBF Explorer list, then inspect direct relations here.
+          </p>
+          <div className="dbf-layout">
+            <aside className="dbf-files">
+              <h3>Tables ({dbfFiles.length})</h3>
+              <input
+                className="dbf-search"
+                placeholder="Search table..."
+                value={tableSearch}
+                onChange={(e) => setTableSearch(e.target.value)}
+              />
+              {dbfFiles
+                .filter((t) =>
+                  t.table.toLowerCase().includes(tableSearch.toLowerCase()),
+                )
+                .map((t) => (
+                  <button
+                    key={t.table}
+                    type="button"
+                    className={
+                      t.table === selectedTableName ? "dbf-file active" : "dbf-file"
+                    }
+                    onClick={() => {
+                      setSelectedTableName(t.table);
+                      setDbfPage(1);
+                    }}
+                  >
+                    {t.table}
+                  </button>
+                ))}
+            </aside>
+            <div className="dbf-details">
+              {dbfLoading ? <p>Loading relations...</p> : null}
+              {!dbfLoading && selected ? (
+                <>
+                  <h3>{selected.table}</h3>
+                  <p>
+                    Direct relations: {selected.relations.length}
+                  </p>
+                  {selectedRelation ? (
+                    <div className="link-inspector">
+                      <h3>Link Inspector</h3>
+                      <p>
+                        {selected.table}.{selectedRelation.key} {"->"}{" "}
+                        {selectedRelation.targetTable}.{selectedRelation.targetKey}
+                      </p>
+                      <div className="link-columns">
+                        <div>
+                          <h4>{selected.table}</h4>
+                          <div className="table-wrap">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Column</th>
+                                  <th>Type</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {selected.fields.map((f) => (
+                                  <tr
+                                    key={f.name}
+                                    className={
+                                      f.name === selectedRelation.key ? "active-col-row" : ""
+                                    }
+                                  >
+                                    <td>{f.name}</td>
+                                    <td>{f.type}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                        <div>
+                          <h4>{selectedRelation.targetTable}</h4>
+                          <div className="table-wrap">
+                            <table>
+                              <thead>
+                                <tr>
+                                  <th>Column</th>
+                                  <th>Type</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {(tableMetaCache[selectedRelation.targetTable]?.fields ?? []).map(
+                                  (f) => (
+                                    <tr
+                                      key={f.name}
+                                      className={
+                                        f.name === selectedRelation.targetKey
+                                          ? "active-col-row"
+                                          : ""
+                                      }
+                                    >
+                                      <td>{f.name}</td>
+                                      <td>{f.type}</td>
+                                    </tr>
+                                  ),
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ) : null}
                   <h3>Inferred Relations</h3>
                   <div className="table-wrap">
                     <table>
                       <thead>
                         <tr>
+                          <th>From Table</th>
                           <th>Key</th>
-                          <th>Target Table</th>
-                          <th>Target Key</th>
+                          <th>To Table</th>
                           <th>Type</th>
                         </tr>
                       </thead>
                       <tbody>
                         {selected.relations.length ? (
                           selected.relations.map((r, idx) => (
-                            <tr key={`${r.key}-${r.targetTable}-${idx}`}>
+                            <tr
+                              key={`${r.targetTable}-${r.key}-${idx}`}
+                              className={
+                                selectedRelation?.targetTable === r.targetTable &&
+                                selectedRelation?.key === r.key
+                                  ? "active-rel-row"
+                                  : ""
+                              }
+                              onClick={() => setSelectedRelation(r)}
+                            >
+                              <td>{selected.table}</td>
                               <td>{r.key}</td>
                               <td>{r.targetTable}</td>
-                              <td>{r.targetKey}</td>
                               <td>{r.relationType}</td>
                             </tr>
                           ))
                         ) : (
                           <tr>
-                            <td colSpan={4}>No inferred relations found.</td>
+                            <td colSpan={4}>No relations found for this table.</td>
                           </tr>
                         )}
                       </tbody>
                     </table>
                   </div>
+                  <div className="erd-graph">
+                    <div className="erd-center">{selected.table}</div>
+                    <div className="erd-related-grid">
+                      {graphNodes
+                        .filter((n) => n.kind === "related")
+                        .map((n, idx) => (
+                          <button
+                            key={`${n.table}-${idx}`}
+                            type="button"
+                            className="erd-related-node"
+                            onClick={() => {
+                              setSelectedTableName(n.table);
+                              setDbfPage(1);
+                            }}
+                          >
+                            <span>{n.table}</span>
+                            <small>{n.key}</small>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
                 </>
-              ) : (
-                <p>No DBF tables loaded.</p>
-              )}
+              ) : null}
             </div>
           </div>
         </section>
@@ -419,10 +599,28 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
     return (
       <section className="window-section">
         <h2>Settings</h2>
-        <p>Data source is imported from local DBF files in `/wmarket/DATA`.</p>
+        <p>DBF Explorer now reads all files dynamically from local DATA via API.</p>
       </section>
     );
-  }, [activeView, cont, customers, dbfPage, ledger, selectedTableName, stock, suppliers, totals.inwardQty, totals.netValue]);
+  }, [
+    activeView,
+    cont,
+    customers,
+    dbfError,
+    dbfFiles,
+    dbfLoading,
+    dbfSource,
+    dbfTable,
+    ledger,
+    selectedRelation,
+    selectedTableName,
+    stock,
+    suppliers,
+    tableMetaCache,
+    tableSearch,
+    totals.inwardQty,
+    totals.netValue,
+  ]);
 
   return (
     <main className="app-layout" aria-label="Aadt solution application">
@@ -450,7 +648,6 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
 
 export default function App() {
   const [stage, setStage] = useState<AppStage>("login");
-
   if (stage === "login") return <LoginWindow onLogin={() => setStage("firm-selection")} />;
   if (stage === "firm-selection") return <FirmSelectionWindow onContinue={() => setStage("app")} />;
   return <AppShell onLogout={() => setStage("login")} />;
