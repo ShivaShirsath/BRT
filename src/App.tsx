@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import seed from "./data/wmarket_seed.json";
+import liveDb from "./data/wmarket_live_db.json";
 import "./App.css";
 
 type AppView =
@@ -229,6 +230,27 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
             <li>Ledger entries: {ledger.length}</li>
             <li>Stock entries: {stock.length}</li>
           </ul>
+          <h3>Live DBF Tables (Direct Read via dbffile)</h3>
+          <div className="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Table</th>
+                  <th>Records</th>
+                  <th>Fields</th>
+                </tr>
+              </thead>
+              <tbody>
+                {liveDb.tables.map((t) => (
+                  <tr key={t.table}>
+                    <td>{t.table}</td>
+                    <td>{t.recordCount}</td>
+                    <td>{t.fieldCount}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </section>
       );
     }
