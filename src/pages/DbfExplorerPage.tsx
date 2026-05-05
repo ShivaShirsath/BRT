@@ -33,40 +33,29 @@ export function DbfExplorerPage(props: Props) {
   );
 
   return (
-    <section className="window-section">
-      <h2>DBF Explorer</h2>
+    <section className="window-section full-height">
       <p>Source: <code>{dbfSource || "Loading..."}</code></p>
       {dbfError ? <p className="error-text">{dbfError}</p> : null}
       <div className="dbf-layout">
         <aside className="dbf-files">
           <h3>Files ({dbfFiles.length})</h3>
           <input className="dbf-search" placeholder="Search table..." value={tableSearch} onChange={(e) => setTableSearch(e.target.value)} />
-          {filteredFiles.map((t) => (
-            <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
-              {t.table}
-            </button>
-          ))}
+          <div className="dbf-files-list">
+            {filteredFiles.map((t) => (
+              <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
+                {t.table} ({t.recordCount})
+              </button>
+            ))}
+          </div>
         </aside>
         <div className="dbf-details">
           {dbfLoading ? <p>Loading table...</p> : null}
           {!dbfLoading && dbfTable ? (
             <>
-              <h3>{dbfTable.table}</h3>
-              <p>Records: {dbfTable.recordCount} | Fields: {dbfTable.fieldCount}</p>
-              <div className="table-wrap">
-                <table>
-                  <thead><tr><th>Column</th><th>Type</th><th>Size</th></tr></thead>
-                  <tbody>{dbfTable.fields.map((f) => <tr key={f.name}><td>{f.name}</td><td>{f.type}</td><td>{f.size}</td></tr>)}</tbody>
-                </table>
-              </div>
+              <h2> {dbfTable.table}</h2>
 
               <h3>Real Data</h3>
-              <div className="dbf-pagination">
-                <button type="button" className="secondary-btn" disabled={dbfTable.page <= 1} onClick={() => setDbfPage((p) => Math.max(1, p - 1))}>Prev</button>
-                <span>Page {dbfTable.page} / {dbfTable.totalPages}</span>
-                <button type="button" className="secondary-btn" disabled={dbfTable.page >= dbfTable.totalPages} onClick={() => setDbfPage((p) => Math.min(dbfTable.totalPages, p + 1))}>Next</button>
-              </div>
-              <div className="table-wrap">
+              <div className="table-wrap scrollable-y">
                 <table>
                   <thead><tr>{dbfTable.fields.map((f) => <th key={f.name}>{f.name}</th>)}</tr></thead>
                   <tbody>
@@ -76,9 +65,28 @@ export function DbfExplorerPage(props: Props) {
                   </tbody>
                 </table>
               </div>
+              {
+                dbfTable.totalPages > 1 && (
+                  <div className="dbf-pagination">
+                    <button type="button" className="secondary-btn" disabled={dbfTable.page <= 1} onClick={() => setDbfPage((p) => Math.max(1, p - 1))}>Prev</button>
+                    <span>Page {dbfTable.page} / {dbfTable.totalPages}</span>
+                    <button type="button" className="secondary-btn" disabled={dbfTable.page >= dbfTable.totalPages} onClick={() => setDbfPage((p) => Math.min(dbfTable.totalPages, p + 1))}>Next</button>
+                  </div>
+                )
+              }
+
+              <p>Records: {dbfTable.recordCount} | Fields: {dbfTable.fieldCount}</p>
+              <div className="dbf-fields-grid">
+                {dbfTable.fields.map((f) => (
+                  <div key={f.name} className="dbf-field-pill" title={`${f.name} - ${f.type} (${f.size})`}>
+                    <span className="field-name">{f.name}</span>
+                    <span className="field-info">{f.type}({f.size})</span>
+                  </div>
+                ))}
+              </div>
 
               <h3>Inferred Relations</h3>
-              <div className="table-wrap">
+              <div className="table-wrap scrollable-y">
                 <table>
                   <thead><tr><th>Key</th><th>Target Table</th><th>Target Key</th><th>Type</th></tr></thead>
                   <tbody>
@@ -97,6 +105,6 @@ export function DbfExplorerPage(props: Props) {
           ) : null}
         </div>
       </div>
-    </section>
+    </section >
   );
 }

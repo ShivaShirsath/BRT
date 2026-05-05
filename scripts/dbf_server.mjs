@@ -6,6 +6,7 @@ import { DBFFile } from 'dbffile';
 const HOST = '127.0.0.1';
 const PORT = 4001;
 const DATA_DIR = '/Users/shiva/Downloads/wmarket/DATA';
+const AUTH_TABLE = '/Users/shiva/Downloads/wmarket/DATA/MAST2601.DBF';
 const RELATION_KEYS = ['ACNO', 'BYTOACNO', 'CHALLAN_NO', 'SRNO', 'DOC_NO', 'RECD_ITEM'];
 
 let catalogCache = null;
@@ -89,6 +90,54 @@ function inferRelationsFor(table, tables) {
 const server = http.createServer(async (req, res) => {
   if (req.method === 'OPTIONS') {
     return sendJson(res, 200, { ok: true });
+  }
+
+  if (req.method === 'POST' && req.url === '/api/auth/login') {
+    try {
+      let body = '';
+      req.on('data', (chunk) => {
+        body += chunk;
+      });
+      req.on('end', async () => {
+        try {
+          const payload = JSON.parse(body || '{}');
+          const userId = String(payload.userId || '').trim().toUpperCase();
+          const password = String(payload.password || '').trim();
+
+          if (!userId) {
+            return sendJson(res, 400, { error: 'userId is required' });
+          }
+
+          const dbf = await DBFFile.open(AUTH_TABLE);
+          const rows = await dbf.readRecords(dbf.recordCount);
+          const candidates = rows.filter((r) => String(r.USERID || '').trim().toUpperCase() === userId);
+
+          if (!candidates.length) {
+            return sendJson(res, 401, { error: 'Invalid user' });
+          }
+
+          // Real DB note: PWD is mostly empty in this dataset, so user existence is the primary check.
+          const hasPwdValue = candidates.some((r) => String(r.PWD || '').trim().length > 0);
+          if (hasPwdValue) {
+            const ok = candidates.some((r) => String(r.PWD || '').trim() === password);
+            if (!ok) {
+              return sendJson(res, 401, { error: 'Invalid password' });
+            }
+          }
+
+          return sendJson(res, 200, {
+            ok: true,
+            userId,
+            authMode: hasPwdValue ? 'user+password' : 'user-only',
+          });
+        } catch (error) {
+          return sendJson(res, 400, { error: 'Invalid request payload', detail: String(error) });
+        }
+      });
+      return;
+    } catch (error) {
+      return sendJson(res, 500, { error: 'Auth error', detail: String(error) });
+    }
   }
 
   if (req.method !== 'GET') {

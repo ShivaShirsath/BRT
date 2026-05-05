@@ -2,7 +2,7 @@ export function SimpleTable({ title, headers, rows }: { title: string; headers: 
   return (
     <section className="window-section">
       <h2>{title}</h2>
-      <div className="table-wrap">
+      <div className="table-wrap scrollable-y">
         <table>
           <thead><tr>{headers.map((h) => <th key={h}>{h}</th>)}</tr></thead>
           <tbody>

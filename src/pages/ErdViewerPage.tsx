@@ -32,18 +32,19 @@ export function ErdViewerPage(props: Props) {
   const selected = dbfTable;
 
   return (
-    <section className="window-section">
-      <h2>ERD Viewer</h2>
+    <section className="window-section full-height">
       <p>Pick a table and inspect links and structure mapping.</p>
       <div className="dbf-layout">
         <aside className="dbf-files">
           <h3>Tables ({dbfFiles.length})</h3>
           <input className="dbf-search" placeholder="Search table..." value={tableSearch} onChange={(e) => setTableSearch(e.target.value)} />
-          {dbfFiles.filter((t) => t.table.toLowerCase().includes(tableSearch.toLowerCase())).map((t) => (
-            <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
-              {t.table}
-            </button>
-          ))}
+          <div className="dbf-files-list">
+            {dbfFiles.filter((t) => t.table.toLowerCase().includes(tableSearch.toLowerCase())).map((t) => (
+              <button key={t.table} type="button" className={t.table === selectedTableName ? "dbf-file active" : "dbf-file"} onClick={() => { setSelectedTableName(t.table); setDbfPage(() => 1); }}>
+                {t.table}
+              </button>
+            ))}
+          </div>
         </aside>
         <div className="dbf-details">
           {dbfLoading ? <p>Loading relations...</p> : null}
@@ -59,7 +60,7 @@ export function ErdViewerPage(props: Props) {
                   <div className="link-columns">
                     <div>
                       <h4>{selected.table}</h4>
-                      <div className="table-wrap">
+                      <div className="table-wrap scrollable-y">
                         <table>
                           <thead><tr><th>Column</th><th>Type</th></tr></thead>
                           <tbody>{selected.fields.map((f) => <tr key={f.name} className={f.name === selectedRelation.key ? "active-col-row" : ""}><td>{f.name}</td><td>{f.type}</td></tr>)}</tbody>
@@ -68,7 +69,7 @@ export function ErdViewerPage(props: Props) {
                     </div>
                     <div>
                       <h4>{selectedRelation.targetTable}</h4>
-                      <div className="table-wrap">
+                      <div className="table-wrap scrollable-y">
                         <table>
                           <thead><tr><th>Column</th><th>Type</th></tr></thead>
                           <tbody>{(tableMetaCache[selectedRelation.targetTable]?.fields ?? []).map((f) => <tr key={f.name} className={f.name === selectedRelation.targetKey ? "active-col-row" : ""}><td>{f.name}</td><td>{f.type}</td></tr>)}</tbody>
@@ -80,7 +81,7 @@ export function ErdViewerPage(props: Props) {
               ) : null}
 
               <h3>Inferred Relations</h3>
-              <div className="table-wrap">
+              <div className="table-wrap scrollable-y">
                 <table>
                   <thead><tr><th>From Table</th><th>Key</th><th>To Table</th><th>Type</th></tr></thead>
                   <tbody>

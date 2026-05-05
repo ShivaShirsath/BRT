@@ -65,7 +65,7 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
             <li>Stock entries: {stock.length}</li>
           </ul>
           <h3>Live DBF Catalog (Dynamic)</h3>
-          <div className="table-wrap">
+          <div className="table-wrap scrollable-y">
             <table>
               <thead><tr><th>Table</th><th>Records</th><th>Fields</th></tr></thead>
               <tbody>{dbf.dbfFiles.map((t) => <tr key={t.table}><td>{t.table}</td><td>{t.recordCount}</td><td>{t.fieldCount}</td></tr>)}</tbody>
