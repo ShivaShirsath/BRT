@@ -7,6 +7,7 @@ const OUT_JSON = '/Users/shiva/Downloads/wmarket/BRT/src/data/wmarket_live_db.js
 const OUT_MD = '/Users/shiva/Downloads/wmarket/BRT/src/data/wmarket_live_db.md';
 
 const TABLE_PATTERNS = [/^CUST\d+\.DBF$/i, /^SUPP\d+\.DBF$/i, /^CONT\d+\.DBF$/i, /^GL\d+\.DBF$/i, /^STOK\d+\.DBF$/i];
+const RELATION_KEYS = ['ACNO', 'BYTOACNO', 'CHALLAN_NO', 'SRNO', 'DOC_NO', 'RECD_ITEM'];
 
 function pickNewestByName(files) {
   const grouped = new Map();
@@ -35,7 +36,7 @@ async function main() {
   for (const file of chosen) {
     const full = path.join(DATA_DIR, file);
     const dbf = await DBFFile.open(full);
-    const records = await dbf.readRecords(120);
+    const records = await dbf.readRecords(dbf.recordCount);
     db.tables.push({
       table: file,
       recordCount: dbf.recordCount,
@@ -45,8 +46,34 @@ async function main() {
         type: f.type,
         size: f.size,
       })),
-      sampleRows: records.slice(0, 20),
+      rows: records,
+      relations: [],
     });
+  }
+
+  const fieldMap = new Map(
+    db.tables.map((t) => [t.table, new Set(t.fields.map((f) => String(f.name).toUpperCase()))]),
+  );
+
+  for (const table of db.tables) {
+    const own = fieldMap.get(table.table) || new Set();
+    const relations = [];
+    for (const key of RELATION_KEYS) {
+      if (!own.has(key)) continue;
+      for (const other of db.tables) {
+        if (other.table === table.table) continue;
+        const otherFields = fieldMap.get(other.table) || new Set();
+        if (otherFields.has(key)) {
+          relations.push({
+            key,
+            targetTable: other.table,
+            targetKey: key,
+            relationType: 'inferred',
+          });
+        }
+      }
+    }
+    table.relations = relations;
   }
 
   await fs.mkdir(path.dirname(OUT_JSON), { recursive: true });
@@ -71,10 +98,21 @@ async function main() {
       lines.push(`| ${f.name} | ${f.type} | ${f.size} |`);
     }
     lines.push('');
-    lines.push('### Sample Rows (first 20)');
+    lines.push('### Rows (all)');
     lines.push('```json');
-    lines.push(JSON.stringify(t.sampleRows, null, 2));
+    lines.push(JSON.stringify(t.rows, null, 2));
     lines.push('```');
+    lines.push('');
+    lines.push('### Inferred Relations');
+    if (!t.relations.length) {
+      lines.push('- none');
+    } else {
+      lines.push('| Key | Target Table | Target Key | Type |');
+      lines.push('|---|---|---|---|');
+      for (const r of t.relations) {
+        lines.push(`| ${r.key} | ${r.targetTable} | ${r.targetKey} | ${r.relationType} |`);
+      }
+    }
     lines.push('');
   }
 

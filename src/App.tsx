@@ -14,6 +14,7 @@ type AppView =
   | "stock-ledger"
   | "account-ledger"
   | "reports"
+  | "dbf-explorer"
   | "settings";
 
 type AppStage = "login" | "firm-selection" | "app";
@@ -30,6 +31,7 @@ const NAV_ITEMS: NavItem[] = [
   { key: "stock-ledger", label: "Stock Ledger" },
   { key: "account-ledger", label: "Account Ledger" },
   { key: "reports", label: "Reports" },
+  { key: "dbf-explorer", label: "DBF Explorer" },
   { key: "settings", label: "Settings" },
 ];
 
@@ -106,6 +108,11 @@ function SimpleTable({ title, headers, rows }: { title: string; headers: string[
 
 function AppShell({ onLogout }: { onLogout: () => void }) {
   const [activeView, setActiveView] = useState<AppView>("dashboard");
+  const [selectedTableName, setSelectedTableName] = useState<string>(
+    liveDb.tables[0]?.table ?? "",
+  );
+  const [dbfPage, setDbfPage] = useState(1);
+  const dbfPageSize = 50;
 
   const customers = seed.customers;
   const suppliers = seed.suppliers;
@@ -255,13 +262,167 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
       );
     }
 
+    if (activeView === "dbf-explorer") {
+      const selected =
+        liveDb.tables.find((t) => t.table === selectedTableName) ??
+        liveDb.tables[0];
+
+      return (
+        <section className="window-section">
+          <h2>DBF Explorer</h2>
+          <p>
+            Source: <code>{liveDb.source}</code>
+          </p>
+          <div className="dbf-layout">
+            <aside className="dbf-files">
+              <h3>Files</h3>
+              {liveDb.tables.map((t) => (
+                <button
+                  key={t.table}
+                  type="button"
+                  className={
+                    t.table === selected?.table ? "dbf-file active" : "dbf-file"
+                  }
+                  onClick={() => {
+                    setSelectedTableName(t.table);
+                    setDbfPage(1);
+                  }}
+                >
+                  {t.table}
+                </button>
+              ))}
+            </aside>
+            <div className="dbf-details">
+              {selected ? (
+                <>
+                  <h3>{selected.table}</h3>
+                  <p>
+                    Records: {selected.recordCount} | Fields: {selected.fieldCount}
+                  </p>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Column</th>
+                          <th>Type</th>
+                          <th>Size</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selected.fields.map((f) => (
+                          <tr key={f.name}>
+                            <td>{f.name}</td>
+                            <td>{f.type}</td>
+                            <td>{f.size}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <h3>Real Data</h3>
+                  <div className="dbf-pagination">
+                    <button
+                      type="button"
+                      className="secondary-btn"
+                      disabled={dbfPage === 1}
+                      onClick={() => setDbfPage((p) => Math.max(1, p - 1))}
+                    >
+                      Prev
+                    </button>
+                    <span>
+                      Page {dbfPage} /{" "}
+                      {Math.max(
+                        1,
+                        Math.ceil((selected.rows?.length ?? 0) / dbfPageSize),
+                      )}
+                    </span>
+                    <button
+                      type="button"
+                      className="secondary-btn"
+                      disabled={
+                        dbfPage >=
+                        Math.ceil((selected.rows?.length ?? 0) / dbfPageSize)
+                      }
+                      onClick={() =>
+                        setDbfPage((p) =>
+                          Math.min(
+                            Math.ceil((selected.rows?.length ?? 0) / dbfPageSize),
+                            p + 1,
+                          ),
+                        )
+                      }
+                    >
+                      Next
+                    </button>
+                  </div>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          {selected.fields.map((f) => (
+                            <th key={f.name}>{f.name}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selected.rows
+                          .slice((dbfPage - 1) * dbfPageSize, dbfPage * dbfPageSize)
+                          .map((row, idx) => (
+                            <tr key={idx}>
+                              {selected.fields.map((f) => (
+                                <td key={f.name}>{String(row[f.name] ?? "")}</td>
+                              ))}
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  </div>
+                  <h3>Inferred Relations</h3>
+                  <div className="table-wrap">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Key</th>
+                          <th>Target Table</th>
+                          <th>Target Key</th>
+                          <th>Type</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {selected.relations.length ? (
+                          selected.relations.map((r, idx) => (
+                            <tr key={`${r.key}-${r.targetTable}-${idx}`}>
+                              <td>{r.key}</td>
+                              <td>{r.targetTable}</td>
+                              <td>{r.targetKey}</td>
+                              <td>{r.relationType}</td>
+                            </tr>
+                          ))
+                        ) : (
+                          <tr>
+                            <td colSpan={4}>No inferred relations found.</td>
+                          </tr>
+                        )}
+                      </tbody>
+                    </table>
+                  </div>
+                </>
+              ) : (
+                <p>No DBF tables loaded.</p>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
     return (
       <section className="window-section">
         <h2>Settings</h2>
         <p>Data source is imported from local DBF files in `/wmarket/DATA`.</p>
       </section>
     );
-  }, [activeView, cont, customers, ledger, stock, suppliers, totals.inwardQty, totals.netValue]);
+  }, [activeView, cont, customers, dbfPage, ledger, selectedTableName, stock, suppliers, totals.inwardQty, totals.netValue]);
 
   return (
     <main className="app-layout" aria-label="Aadt solution application">

@@ -295,6 +295,78 @@ th {
   text-align: left;
 }
 
+.dbf-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 14px;
+}
+
+.dbf-files {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 10px;
+  background: #f9fafb;
+}
+
+.dbf-files h3,
+.dbf-details h3 {
+  margin: 0 0 10px;
+}
+
+.dbf-file {
+  width: 100%;
+  text-align: left;
+  margin-bottom: 6px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.dbf-file.active {
+  background: #eff6ff;
+  border-color: #2563eb;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.dbf-details {
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 12px;
+  background: #ffffff;
+}
+
+.dbf-pagination {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 8px 0 10px;
+}
+
+.dbf-pagination span {
+  font-size: 13px;
+  color: #334155;
+  font-weight: 600;
+}
+
+.secondary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.json-preview {
+  margin: 0;
+  padding: 10px;
+  background: #0b1020;
+  color: #d1e7ff;
+  border-radius: 8px;
+  max-height: 380px;
+  overflow: auto;
+  font-size: 12px;
+}
+
 @media (max-width: 1024px) {
   .app-layout {
     grid-template-columns: 1fr;
@@ -312,6 +384,10 @@ th {
 
   .form-grid,
   .report-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .dbf-layout {
     grid-template-columns: 1fr;
   }
 }
