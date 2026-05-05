@@ -327,10 +327,25 @@
   flex-shrink: 0;
 }
 
-.card-icon.blue { background: #eff6ff; color: #2563eb; }
-.card-icon.purple { background: #f5f3ff; color: #7c3aed; }
-.card-icon.orange { background: #fff7ed; color: #ea580c; }
-.card-icon.green { background: #f0fdf4; color: #16a34a; }
+.card-icon.blue {
+  background: #eff6ff;
+  color: #2563eb;
+}
+
+.card-icon.purple {
+  background: #f5f3ff;
+  color: #7c3aed;
+}
+
+.card-icon.orange {
+  background: #fff7ed;
+  color: #ea580c;
+}
+
+.card-icon.green {
+  background: #f0fdf4;
+  color: #16a34a;
+}
 
 .card-details p {
   margin: 0;
@@ -354,8 +369,13 @@
   color: #94a3b8;
 }
 
-.card-trend.positive { color: #10b981; }
-.card-trend.negative { color: #ef4444; }
+.card-trend.positive {
+  color: #10b981;
+}
+
+.card-trend.negative {
+  color: #ef4444;
+}
 
 .dashboard-grid-main {
   display: grid;
@@ -363,6 +383,8 @@
   gap: 24px;
   align-items: start;
 }
+
+
 
 .window-section-premium {
   background: #ffffff;
@@ -444,8 +466,13 @@
   border-radius: 4px;
 }
 
-.progress.blue { background: #2563eb; }
-.progress.purple { background: #7c3aed; }
+.progress.blue {
+  background: #2563eb;
+}
+
+.progress.purple {
+  background: #7c3aed;
+}
 
 .status-grid {
   display: grid;
@@ -471,11 +498,20 @@
   font-size: 14px;
 }
 
-.text-green { color: #10b981; }
-.text-orange { color: #f59e0b; }
-.font-bold { font-weight: 700; }
+.text-green {
+  color: #10b981;
+}
 
-.window-section {
+.text-orange {
+  color: #f59e0b;
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.window-section,
+.dashboard-content {
   flex: 1;
   min-height: 0;
   display: flex;
@@ -818,7 +854,8 @@ th {
     z-index: 50;
     height: auto;
     padding: 12px;
-    width: 100% !important; /* Reset width on mobile */
+    width: 100% !important;
+    /* Reset width on mobile */
   }
 
   .sidebar-toggle {

@@ -257,8 +257,19 @@ function AppShell({ onLogout }: { onLogout: () => void }) {
 }
 
 export default function App() {
-  const [stage, setStage] = useState<AppStage>("login");
+  const [stage, setStage] = useState<AppStage>(() => {
+    return (localStorage.getItem("brt_app_stage") as AppStage) || "login";
+  });
+
+  useEffect(() => {
+    localStorage.setItem("brt_app_stage", stage);
+  }, [stage]);
+
+  const handleLogout = () => {
+    setStage("login");
+  };
+
   if (stage === "login") return <LoginWindow onLogin={() => setStage("firm-selection")} />;
   if (stage === "firm-selection") return <FirmSelectionWindow onContinue={() => setStage("app")} />;
-  return <AppShell onLogout={() => setStage("login")} />;
+  return <AppShell onLogout={handleLogout} />;
 }

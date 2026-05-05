@@ -1,7 +1,7 @@
-export function SimpleTable({ title, headers, rows }: { title: string; headers: string[]; rows: string[][] }) {
+export function SimpleTable({ title, headers, rows, showTitle = false }: { title: string; headers: string[]; rows: string[][]; showTitle?: boolean }) {
   return (
     <section className="window-section">
-      <h2>{title}</h2>
+      {showTitle && title}
       <div className="table-wrap scrollable-y">
         <table>
           <thead><tr>{headers.map((h) => <th key={h}>{h}</th>)}</tr></thead>
