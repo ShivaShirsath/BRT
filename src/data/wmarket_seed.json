@@ -1,0 +1,7852 @@
+{
+  "customers": [
+    {
+      "ACNO": "004",
+      "NAME": "Customer Accounts",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004001",
+      "NAME": "K",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004002",
+      "NAME": "B",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004003",
+      "NAME": "R",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004004",
+      "NAME": "A",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004005",
+      "NAME": "L",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004006",
+      "NAME": "J",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004006001",
+      "NAME": "JITENDRA T CO.",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 288247.0
+    },
+    {
+      "ACNO": "004007",
+      "NAME": "G",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004043001",
+      "NAME": "Cash Sale Account",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": -0.01
+    },
+    {
+      "ACNO": "004008",
+      "NAME": "REHANBHAI G V C",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004009",
+      "NAME": "F",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004009001",
+      "NAME": "FAZALBHAI G V C",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004043001",
+      "NAME": "CASH SALE ACCOUNT",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": -0.01
+    },
+    {
+      "ACNO": "027",
+      "NAME": "OWN PURCHASE ACCOUNT",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "027001",
+      "NAME": "OWN PURCHASE ACCOUNT - A-Nagar",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "027002",
+      "NAME": "OWN PURCHASE ACCOUNT - LOCAL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004004001",
+      "NAME": "ABRAR",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "004010001",
+      "NAME": "SSB",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 27775.0
+    },
+    {
+      "ACNO": "004004002",
+      "NAME": "ALIM",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 2.0
+    },
+    {
+      "ACNO": "004010002",
+      "NAME": "SATYANARAYAN RAJKOT",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 630.0
+    },
+    {
+      "ACNO": "004001001",
+      "NAME": "KADEER NBS",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 4270.0
+    }
+  ],
+  "suppliers": [
+    {
+      "ACNO": "003",
+      "NAME": "Supplier Accounts",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003001",
+      "NAME": "R",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003002",
+      "NAME": "N",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003003",
+      "NAME": "P",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003004",
+      "NAME": "U",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005",
+      "NAME": "S",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003006",
+      "NAME": "PRASHANT WALUNJ WADI",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003007",
+      "NAME": "M",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003008",
+      "NAME": "L",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005003",
+      "NAME": "SITARAM SHELAKE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": -1.0
+    },
+    {
+      "ACNO": "003009",
+      "NAME": "D",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010",
+      "NAME": "B",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003011",
+      "NAME": "G",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003012",
+      "NAME": "W",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003013",
+      "NAME": "C",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003014",
+      "NAME": "A",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003015",
+      "NAME": "V",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003016",
+      "NAME": "K",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003017",
+      "NAME": "T",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005015",
+      "NAME": "SHIVRAM SHELAKE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003009001",
+      "NAME": "DADASAHEB J KHARDE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003018",
+      "NAME": "H",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005016",
+      "NAME": "SANGAMNER CASH",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "027",
+      "NAME": "OWN PURCHASE ACCOUNT",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "027001",
+      "NAME": "OWN PURCHASE ACCOUNT - A-Nagar",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "027002",
+      "NAME": "OWN PURCHASE ACCOUNT - LOCAL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003016001",
+      "NAME": "KIRAN SAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010001",
+      "NAME": "BHASKAR BINNAR",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010002",
+      "NAME": "B.D.K",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 350.0
+    },
+    {
+      "ACNO": "003003001",
+      "NAME": "PRAVIN SAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003004001",
+      "NAME": "UDDHAV SAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003008001",
+      "NAME": "LAHU BINNAR",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003015001",
+      "NAME": "VIKAS DHERANGE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005017",
+      "NAME": "SAKHAHARI WALUNJ'",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003011001",
+      "NAME": "GOKUL AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003009002",
+      "NAME": "DAGU AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 50.0
+    },
+    {
+      "ACNO": "003010003",
+      "NAME": "BHASKAR SAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003007001",
+      "NAME": "MUNNA RUPAWATE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003007002",
+      "NAME": "MADHUKR RUPAWATE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003014001",
+      "NAME": "AJAY SAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003001001",
+      "NAME": "RAJU DHERANGE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005018",
+      "NAME": "SANTOSH SANGALE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": -396.0
+    },
+    {
+      "ACNO": "003016002",
+      "NAME": "KAILAS SANGALE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005019",
+      "NAME": "SAGAR SHINDE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005020",
+      "NAME": "SANJAY SANGALE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003019001",
+      "NAME": "EKNATH WALUNJ",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003016003",
+      "NAME": "KAILAS DHERANGE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003007003",
+      "NAME": "MADHUKAR WALUNJ",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005021",
+      "NAME": "SAI WALUNJ",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010004",
+      "NAME": "BHAURAO AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003015002",
+      "NAME": "VIKRAM AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010005",
+      "NAME": "BHAUSAHEB AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003002001",
+      "NAME": "NAVNATH AVHAD",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003002002",
+      "NAME": "NAVNATH SANGALE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005022",
+      "NAME": "SAMPAT SHINDE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003012001",
+      "NAME": "WALIBA SHELAKE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003001002",
+      "NAME": "RAIS PATEL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 100.0
+    },
+    {
+      "ACNO": "003005023",
+      "NAME": "SHANTARAM AMLE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003016004",
+      "NAME": "KIRAN GULAWE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003011002",
+      "NAME": "GORAKH BARAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003009003",
+      "NAME": "DHANU KHEMANAR",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003009004",
+      "NAME": "DIPAK GULAWE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005024",
+      "NAME": "SOMA BARAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003003002",
+      "NAME": "POPAT GULAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003002003",
+      "NAME": "NILESH GULAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003015003",
+      "NAME": "VIJAY WAJAGE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003002004",
+      "NAME": "NILESH RAHANE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003009005",
+      "NAME": "DATTU MAJOR",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003001003",
+      "NAME": "RAMDAS SHEJAWAL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005025",
+      "NAME": "SANJAY GULAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005026",
+      "NAME": "SHARAD DARADE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003014002",
+      "NAME": "ANIL GULAVE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003010006",
+      "NAME": "BHASKAR SEJAWAL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005027",
+      "NAME": "SANDEEP PAWASE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 2100.0
+    },
+    {
+      "ACNO": "003005028",
+      "NAME": "SUMIT GHOMAL",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003005029",
+      "NAME": "SACHIN NIBE",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003018001",
+      "NAME": "HIVARGAO CASH",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 0.0
+    },
+    {
+      "ACNO": "003014003",
+      "NAME": "AMROHA BABA",
+      "CITY": "",
+      "PHONE": "",
+      "CLBALANCE": 81.0
+    }
+  ],
+  "stock": [
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 59.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 67.0,
+      "SALE_QTY": 67.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 80.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 68.0,
+      "SALE_QTY": 68.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 80.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 7.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 37.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 107.0,
+      "SALE_QTY": 107.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 135.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 135.0,
+      "SALE_QTY": 135.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 51.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 75.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 116.0,
+      "SALE_QTY": 116.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 160.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 157.0,
+      "SALE_QTY": 157.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 160.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 143.0,
+      "SALE_QTY": 143.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 115.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 11.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "B.D.K",
+      "RECD_QTY": 26.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 67.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 15.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 210.0,
+      "SALE_QTY": 210.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 26.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 3.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 49.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 113.0,
+      "SALE_QTY": 113.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 20.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 68.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 52.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIKAS DHERANGE",
+      "RECD_QTY": 72.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAKHAHARI WALUNJ'",
+      "RECD_QTY": 52.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 206.0,
+      "SALE_QTY": 206.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 19.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 76.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 15.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 153.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 16.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "B.D.K",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 265.0,
+      "SALE_QTY": 265.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 8.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 25.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 7.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 15.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 32.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 15.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "AJAY SAHANE",
+      "RECD_QTY": 33.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "RAJU DHERANGE",
+      "RECD_QTY": 64.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 74.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 25.0,
+      "SALE_QTY": 25.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 266.0,
+      "SALE_QTY": 266.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 163.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR SAHANE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 68.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANTOSH SANGALE",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAGAR SHINDE",
+      "RECD_QTY": 7.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAGAR SHINDE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANJAY SANGALE",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "EKNATH WALUNJ",
+      "RECD_QTY": 21.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "EKNATH WALUNJ",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS DHERANGE",
+      "RECD_QTY": 32.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKAR WALUNJ",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "B.D.K",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 37.0,
+      "SALE_QTY": 37.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 317.0,
+      "SALE_QTY": 317.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 3.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 3.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 18.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 12.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "RAJU DHERANGE",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAI WALUNJ",
+      "RECD_QTY": 30.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 25.0,
+      "SALE_QTY": 25.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 139.0,
+      "SALE_QTY": 139.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 348.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 66.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 3.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 348.0,
+      "SALE_QTY": 348.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 16.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANJAY SANGALE",
+      "RECD_QTY": 32.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 9.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANTOSH SANGALE",
+      "RECD_QTY": 37.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 65.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 23.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 48.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 36.0,
+      "SALE_QTY": 36.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 196.0,
+      "SALE_QTY": 196.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 82.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 34.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "UDDHAV SAHANE",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 26.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MADHUKR RUPAWATE",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "LAHU BINNAR",
+      "RECD_QTY": 11.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 11.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "MUNNA RUPAWATE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "PRAVIN SAHANE",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "AJAY SAHANE",
+      "RECD_QTY": 44.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 31.0,
+      "SALE_QTY": 31.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 192.0,
+      "SALE_QTY": 192.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 125.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 131.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIKRAM AVHAD",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAUSAHEB AVHAD",
+      "RECD_QTY": 52.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH AVHAD",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 42.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH SANGALE",
+      "RECD_QTY": 12.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 333.0,
+      "SALE_QTY": 333.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 96.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANJAY SANGALE",
+      "RECD_QTY": 59.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAGAR SHINDE",
+      "RECD_QTY": 32.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAMPAT SHINDE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANTOSH SANGALE",
+      "RECD_QTY": 33.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 72.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHASKAR BINNAR",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 53.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN SAHANE",
+      "RECD_QTY": 37.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 72.0,
+      "SALE_QTY": 72.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 304.0,
+      "SALE_QTY": 304.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 123.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 118.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 233.0,
+      "SALE_QTY": 233.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIKRAM AVHAD",
+      "RECD_QTY": 26.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAUSAHEB AVHAD",
+      "RECD_QTY": 62.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 105.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 28.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH AVHAD",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH SANGALE",
+      "RECD_QTY": 12.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 205.0,
+      "SALE_QTY": 205.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 99.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 91.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAMPAT SHINDE",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANJAY SANGALE",
+      "RECD_QTY": 46.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANTOSH SANGALE",
+      "RECD_QTY": 36.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 81.0,
+      "SALE_QTY": 81.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 197.0,
+      "SALE_QTY": 197.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 93.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH AVHAD",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 106.0,
+      "SALE_QTY": 106.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 63.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 82.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 39.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 170.0,
+      "SALE_QTY": 170.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIKRAM AVHAD",
+      "RECD_QTY": 30.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAGAR SHINDE",
+      "RECD_QTY": 42.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 78.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANJAY SANGALE",
+      "RECD_QTY": 34.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANTOSH SANGALE",
+      "RECD_QTY": 30.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 198.0,
+      "SALE_QTY": 198.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 53.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 74.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 65.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KAILAS SANGALE",
+      "RECD_QTY": 46.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NAVNATH AVHAD",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 229.0,
+      "SALE_QTY": 229.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 1.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 40.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 58.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "RAIS PATEL",
+      "RECD_QTY": 30.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 114.0,
+      "SALE_QTY": 114.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 99.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DAGU AVHAD",
+      "RECD_QTY": 55.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "BHAURAO AVHAD",
+      "RECD_QTY": 49.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 176.0,
+      "SALE_QTY": 176.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 31.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 27.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 16.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 27.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 17.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 4.0,
+      "SALE_QTY": 4.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 161.0,
+      "SALE_QTY": 161.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GOKUL AVHAD",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 9.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 98.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 127.0,
+      "SALE_QTY": 127.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 53.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "WALIBA SHELAKE",
+      "RECD_QTY": 9.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIKRAM AVHAD",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAMPAT SHINDE",
+      "RECD_QTY": 21.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAMPAT SHINDE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SAGAR SHINDE",
+      "RECD_QTY": 34.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 37.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 25.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 9.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 22.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 35.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 161.0,
+      "SALE_QTY": 161.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 61.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 28.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 61.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 17.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 53.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 11.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 205.0,
+      "SALE_QTY": 205.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 31.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 28.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 97.0,
+      "SALE_QTY": 97.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 50.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 35.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 31.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 27.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 10.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 7.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 30.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 206.0,
+      "SALE_QTY": 206.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 2.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 91.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 13.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 12.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN GULAWE",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "KIRAN GULAWE",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GORAKH BARAVE",
+      "RECD_QTY": 9.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GORAKH BARAVE",
+      "RECD_QTY": 36.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "GORAKH BARAVE",
+      "RECD_QTY": 1.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DHANU KHEMANAR",
+      "RECD_QTY": 68.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 15.0,
+      "SALE_QTY": 15.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 3.0,
+      "SALE_QTY": 3.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 243.0,
+      "SALE_QTY": 243.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 5.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 52.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 14.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SHANTARAM AMLE",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DIPAK GULAWE",
+      "RECD_QTY": 26.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "DIPAK GULAWE",
+      "RECD_QTY": 43.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SOMA BARAVE",
+      "RECD_QTY": 24.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 131.0,
+      "SALE_QTY": 131.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 20.0,
+      "SALE_QTY": 20.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SANGAMNER CASH",
+      "RECD_QTY": 39.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "POPAT GULAVE",
+      "RECD_QTY": 49.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "POPAT GULAVE",
+      "RECD_QTY": 34.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NILESH GULAVE",
+      "RECD_QTY": 6.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "NILESH GULAVE",
+      "RECD_QTY": 21.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "VIJAY WAJAGE",
+      "RECD_QTY": 8.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 78.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "SITARAM SHELAKE",
+      "RECD_QTY": 7.0,
+      "SALE_QTY": 0.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    },
+    {
+      "RECD_ITEM": "001",
+      "RECD_NAME": "",
+      "RECD_QTY": 200.0,
+      "SALE_QTY": 200.0,
+      "BAL_QTY": 0.0,
+      "EFF_VAL": null
+    }
+  ],
+  "cont": [
+    {
+      "DATE": "2025-06-25",
+      "SRNO": "00001",
+      "ACNO": "003005016",
+      "RECEIVED": 59,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 22500.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "SRNO": "00002",
+      "ACNO": "003005016",
+      "RECEIVED": 24,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 22500.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "SRNO": "00005",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 67,
+      "CHALLAN_NO": "00001",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-442"
+    },
+    {
+      "DATE": "2025-06-25",
+      "SRNO": "00006",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00001",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-442"
+    },
+    {
+      "DATE": "2025-06-26",
+      "SRNO": "00007",
+      "ACNO": "003005016",
+      "RECEIVED": 80,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 23200.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-26",
+      "SRNO": "00009",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 68,
+      "CHALLAN_NO": "00002",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-192"
+    },
+    {
+      "DATE": "2025-06-26",
+      "SRNO": "00010",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00002",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-192"
+    },
+    {
+      "DATE": "2025-06-27",
+      "SRNO": "00011",
+      "ACNO": "003005016",
+      "RECEIVED": 80,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 32590.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "SRNO": "00012",
+      "ACNO": "003005016",
+      "RECEIVED": 7,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 32590.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "SRNO": "00013",
+      "ACNO": "003005016",
+      "RECEIVED": 37,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 32590.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "SRNO": "00015",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 107,
+      "CHALLAN_NO": "00003",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-538"
+    },
+    {
+      "DATE": "2025-06-27",
+      "SRNO": "00016",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00003",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-538"
+    },
+    {
+      "DATE": "2025-06-28",
+      "SRNO": "00017",
+      "ACNO": "003005016",
+      "RECEIVED": 135,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 21600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "SRNO": "00019",
+      "ACNO": "004043001",
+      "RECEIVED": 0,
+      "SEND": 125,
+      "CHALLAN_NO": "00004",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "SRNO": "00020",
+      "ACNO": "004043001",
+      "RECEIVED": 0,
+      "SEND": 10,
+      "CHALLAN_NO": "00004",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "SRNO": "00021",
+      "ACNO": "004043001",
+      "RECEIVED": 0,
+      "SEND": 0,
+      "CHALLAN_NO": "00004",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "SRNO": "00022",
+      "ACNO": "003016001",
+      "RECEIVED": 51,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 16350.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "SRNO": "00023",
+      "ACNO": "003016001",
+      "RECEIVED": 6,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 16350.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "SRNO": "00025",
+      "ACNO": "003005016",
+      "RECEIVED": 75,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 24444.75,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "SRNO": "00027",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 116,
+      "CHALLAN_NO": "00005",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-389"
+    },
+    {
+      "DATE": "2025-06-30",
+      "SRNO": "00028",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00005",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-389"
+    },
+    {
+      "DATE": "2025-07-01",
+      "SRNO": "00029",
+      "ACNO": "003005016",
+      "RECEIVED": 160,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 57200.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "SRNO": "00031",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 65,
+      "CHALLAN_NO": "00006",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "SRNO": "00032",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00006",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "SRNO": "00033",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 92,
+      "CHALLAN_NO": "00007",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-643"
+    },
+    {
+      "DATE": "2025-07-01",
+      "SRNO": "00034",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00007",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-643"
+    },
+    {
+      "DATE": "2025-07-02",
+      "SRNO": "00035",
+      "ACNO": "003005016",
+      "RECEIVED": 160,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 77760.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "SRNO": "00036",
+      "ACNO": "003005016",
+      "RECEIVED": 2,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 77760.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "SRNO": "00038",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 143,
+      "CHALLAN_NO": "00008",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-643"
+    },
+    {
+      "DATE": "2025-07-02",
+      "SRNO": "00039",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00008",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-643"
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00040",
+      "ACNO": "003010001",
+      "RECEIVED": 115,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 44520.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00041",
+      "ACNO": "003010001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 44520.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00042",
+      "ACNO": "003010001",
+      "RECEIVED": 11,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 44520.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00044",
+      "ACNO": "003010002",
+      "RECEIVED": 26,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 13000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00046",
+      "ACNO": "003005016",
+      "RECEIVED": 67,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36255.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00047",
+      "ACNO": "003005016",
+      "RECEIVED": 8,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36255.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00048",
+      "ACNO": "003005016",
+      "RECEIVED": 15,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36255.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00049",
+      "ACNO": "003005016",
+      "RECEIVED": 4,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36255.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00050",
+      "ACNO": "003005016",
+      "RECEIVED": 5,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36255.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00052",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 210,
+      "CHALLAN_NO": "00009",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-512"
+    },
+    {
+      "DATE": "2025-07-03",
+      "SRNO": "00053",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00009",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-512"
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00054",
+      "ACNO": "003003001",
+      "RECEIVED": 22,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8690.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00055",
+      "ACNO": "003003001",
+      "RECEIVED": 4,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8690.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00057",
+      "ACNO": "003004001",
+      "RECEIVED": 26,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 10080.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00058",
+      "ACNO": "003004001",
+      "RECEIVED": 3,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 10080.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00060",
+      "ACNO": "003008001",
+      "RECEIVED": 49,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 16730.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00061",
+      "ACNO": "003008001",
+      "RECEIVED": 14,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 16730.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00063",
+      "ACNO": "003005016",
+      "RECEIVED": 5,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11220.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00064",
+      "ACNO": "003005016",
+      "RECEIVED": 24,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11220.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00065",
+      "ACNO": "003005016",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11220.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00067",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 20,
+      "CHALLAN_NO": "00010",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00068",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00010",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00069",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 113,
+      "CHALLAN_NO": "00011",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-711"
+    },
+    {
+      "DATE": "2025-07-04",
+      "SRNO": "00070",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00011",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GG-711"
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00071",
+      "ACNO": "003005016",
+      "RECEIVED": 68,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 46620.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00072",
+      "ACNO": "003005016",
+      "RECEIVED": 52,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 46620.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00073",
+      "ACNO": "003005016",
+      "RECEIVED": 2,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 46620.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00075",
+      "ACNO": "003015001",
+      "RECEIVED": 72,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 32472.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00077",
+      "ACNO": "003005017",
+      "RECEIVED": 52,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 23452.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00079",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 206,
+      "CHALLAN_NO": "00012",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-643"
+    },
+    {
+      "DATE": "2025-07-05",
+      "SRNO": "00080",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00012",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GH-643"
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00081",
+      "ACNO": "003011001",
+      "RECEIVED": 19,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00083",
+      "ACNO": "003009002",
+      "RECEIVED": 4,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 1600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00085",
+      "ACNO": "003016001",
+      "RECEIVED": 76,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 30150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00086",
+      "ACNO": "003016001",
+      "RECEIVED": 15,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 30150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00088",
+      "ACNO": "003010003",
+      "RECEIVED": 153,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 59135.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00089",
+      "ACNO": "003010003",
+      "RECEIVED": 16,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 59135.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00091",
+      "ACNO": "003010002",
+      "RECEIVED": 35,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 17850.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00093",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 8,
+      "CHALLAN_NO": "00013",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00094",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00013",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00095",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 265,
+      "CHALLAN_NO": "00014",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-990"
+    },
+    {
+      "DATE": "2025-07-06",
+      "SRNO": "00096",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00014",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-990"
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00097",
+      "ACNO": "003004001",
+      "RECEIVED": 25,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9885.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00098",
+      "ACNO": "003004001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9885.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00100",
+      "ACNO": "003007001",
+      "RECEIVED": 7,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2770.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00101",
+      "ACNO": "003007001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2770.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00103",
+      "ACNO": "003007002",
+      "RECEIVED": 24,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9340.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00104",
+      "ACNO": "003007002",
+      "RECEIVED": 2,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9340.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00106",
+      "ACNO": "003003001",
+      "RECEIVED": 15,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 6065.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00107",
+      "ACNO": "003003001",
+      "RECEIVED": 4,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 6065.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00109",
+      "ACNO": "003008001",
+      "RECEIVED": 32,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11250.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00110",
+      "ACNO": "003008001",
+      "RECEIVED": 15,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11250.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00112",
+      "ACNO": "003014001",
+      "RECEIVED": 33,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 13233.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00114",
+      "ACNO": "003001001",
+      "RECEIVED": 64,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 33344.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00116",
+      "ACNO": "003005016",
+      "RECEIVED": 22,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 12100.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00118",
+      "ACNO": "003005016",
+      "RECEIVED": 74,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 49394.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00119",
+      "ACNO": "003005016",
+      "RECEIVED": 14,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 49394.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00121",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 266,
+      "CHALLAN_NO": "00015",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "GJ-12-BZ-737"
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00122",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00015",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "GJ-12-BZ-737"
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00123",
+      "ACNO": "004004001",
+      "RECEIVED": null,
+      "SEND": 25,
+      "CHALLAN_NO": "00016",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "SRNO": "00124",
+      "ACNO": "004004001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00016",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00125",
+      "ACNO": "003010003",
+      "RECEIVED": 10,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 72410.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00126",
+      "ACNO": "003010003",
+      "RECEIVED": 163,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 72410.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00127",
+      "ACNO": "003010003",
+      "RECEIVED": 22,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 72410.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00128",
+      "ACNO": "003010003",
+      "RECEIVED": 1,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 72410.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00130",
+      "ACNO": "003016001",
+      "RECEIVED": 68,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 29020.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00131",
+      "ACNO": "003016001",
+      "RECEIVED": 14,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 29020.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00133",
+      "ACNO": "003005018",
+      "RECEIVED": 10,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 4750.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00135",
+      "ACNO": "003016002",
+      "RECEIVED": 4,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 1800.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00137",
+      "ACNO": "003005019",
+      "RECEIVED": 7,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3375.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00138",
+      "ACNO": "003005019",
+      "RECEIVED": 1,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3375.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00140",
+      "ACNO": "003005020",
+      "RECEIVED": 6,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2700.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00142",
+      "ACNO": "003019001",
+      "RECEIVED": 21,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9696.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00143",
+      "ACNO": "003019001",
+      "RECEIVED": 1,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9696.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00145",
+      "ACNO": "003016003",
+      "RECEIVED": 32,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 14432.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00147",
+      "ACNO": "003007003",
+      "RECEIVED": 14,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 6314.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00149",
+      "ACNO": "003010002",
+      "RECEIVED": 35,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 19250.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00151",
+      "ACNO": "004006001",
+      "RECEIVED": 0,
+      "SEND": 317,
+      "CHALLAN_NO": "00017",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-763"
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00152",
+      "ACNO": "004006001",
+      "RECEIVED": 0,
+      "SEND": 0,
+      "CHALLAN_NO": "00017",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-763"
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00153",
+      "ACNO": "004004001",
+      "RECEIVED": 0,
+      "SEND": 37,
+      "CHALLAN_NO": "00018",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "SRNO": "00154",
+      "ACNO": "004004001",
+      "RECEIVED": 0,
+      "SEND": 0,
+      "CHALLAN_NO": "00018",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00155",
+      "ACNO": "003007002",
+      "RECEIVED": 22,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00156",
+      "ACNO": "003007002",
+      "RECEIVED": 3,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00158",
+      "ACNO": "003004001",
+      "RECEIVED": 24,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00159",
+      "ACNO": "003004001",
+      "RECEIVED": 5,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00161",
+      "ACNO": "003003001",
+      "RECEIVED": 8,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3250.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00162",
+      "ACNO": "003003001",
+      "RECEIVED": 3,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3250.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00164",
+      "ACNO": "003008001",
+      "RECEIVED": 18,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7680.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00165",
+      "ACNO": "003008001",
+      "RECEIVED": 14,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7680.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00167",
+      "ACNO": "003007001",
+      "RECEIVED": 12,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00168",
+      "ACNO": "003007001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3150.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00170",
+      "ACNO": "003001001",
+      "RECEIVED": 43,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 22575.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00172",
+      "ACNO": "003005021",
+      "RECEIVED": 30,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 18750.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00174",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 139,
+      "CHALLAN_NO": "00019",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-143"
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00175",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00019",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-143"
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00176",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 25,
+      "CHALLAN_NO": "00020",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "SRNO": "00177",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00020",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "SRNO": "00178",
+      "ACNO": "003005016",
+      "RECEIVED": 348,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 147600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "SRNO": "00179",
+      "ACNO": "003005016",
+      "RECEIVED": 66,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 147600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "SRNO": "00180",
+      "ACNO": "003005016",
+      "RECEIVED": 3,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 147600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "SRNO": "00182",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 348,
+      "CHALLAN_NO": "00021",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-782"
+    },
+    {
+      "DATE": "2025-07-11",
+      "SRNO": "00183",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00021",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-782"
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00184",
+      "ACNO": "003005016",
+      "RECEIVED": 16,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 4320.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00186",
+      "ACNO": "003005020",
+      "RECEIVED": 32,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8640.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00188",
+      "ACNO": "003016002",
+      "RECEIVED": 9,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2430.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00190",
+      "ACNO": "003005018",
+      "RECEIVED": 37,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11100.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00192",
+      "ACNO": "003016001",
+      "RECEIVED": 65,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 15030.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00193",
+      "ACNO": "003016001",
+      "RECEIVED": 23,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 15030.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00195",
+      "ACNO": "003010001",
+      "RECEIVED": 48,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 17370.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00196",
+      "ACNO": "003010001",
+      "RECEIVED": 24,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 17370.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00197",
+      "ACNO": "003010001",
+      "RECEIVED": 13,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 17370.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00198",
+      "ACNO": "003010001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 17370.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00200",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 196,
+      "CHALLAN_NO": "00022",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-367"
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00201",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00022",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GJ-367"
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00202",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 36,
+      "CHALLAN_NO": "00023",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "SRNO": "00203",
+      "ACNO": "004043001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00023",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00204",
+      "ACNO": "003005016",
+      "RECEIVED": 13,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3653.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00206",
+      "ACNO": "003011001",
+      "RECEIVED": 82,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 23042.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00208",
+      "ACNO": "003004001",
+      "RECEIVED": 34,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7580.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00209",
+      "ACNO": "003004001",
+      "RECEIVED": 13,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7580.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00211",
+      "ACNO": "003007002",
+      "RECEIVED": 26,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 5550.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00212",
+      "ACNO": "003007002",
+      "RECEIVED": 5,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 5550.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00214",
+      "ACNO": "003008001",
+      "RECEIVED": 10,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2770.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00215",
+      "ACNO": "003008001",
+      "RECEIVED": 11,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2770.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00217",
+      "ACNO": "003007001",
+      "RECEIVED": 11,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2270.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00218",
+      "ACNO": "003007001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2270.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00220",
+      "ACNO": "003003001",
+      "RECEIVED": 5,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 1000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00222",
+      "ACNO": "003014001",
+      "RECEIVED": 44,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9284.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00224",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 192,
+      "CHALLAN_NO": "00024",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-839"
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00225",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00024",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-839"
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00226",
+      "ACNO": "004004001",
+      "RECEIVED": null,
+      "SEND": 31,
+      "CHALLAN_NO": "00025",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "SRNO": "00227",
+      "ACNO": "004004001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00025",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00228",
+      "ACNO": "003010004",
+      "RECEIVED": 125,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 34375.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00230",
+      "ACNO": "003009002",
+      "RECEIVED": 131,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 36025.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00232",
+      "ACNO": "003015002",
+      "RECEIVED": 35,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9625.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00234",
+      "ACNO": "003010005",
+      "RECEIVED": 52,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 14300.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00236",
+      "ACNO": "003002001",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 111.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00238",
+      "ACNO": "003016002",
+      "RECEIVED": 42,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 11550.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00240",
+      "ACNO": "003002002",
+      "RECEIVED": 12,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 3000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00242",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 333,
+      "CHALLAN_NO": "00026",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-225"
+    },
+    {
+      "DATE": "2025-07-14",
+      "SRNO": "00243",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00026",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-225"
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00244",
+      "ACNO": "003011001",
+      "RECEIVED": 96,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 24000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00246",
+      "ACNO": "003005020",
+      "RECEIVED": 59,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 14750.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00248",
+      "ACNO": "003005019",
+      "RECEIVED": 32,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00250",
+      "ACNO": "003005022",
+      "RECEIVED": 1,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 625.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00252",
+      "ACNO": "003005018",
+      "RECEIVED": 33,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8580.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00254",
+      "ACNO": "003010001",
+      "RECEIVED": 72,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 13990.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00257",
+      "ACNO": "003016001",
+      "RECEIVED": 53,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8740.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00258",
+      "ACNO": "003016001",
+      "RECEIVED": 37,
+      "SEND": 0,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 8740.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00260",
+      "ACNO": "004006001",
+      "RECEIVED": 0,
+      "SEND": 304,
+      "CHALLAN_NO": "00027",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-143"
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00261",
+      "ACNO": "004006001",
+      "RECEIVED": 0,
+      "SEND": 0,
+      "CHALLAN_NO": "00027",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-143"
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00262",
+      "ACNO": "004004001",
+      "RECEIVED": 0,
+      "SEND": 72,
+      "CHALLAN_NO": "00028",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "SRNO": "00263",
+      "ACNO": "004004001",
+      "RECEIVED": 0,
+      "SEND": 0,
+      "CHALLAN_NO": "00028",
+      "SALE_AMT": 0.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00264",
+      "ACNO": "003005016",
+      "RECEIVED": 13,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 5343.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00266",
+      "ACNO": "003005016",
+      "RECEIVED": 20,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 5600.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00268",
+      "ACNO": "003009002",
+      "RECEIVED": 123,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 34490.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00269",
+      "ACNO": "003009002",
+      "RECEIVED": 1,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 34490.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00271",
+      "ACNO": "003010004",
+      "RECEIVED": 118,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 33040.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00273",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 233,
+      "CHALLAN_NO": "00029",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-994"
+    },
+    {
+      "DATE": "2025-07-16",
+      "SRNO": "00274",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00029",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GF-994"
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00275",
+      "ACNO": "003015002",
+      "RECEIVED": 26,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7020.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00277",
+      "ACNO": "003010005",
+      "RECEIVED": 62,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 16740.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00279",
+      "ACNO": "003011001",
+      "RECEIVED": 105,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 28350.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00281",
+      "ACNO": "003016002",
+      "RECEIVED": 28,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 7280.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00283",
+      "ACNO": "003002001",
+      "RECEIVED": 4,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 1000.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00285",
+      "ACNO": "003002002",
+      "RECEIVED": 12,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 2640.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00287",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 205,
+      "CHALLAN_NO": "00030",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-643"
+    },
+    {
+      "DATE": "2025-07-17",
+      "SRNO": "00288",
+      "ACNO": "004006001",
+      "RECEIVED": null,
+      "SEND": 0,
+      "CHALLAN_NO": "00030",
+      "SALE_AMT": 0.0,
+      "VEH_NO": "RJ-19-GK-643"
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00289",
+      "ACNO": "003005016",
+      "RECEIVED": 35,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 9975.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00291",
+      "ACNO": "003009002",
+      "RECEIVED": 99,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 28215.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00293",
+      "ACNO": "003010004",
+      "RECEIVED": 91,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 25935.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00295",
+      "ACNO": "003005022",
+      "RECEIVED": 6,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 1650.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00297",
+      "ACNO": "003005020",
+      "RECEIVED": 46,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 13110.0,
+      "VEH_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "SRNO": "00299",
+      "ACNO": "003005018",
+      "RECEIVED": 36,
+      "SEND": null,
+      "CHALLAN_NO": "",
+      "SALE_AMT": 10800.0,
+      "VEH_NO": ""
+    }
+  ],
+  "ledger": [
+    {
+      "DATE": "2025-04-01",
+      "ACNO": "017",
+      "DESC": "Cash Account",
+      "AMOUNT": 14445.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-04-01",
+      "ACNO": "017",
+      "DESC": "ICICI (A/C - 109505001382)",
+      "AMOUNT": 197000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-04-01",
+      "ACNO": "016001",
+      "DESC": "Opening Balance",
+      "AMOUNT": 10000.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-04-01",
+      "ACNO": "017",
+      "DESC": "SAGAR TARWADE",
+      "AMOUNT": 10000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 28655.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 20150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3700.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 4250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 6660.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 5700.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 2790.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-15",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3960.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-18",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 23490.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-22",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-25",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 920.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-31",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 5400.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-01",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 4360.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-02",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-03",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 2000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-05",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 5062.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-06",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 25465.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-08",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3380.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-09",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 500.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-11",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 8330.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-12",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 800.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-15",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-19",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 17480.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-20",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1800.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-21",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 3020.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-22",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 500.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-23",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 300.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-24",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 2500.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-29",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1260.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-08-30",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-01",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 900.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-03",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 15050.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-04",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 13420.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-06",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 4090.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-07",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 7550.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-08",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1280.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-09-10",
+      "ACNO": "029",
+      "DESC": "As per Challan Summary",
+      "AMOUNT": 1200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00001 Bags:84/84",
+      "AMOUNT": 22500.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "ACNO": "028",
+      "DESC": "Bill no 00001 SANGAMNER CASH",
+      "AMOUNT": 22500.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00001",
+      "AMOUNT": 22500.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-25",
+      "ACNO": "015",
+      "DESC": "Bill no 00001",
+      "AMOUNT": 22500.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-26",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00002 Bags:80/80",
+      "AMOUNT": 23200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-26",
+      "ACNO": "028",
+      "DESC": "Bill no 00002 SANGAMNER CASH",
+      "AMOUNT": 23200.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-26",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00002",
+      "AMOUNT": 23200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-26",
+      "ACNO": "015",
+      "DESC": "Bill no 00002",
+      "AMOUNT": 23200.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00003 Bags:124/124",
+      "AMOUNT": 32590.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "ACNO": "028",
+      "DESC": "Bill no 00003 SANGAMNER CASH",
+      "AMOUNT": 32590.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00003",
+      "AMOUNT": 32590.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-27",
+      "ACNO": "015",
+      "DESC": "Bill no 00003",
+      "AMOUNT": 32590.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00004 Bags:135/135",
+      "AMOUNT": 21600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "ACNO": "028",
+      "DESC": "Bill no 00004 SANGAMNER CASH",
+      "AMOUNT": 21600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00004",
+      "AMOUNT": 21600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-28",
+      "ACNO": "015",
+      "DESC": "Bill no 00004",
+      "AMOUNT": 21600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "003016001",
+      "DESC": "Bill no 00005 Bags:57/57",
+      "AMOUNT": 16350.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "028",
+      "DESC": "Bill no 00005 KIRAN SAHANE",
+      "AMOUNT": 16350.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00005",
+      "AMOUNT": 16350.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "015",
+      "DESC": "Bill no 00005",
+      "AMOUNT": 16350.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00006 Bags:75/75",
+      "AMOUNT": 24445.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "028",
+      "DESC": "Bill no 00006 SANGAMNER CASH",
+      "AMOUNT": 24445.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00006",
+      "AMOUNT": 24445.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-06-30",
+      "ACNO": "015",
+      "DESC": "Bill no 00006",
+      "AMOUNT": 24445.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00007 Bags:160/160",
+      "AMOUNT": 57200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "ACNO": "028",
+      "DESC": "Bill no 00007 SANGAMNER CASH",
+      "AMOUNT": 57200.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00007",
+      "AMOUNT": 57200.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-01",
+      "ACNO": "015",
+      "DESC": "Bill no 00007",
+      "AMOUNT": 57200.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00008 Bags:162/162",
+      "AMOUNT": 77760.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "ACNO": "028",
+      "DESC": "Bill no 00008 SANGAMNER CASH",
+      "AMOUNT": 77760.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00008",
+      "AMOUNT": 77760.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-02",
+      "ACNO": "015",
+      "DESC": "Bill no 00008",
+      "AMOUNT": 77760.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "003010001",
+      "DESC": "Bill no 00009 Bags:127/127",
+      "AMOUNT": 44520.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "028",
+      "DESC": "Bill no 00009 BHASKAR BINNAR",
+      "AMOUNT": 44520.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00009",
+      "AMOUNT": 44520.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "015",
+      "DESC": "Bill no 00009",
+      "AMOUNT": 44520.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "003010002",
+      "DESC": "Bill no 00010 Bags:26/26",
+      "AMOUNT": 13000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "028",
+      "DESC": "Bill no 00010 B.D.K",
+      "AMOUNT": 13000.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00010",
+      "AMOUNT": 13000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "015",
+      "DESC": "Bill no 00010",
+      "AMOUNT": 13000.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00011 Bags:99/99",
+      "AMOUNT": 36255.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "028",
+      "DESC": "Bill no 00011 SANGAMNER CASH",
+      "AMOUNT": 36255.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00011",
+      "AMOUNT": 36255.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-03",
+      "ACNO": "015",
+      "DESC": "Bill no 00011",
+      "AMOUNT": 36255.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "003003001",
+      "DESC": "Bill no 00012 Bags:26/26",
+      "AMOUNT": 8690.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "028",
+      "DESC": "Bill no 00012 PRAVIN SAHANE",
+      "AMOUNT": 8690.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00012",
+      "AMOUNT": 8690.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "015",
+      "DESC": "Bill no 00012",
+      "AMOUNT": 8690.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "003004001",
+      "DESC": "Bill no 00013 Bags:29/29",
+      "AMOUNT": 10080.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "028",
+      "DESC": "Bill no 00013 UDDHAV SAHANE",
+      "AMOUNT": 10080.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00013",
+      "AMOUNT": 10080.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "015",
+      "DESC": "Bill no 00013",
+      "AMOUNT": 10080.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "003008001",
+      "DESC": "Bill no 00014 Bags:63/63",
+      "AMOUNT": 16730.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "028",
+      "DESC": "Bill no 00014 LAHU BINNAR",
+      "AMOUNT": 16730.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00014",
+      "AMOUNT": 16730.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "015",
+      "DESC": "Bill no 00014",
+      "AMOUNT": 16730.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00015 Bags:30/30",
+      "AMOUNT": 11220.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "028",
+      "DESC": "Bill no 00015 SANGAMNER CASH",
+      "AMOUNT": 11220.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00015",
+      "AMOUNT": 11220.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-04",
+      "ACNO": "015",
+      "DESC": "Bill no 00015",
+      "AMOUNT": 11220.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00016 Bags:122/122",
+      "AMOUNT": 46620.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "028",
+      "DESC": "Bill no 00016 SANGAMNER CASH",
+      "AMOUNT": 46620.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00016",
+      "AMOUNT": 46620.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "015",
+      "DESC": "Bill no 00016",
+      "AMOUNT": 46620.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "003015001",
+      "DESC": "Bill no 00017 Bags:72/72",
+      "AMOUNT": 32472.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "028",
+      "DESC": "Bill no 00017 VIKAS DHERANGE",
+      "AMOUNT": 32472.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00017",
+      "AMOUNT": 32472.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "015",
+      "DESC": "Bill no 00017",
+      "AMOUNT": 32472.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "003005017",
+      "DESC": "Bill no 00018 Bags:52/52",
+      "AMOUNT": 23452.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "028",
+      "DESC": "Bill no 00018 SAKHAHARI WALUNJ'",
+      "AMOUNT": 23452.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00018",
+      "AMOUNT": 23452.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-05",
+      "ACNO": "015",
+      "DESC": "Bill no 00018",
+      "AMOUNT": 23452.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "003011001",
+      "DESC": "Bill no 00019 Bags:19/19",
+      "AMOUNT": 7600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "028",
+      "DESC": "Bill no 00019 GOKUL AVHAD",
+      "AMOUNT": 7600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00019",
+      "AMOUNT": 7600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "015",
+      "DESC": "Bill no 00019",
+      "AMOUNT": 7600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "003009002",
+      "DESC": "Bill no 00020 Bags:4/4",
+      "AMOUNT": 1600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "028",
+      "DESC": "Bill no 00020 DAGU AVHAD",
+      "AMOUNT": 1600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00020",
+      "AMOUNT": 1600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "015",
+      "DESC": "Bill no 00020",
+      "AMOUNT": 1600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "003016001",
+      "DESC": "Bill no 00021 Bags:91/91",
+      "AMOUNT": 30150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "028",
+      "DESC": "Bill no 00021 KIRAN SAHANE",
+      "AMOUNT": 30150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00021",
+      "AMOUNT": 30150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "015",
+      "DESC": "Bill no 00021",
+      "AMOUNT": 30150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "003010003",
+      "DESC": "Bill no 00022 Bags:169/169",
+      "AMOUNT": 59135.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "028",
+      "DESC": "Bill no 00022 BHASKAR SAHANE",
+      "AMOUNT": 59135.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00022",
+      "AMOUNT": 59135.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "015",
+      "DESC": "Bill no 00022",
+      "AMOUNT": 59135.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "003010002",
+      "DESC": "Bill no 00023 Bags:35/35",
+      "AMOUNT": 17850.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "028",
+      "DESC": "Bill no 00023 B.D.K",
+      "AMOUNT": 17850.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00023",
+      "AMOUNT": 17850.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-06",
+      "ACNO": "015",
+      "DESC": "Bill no 00023",
+      "AMOUNT": 17850.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003004001",
+      "DESC": "Bill no 00024 Bags:26/26",
+      "AMOUNT": 9885.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00024 UDDHAV SAHANE",
+      "AMOUNT": 9885.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00024",
+      "AMOUNT": 9885.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00024",
+      "AMOUNT": 9885.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003007001",
+      "DESC": "Bill no 00025 Bags:8/8",
+      "AMOUNT": 2770.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00025 MUNNA RUPAWATE",
+      "AMOUNT": 2770.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00025",
+      "AMOUNT": 2770.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00025",
+      "AMOUNT": 2770.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003007002",
+      "DESC": "Bill no 00026 Bags:26/26",
+      "AMOUNT": 9340.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00026 MADHUKR RUPAWATE",
+      "AMOUNT": 9340.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00026",
+      "AMOUNT": 9340.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00026",
+      "AMOUNT": 9340.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003003001",
+      "DESC": "Bill no 00027 Bags:19/19",
+      "AMOUNT": 6065.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00027 PRAVIN SAHANE",
+      "AMOUNT": 6065.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00027",
+      "AMOUNT": 6065.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00027",
+      "AMOUNT": 6065.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003008001",
+      "DESC": "Bill no 00028 Bags:47/47",
+      "AMOUNT": 11250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00028 LAHU BINNAR",
+      "AMOUNT": 11250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00028",
+      "AMOUNT": 11250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00028",
+      "AMOUNT": 11250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003014001",
+      "DESC": "Bill no 00029 Bags:33/33",
+      "AMOUNT": 13233.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00029 AJAY SAHANE",
+      "AMOUNT": 13233.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00029",
+      "AMOUNT": 13233.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00029",
+      "AMOUNT": 13233.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003001001",
+      "DESC": "Bill no 00030 Bags:64/64",
+      "AMOUNT": 33344.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00030 RAJU DHERANGE",
+      "AMOUNT": 33344.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00030",
+      "AMOUNT": 33344.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00030",
+      "AMOUNT": 33344.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00031 Bags:22/22",
+      "AMOUNT": 12100.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00031 SANGAMNER CASH",
+      "AMOUNT": 12100.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00031",
+      "AMOUNT": 12100.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00031",
+      "AMOUNT": 12100.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00032 Bags:88/88",
+      "AMOUNT": 49394.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "028",
+      "DESC": "Bill no 00032 SANGAMNER CASH",
+      "AMOUNT": 49394.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00032",
+      "AMOUNT": 49394.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-07",
+      "ACNO": "015",
+      "DESC": "Bill no 00032",
+      "AMOUNT": 49394.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003010003",
+      "DESC": "Bill no 00033 Bags:196/196",
+      "AMOUNT": 72410.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00033 BHASKAR SAHANE",
+      "AMOUNT": 72410.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00033",
+      "AMOUNT": 72410.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00033",
+      "AMOUNT": 72410.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003016001",
+      "DESC": "Bill no 00034 Bags:82/82",
+      "AMOUNT": 29020.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00034 KIRAN SAHANE",
+      "AMOUNT": 29020.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00034",
+      "AMOUNT": 29020.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00034",
+      "AMOUNT": 29020.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003005018",
+      "DESC": "Bill no 00035 Bags:10/10",
+      "AMOUNT": 4750.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00035 SANTOSH SANGALE",
+      "AMOUNT": 4750.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00035",
+      "AMOUNT": 4750.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00035",
+      "AMOUNT": 4750.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003016002",
+      "DESC": "Bill no 00036 Bags:4/4",
+      "AMOUNT": 1800.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00036 KAILAS SANGALE",
+      "AMOUNT": 1800.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00036",
+      "AMOUNT": 1800.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00036",
+      "AMOUNT": 1800.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003005019",
+      "DESC": "Bill no 00037 Bags:8/8",
+      "AMOUNT": 3375.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00037 SAGAR SHINDE",
+      "AMOUNT": 3375.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00037",
+      "AMOUNT": 3375.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00037",
+      "AMOUNT": 3375.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003005020",
+      "DESC": "Bill no 00038 Bags:6/6",
+      "AMOUNT": 2700.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00038 SANJAY SANGALE",
+      "AMOUNT": 2700.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00038",
+      "AMOUNT": 2700.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00038",
+      "AMOUNT": 2700.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003019001",
+      "DESC": "Bill no 00039 Bags:22/22",
+      "AMOUNT": 9696.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00039 EKNATH WALUNJ",
+      "AMOUNT": 9696.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00039",
+      "AMOUNT": 9696.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00039",
+      "AMOUNT": 9696.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003016003",
+      "DESC": "Bill no 00040 Bags:32/32",
+      "AMOUNT": 14432.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00040 KAILAS DHERANGE",
+      "AMOUNT": 14432.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00040",
+      "AMOUNT": 14432.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00040",
+      "AMOUNT": 14432.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003007003",
+      "DESC": "Bill no 00041 Bags:14/14",
+      "AMOUNT": 6314.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00041 MADHUKAR WALUNJ",
+      "AMOUNT": 6314.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00041",
+      "AMOUNT": 6314.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00041",
+      "AMOUNT": 6314.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "003010002",
+      "DESC": "Bill no 00042 Bags:35/35",
+      "AMOUNT": 19250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "028",
+      "DESC": "Bill no 00042 B.D.K",
+      "AMOUNT": 19250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00042",
+      "AMOUNT": 19250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-09",
+      "ACNO": "015",
+      "DESC": "Bill no 00042",
+      "AMOUNT": 19250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003007002",
+      "DESC": "Bill no 00043 Bags:25/25",
+      "AMOUNT": 8150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00043 MADHUKR RUPAWATE",
+      "AMOUNT": 8150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00043",
+      "AMOUNT": 8150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00043",
+      "AMOUNT": 8150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003004001",
+      "DESC": "Bill no 00044 Bags:29/29",
+      "AMOUNT": 9150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00044 UDDHAV SAHANE",
+      "AMOUNT": 9150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00044",
+      "AMOUNT": 9150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00044",
+      "AMOUNT": 9150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003003001",
+      "DESC": "Bill no 00045 Bags:11/11",
+      "AMOUNT": 3250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00045 PRAVIN SAHANE",
+      "AMOUNT": 3250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00045",
+      "AMOUNT": 3250.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00045",
+      "AMOUNT": 3250.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003008001",
+      "DESC": "Bill no 00046 Bags:32/32",
+      "AMOUNT": 7680.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00046 LAHU BINNAR",
+      "AMOUNT": 7680.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00046",
+      "AMOUNT": 7680.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00046",
+      "AMOUNT": 7680.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003007001",
+      "DESC": "Bill no 00047 Bags:13/13",
+      "AMOUNT": 3150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00047 MUNNA RUPAWATE",
+      "AMOUNT": 3150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00047",
+      "AMOUNT": 3150.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00047",
+      "AMOUNT": 3150.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003001001",
+      "DESC": "Bill no 00048 Bags:43/43",
+      "AMOUNT": 22575.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00048 RAJU DHERANGE",
+      "AMOUNT": 22575.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00048",
+      "AMOUNT": 22575.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00048",
+      "AMOUNT": 22575.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "003005021",
+      "DESC": "Bill no 00049 Bags:30/30",
+      "AMOUNT": 18750.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "028",
+      "DESC": "Bill no 00049 SAI WALUNJ",
+      "AMOUNT": 18750.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00049",
+      "AMOUNT": 18750.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-10",
+      "ACNO": "015",
+      "DESC": "Bill no 00049",
+      "AMOUNT": 18750.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00050 Bags:417/417",
+      "AMOUNT": 147600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "ACNO": "028",
+      "DESC": "Bill no 00050 SANGAMNER CASH",
+      "AMOUNT": 147600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00050",
+      "AMOUNT": 147600.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-11",
+      "ACNO": "015",
+      "DESC": "Bill no 00050",
+      "AMOUNT": 147600.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00051 Bags:16/16",
+      "AMOUNT": 4320.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00051 SANGAMNER CASH",
+      "AMOUNT": 4320.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00051",
+      "AMOUNT": 4320.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00051",
+      "AMOUNT": 4320.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003005020",
+      "DESC": "Bill no 00052 Bags:32/32",
+      "AMOUNT": 8640.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00052 SANJAY SANGALE",
+      "AMOUNT": 8640.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00052",
+      "AMOUNT": 8640.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00052",
+      "AMOUNT": 8640.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003016002",
+      "DESC": "Bill no 00053 Bags:9/9",
+      "AMOUNT": 2430.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00053 KAILAS SANGALE",
+      "AMOUNT": 2430.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00053",
+      "AMOUNT": 2430.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00053",
+      "AMOUNT": 2430.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003005018",
+      "DESC": "Bill no 00054 Bags:37/37",
+      "AMOUNT": 11100.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00054 SANTOSH SANGALE",
+      "AMOUNT": 11100.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00054",
+      "AMOUNT": 11100.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00054",
+      "AMOUNT": 11100.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003016001",
+      "DESC": "Bill no 00055 Bags:88/88",
+      "AMOUNT": 15030.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00055 KIRAN SAHANE",
+      "AMOUNT": 15030.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00055",
+      "AMOUNT": 15030.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00055",
+      "AMOUNT": 15030.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "003010001",
+      "DESC": "Bill no 00056 Bags:86/86",
+      "AMOUNT": 17370.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "028",
+      "DESC": "Bill no 00056 BHASKAR BINNAR",
+      "AMOUNT": 17370.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00056",
+      "AMOUNT": 17370.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-12",
+      "ACNO": "015",
+      "DESC": "Bill no 00056",
+      "AMOUNT": 17370.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003005016",
+      "DESC": "Bill no 00057 Bags:13/13",
+      "AMOUNT": 3653.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00057 SANGAMNER CASH",
+      "AMOUNT": 3653.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00057",
+      "AMOUNT": 3653.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00057",
+      "AMOUNT": 3653.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003011001",
+      "DESC": "Bill no 00058 Bags:82/82",
+      "AMOUNT": 23042.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00058 GOKUL AVHAD",
+      "AMOUNT": 23042.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00058",
+      "AMOUNT": 23042.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00058",
+      "AMOUNT": 23042.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003004001",
+      "DESC": "Bill no 00059 Bags:47/47",
+      "AMOUNT": 7580.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00059 UDDHAV SAHANE",
+      "AMOUNT": 7580.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00059",
+      "AMOUNT": 7580.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00059",
+      "AMOUNT": 7580.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003007002",
+      "DESC": "Bill no 00060 Bags:31/31",
+      "AMOUNT": 5550.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00060 MADHUKR RUPAWATE",
+      "AMOUNT": 5550.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00060",
+      "AMOUNT": 5550.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00060",
+      "AMOUNT": 5550.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003008001",
+      "DESC": "Bill no 00061 Bags:21/21",
+      "AMOUNT": 2770.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00061 LAHU BINNAR",
+      "AMOUNT": 2770.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00061",
+      "AMOUNT": 2770.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00061",
+      "AMOUNT": 2770.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003007001",
+      "DESC": "Bill no 00062 Bags:12/12",
+      "AMOUNT": 2270.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00062 MUNNA RUPAWATE",
+      "AMOUNT": 2270.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00062",
+      "AMOUNT": 2270.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00062",
+      "AMOUNT": 2270.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003003001",
+      "DESC": "Bill no 00063 Bags:5/5",
+      "AMOUNT": 1000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00063 PRAVIN SAHANE",
+      "AMOUNT": 1000.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00063",
+      "AMOUNT": 1000.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00063",
+      "AMOUNT": 1000.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "003014001",
+      "DESC": "Bill no 00064 Bags:44/44",
+      "AMOUNT": 9284.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "028",
+      "DESC": "Bill no 00064 AJAY SAHANE",
+      "AMOUNT": 9284.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "009001006",
+      "DESC": "Bill no 00064",
+      "AMOUNT": 9284.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-13",
+      "ACNO": "015",
+      "DESC": "Bill no 00064",
+      "AMOUNT": 9284.0,
+      "CD": "D",
+      "MODULE": "",
+      "DOC_NO": ""
+    },
+    {
+      "DATE": "2025-07-14",
+      "ACNO": "003010004",
+      "DESC": "Bill no 00065 Bags:125/125",
+      "AMOUNT": 34375.0,
+      "CD": "C",
+      "MODULE": "",
+      "DOC_NO": ""
+    }
+  ]
+}
