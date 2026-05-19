@@ -1,6 +1,7 @@
 import type { NavItem } from "../types/app";
 
 export const NAV_ITEMS: NavItem[] = [
+  { key: "classic-dashboard", label: "BRT Flow Dashboard" },
   { key: "dashboard", label: "Dashboard" },
   { key: "customers", label: "Customer Master" },
   { key: "suppliers", label: "Supplier Master" },

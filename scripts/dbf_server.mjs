@@ -1,5 +1,6 @@
 import http from 'node:http';
 import fs from 'node:fs/promises';
+import fsSync from 'node:fs';
 import path from 'node:path';
 import { DBFFile } from 'dbffile';
 
@@ -15,7 +16,7 @@ function sendJson(res, status, payload) {
   res.writeHead(status, {
     'Content-Type': 'application/json; charset=utf-8',
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
+    'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
     'Access-Control-Allow-Headers': 'Content-Type',
   });
   res.end(JSON.stringify(payload));
@@ -62,6 +63,47 @@ async function loadCatalog() {
   };
 
   return catalogCache;
+}
+
+async function loadFirms() {
+  const candidates = ['CUST2601.DBF', 'MAST2601.DBF', 'SUPP2601.DBF'];
+  const generic = new Set([
+    'SUPPLIER ACCOUNTS',
+    'CUSTOMER ACCOUNTS',
+    'BANK ACCOUNTS',
+    'CASH ACCOUNT',
+    'ASSET ACCOUNTS',
+    'OPENING BALANCE DIFFERENCE',
+    'TRANSACTION ACCOUNT',
+  ]);
+  const values = [];
+
+  for (const tableName of candidates) {
+    const fullPath = path.join(DATA_DIR, tableName);
+    try {
+      const dbf = await DBFFile.open(fullPath);
+      const rows = await dbf.readRecords(dbf.recordCount);
+      for (const row of rows) {
+        const raw = String(row.NAME ?? '').trim();
+        if (!raw) continue;
+        const upper = raw.toUpperCase();
+        if (raw.length < 4) continue;
+        if (generic.has(upper)) continue;
+        values.push(raw);
+      }
+    } catch {
+      // ignore table-level errors and continue
+    }
+  }
+
+  const preferred = values.filter((name) => /BRT|TRADING|CO\.|COMPANY/i.test(name));
+  const pool = preferred.length ? preferred : values;
+  const deduped = [...new Set(pool.map((name) => name.toUpperCase()))]
+    .map((upper) => pool.find((n) => n.toUpperCase() === upper))
+    .filter(Boolean);
+
+  if (!deduped.length) return ['BRT TRADING CO.'];
+  return deduped.slice(0, 12);
 }
 
 function inferRelationsFor(table, tables) {
@@ -140,6 +182,53 @@ const server = http.createServer(async (req, res) => {
     }
   }
 
+  if (req.method === 'POST' && req.url.startsWith('/api/dbf/upload')) {
+    try {
+      const url = new URL(req.url, `http://${HOST}:${PORT}`);
+      const name = url.searchParams.get('name');
+      if (!name) return sendJson(res, 400, { error: 'name query parameter required' });
+
+      const outPath = path.join(DATA_DIR, name);
+      const writeStream = fsSync.createWriteStream(outPath);
+      req.pipe(writeStream);
+      
+      req.on('end', () => {
+        catalogCache = null; // Invalidate cache so it reloads new files
+        sendJson(res, 200, { ok: true, name });
+      });
+      req.on('error', (err) => {
+        sendJson(res, 500, { error: 'Upload failed', detail: String(err) });
+      });
+      return;
+    } catch (err) {
+      return sendJson(res, 500, { error: 'Upload failed', detail: String(err) });
+    }
+  }
+
+  if (req.method === 'POST' && req.url === '/api/dbf/export') {
+    try {
+      const exportDir = path.join(DATA_DIR, 'exports');
+      await fs.mkdir(exportDir, { recursive: true });
+      const catalog = await loadCatalog();
+      
+      const results = [];
+      for (const t of catalog.tables) {
+        try {
+          const dbf = await DBFFile.open(t.path);
+          const rows = await dbf.readRecords(dbf.recordCount);
+          const jsonName = t.table.replace(/\.dbf$/i, '.json');
+          await fs.writeFile(path.join(exportDir, jsonName), JSON.stringify(rows, null, 2));
+          results.push(jsonName);
+        } catch (err) {
+          // ignore individual failures
+        }
+      }
+      return sendJson(res, 200, { ok: true, exportDir, exported: results.length });
+    } catch (err) {
+      return sendJson(res, 500, { error: 'Export failed', detail: String(err) });
+    }
+  }
+
   if (req.method !== 'GET') {
     return sendJson(res, 405, { error: 'Method not allowed' });
   }
@@ -158,6 +247,11 @@ const server = http.createServer(async (req, res) => {
           fieldCount: t.fieldCount,
         })),
       });
+    }
+
+    if (url.pathname === '/api/dbf/firms') {
+      const firms = await loadFirms();
+      return sendJson(res, 200, { firms });
     }
 
     if (url.pathname === '/api/dbf/table') {

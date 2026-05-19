@@ -901,3 +901,121 @@ th {
     overflow-y: auto;
   }
 }
+.classic-dashboard-root {
+  min-height: calc(100vh - 64px);
+  background: #c5cfdd;
+  padding: 0;
+}
+
+.classic-dashboard-head {
+  background: #ffffff;
+  text-align: center;
+  padding: 22px 24px 14px;
+}
+
+.classic-dashboard-head h1 {
+  margin: 0;
+  color: #17356d;
+  font-size: clamp(34px, 4vw, 64px);
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.classic-dashboard-head p {
+  margin: 4px 0 0;
+  font-size: clamp(18px, 2vw, 48px);
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.classic-dashboard-body {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1fr;
+  gap: 36px;
+  padding: 40px 56px;
+}
+
+.classic-panel {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+}
+
+.classic-btn {
+  border: 1px solid #bbc7d8;
+  background: #f4f6fa;
+  color: #253142;
+  border-radius: 12px;
+  min-height: 54px;
+  text-align: left;
+  padding: 8px 20px;
+  font-size: 42px;
+  font-weight: 600;
+}
+
+.classic-btn.left {
+  font-size: clamp(18px, 1.5vw, 34px);
+}
+
+.classic-btn.center {
+  text-align: center;
+  font-size: clamp(34px, 2.6vw, 52px);
+  font-weight: 500;
+}
+
+.classic-btn.center.active {
+  border-color: #2b74d7;
+  box-shadow: inset 0 0 0 1px #2b74d7;
+  font-weight: 700;
+}
+
+.classic-btn.disabled {
+  opacity: 0.4;
+}
+
+.classic-panel-right {
+  background: #c1cddd;
+  border-radius: 16px;
+  border: 1px solid #adbbcf;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  padding: 24px;
+  align-content: start;
+}
+
+.classic-pill {
+  display: inline-block;
+  justify-self: start;
+  background: #1f6fdc;
+  color: #ffffff;
+  border-radius: 14px;
+  padding: 8px 18px;
+  font-size: clamp(24px, 1.9vw, 42px);
+  font-weight: 700;
+  margin-bottom: 14px;
+}
+
+.classic-right-link {
+  border: 0;
+  background: transparent;
+  text-align: left;
+  color: #1f2937;
+  font-size: clamp(24px, 1.8vw, 40px);
+  font-weight: 700;
+  padding: 4px 0;
+}
+
+@media (max-width: 1100px) {
+  .classic-dashboard-body {
+    grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 16px;
+  }
+
+  .classic-btn,
+  .classic-btn.left,
+  .classic-btn.center,
+  .classic-right-link,
+  .classic-pill {
+    font-size: 18px;
+  }
+}

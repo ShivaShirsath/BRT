@@ -1,0 +1,22 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/brt}
+    username: ${SPRING_DATASOURCE_USERNAME:brt}
+    password: ${SPRING_DATASOURCE_PASSWORD:brt}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+
+app:
+  jwt:
+    secret: ${APP_JWT_SECRET:brt-super-secret-key-brt-super-secret-key-2026}
+    expiration-minutes: 480

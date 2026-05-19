@@ -32,9 +32,60 @@ export function DbfExplorerPage(props: Props) {
     t.table.toLowerCase().includes(tableSearch.toLowerCase()),
   ).sort((a, b) => b.recordCount - a.recordCount);
 
+  const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+    const files = Array.from(e.target.files).filter((f) => f.name.toLowerCase().endsWith(".dbf"));
+    
+    if (files.length === 0) {
+      alert("No DBF files found in selected folder.");
+      return;
+    }
+
+    let successCount = 0;
+    for (const file of files) {
+      try {
+        const response = await fetch(`http://127.0.0.1:4001/api/dbf/upload?name=${encodeURIComponent(file.name)}`, {
+          method: "POST",
+          body: file,
+        });
+        if (response.ok) successCount++;
+      } catch (err) {
+        console.error("Failed to upload", file.name, err);
+      }
+    }
+    alert(`Successfully imported ${successCount} DBF files.`);
+    window.location.reload();
+  };
+
+  const handleExport = async () => {
+    try {
+      const res = await fetch("http://127.0.0.1:4001/api/dbf/export", { method: "POST" });
+      const data = await res.json();
+      if (data.ok) {
+        alert(`Successfully exported ${data.exported} files to JSON in ${data.exportDir}`);
+      } else {
+        alert(`Export failed: ${data.error}`);
+      }
+    } catch (err) {
+      alert(`Export error: ${err}`);
+    }
+  };
+
   return (
     <section className="window-section full-height">
-      <p>Source: <code>{dbfSource || "Loading..."}</code></p>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <p>Source: <code>{dbfSource || "Loading..."}</code></p>
+        <div style={{ display: "flex", gap: "10px" }}>
+          <label className="secondary-btn" style={{ cursor: "pointer", padding: "4px 12px", border: "1px solid #ccc", borderRadius: "4px" }}>
+            Import Folder
+            {/* @ts-expect-error webkitdirectory is non-standard but supported in most browsers */}
+            <input type="file" webkitdirectory="" directory="" multiple onChange={handleImport} style={{ display: "none" }} />
+          </label>
+          <button type="button" className="secondary-btn" onClick={handleExport}>
+            Export to JSON
+          </button>
+        </div>
+      </div>
       {dbfError ? <p className="error-text">{dbfError}</p> : null}
       <div className="dbf-layout">
         <aside className="dbf-files">

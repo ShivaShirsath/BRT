@@ -1,4 +1,5 @@
 export type AppView =
+  | "classic-dashboard"
   | "dashboard"
   | "customers"
   | "suppliers"
