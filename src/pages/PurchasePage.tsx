@@ -83,6 +83,20 @@ export function PurchasePage() {
     return rows.reduce((sum, r) => sum + Number(r.netWt || 0) * Number(r.rate || 0), 0);
   }, [rows]);
 
+  const netTotal = useMemo(() => {
+    let sum = total;
+    const additionFields = [
+      "M. Tax", "Commission", "Pur. Comm", "Freight", "Packing", "Loading", "Leivy",
+      "Tolai", "Hamali", "IGST", "SGST", "CGST", "Khandani", "Our expenses", "Exp. 2", "Exp. 3", "Exp. 4"
+    ];
+    additionFields.forEach((f) => {
+      sum += Number(charges[f] || 0);
+    });
+    sum -= Number(charges["Discount"] || 0);
+    sum -= Number(charges["TDS"] || 0);
+    return sum;
+  }, [total, charges]);
+
   async function onSave() {
     setError("");
     setMessage("");
@@ -92,20 +106,66 @@ export function PurchasePage() {
       return;
     }
 
-    const qty = activeRows.reduce((s, r) => s + Number(r.netWt || 0), 0);
-    const totalAmount = activeRows.reduce((s, r) => s + Number(r.netWt || 0) * Number(r.rate || 0), 0);
-    const rate = qty > 0 ? totalAmount / qty : 0;
-    const first = activeRows[0];
+    const items = activeRows.map((r) => ({
+      commodity: r.commodity.trim(),
+      mark: r.mark.trim(),
+      brand: r.brand.trim(),
+      bags: r.bags.trim(),
+      avgWeight: Number(r.avgWt) || 0,
+      purchaseWeight: Number(r.purWt) || 0,
+      packingWeight: Number(r.packingWeight) || 0,
+      netWeight: Number(r.netWt) || 0,
+      rate: Number(r.rate) || 0,
+      amount: Number(r.netWt || 0) * Number(r.rate || 0),
+    }));
+
+    const parsedSellerId = /^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null;
+
+    const chargesMap: Record<string, string> = {
+      "Purchase amt.": "purchaseAmount",
+      "M. Tax": "mTax",
+      "Commission": "commission",
+      "Pur. Comm": "purchaseCommission",
+      "Freight": "freight",
+      "Packing": "packing",
+      "Loading": "loading",
+      "Leivy": "levy",
+      "Tolai": "tolai",
+      "Hamali": "hamali",
+      "Discount": "discount",
+      "IGST": "igst",
+      "SGST": "sgst",
+      "CGST": "cgst",
+      "TDS": "tds",
+      "Khandani": "khandani",
+      "Our expenses": "ourExpenses",
+      "Exp. 2": "exp2",
+      "Exp. 3": "exp3",
+      "Exp. 4": "exp4",
+    };
+
+    const chargesPayload: Record<string, number> = {};
+    for (const [uiField, apiField] of Object.entries(chargesMap)) {
+      chargesPayload[apiField] = uiField === "Purchase amt." ? total : (Number(charges[uiField]) || 0);
+    }
 
     setLoading(true);
     try {
       const payload = {
         voucherNo: billNo,
         businessDate: toIsoDate(date),
-        supplierAcno: (seller || "SUPP001").toUpperCase(),
-        itemCode: (first.commodity || "ITEM001").toUpperCase().replace(/\s+/g, "_"),
-        qty: qty > 0 ? qty : 1,
-        rate,
+        entryType,
+        cessCondition,
+        sellerId: parsedSellerId,
+        vehicleNo: vehicleNo.trim(),
+        partyBillNo: partyBillNo.trim(),
+        note: note.trim(),
+        items,
+        charges: {
+          ...chargesPayload,
+          total,
+          netTotal,
+        },
       };
       const { data } = await api.post("/purchase", payload);
       setMessage(`Purchase saved. ID: ${data.id}`);
@@ -187,10 +247,17 @@ export function PurchasePage() {
           <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>Charges & Taxes</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: 1.2 }}>
             {chargeFields.map((f) => (
-              <TextField key={f} size="small" label={f} value={charges[f]} onChange={(e) => setCharges((c) => ({ ...c, [f]: e.target.value }))} />
+              <TextField
+                key={f}
+                size="small"
+                label={f}
+                value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
+                onChange={(e) => setCharges((c) => ({ ...c, [f]: e.target.value }))}
+                disabled={f === "Purchase amt."}
+              />
             ))}
           </Box>
-          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Total ₹ {total.toFixed(2)} | Net total ₹ {total.toFixed(2)}</Typography>
+          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Total ₹ {total.toFixed(2)} | Net total ₹ {netTotal.toFixed(2)}</Typography>
         </Box>
 
         {message ? <Alert severity="success" sx={{ mt: 1.2 }}>{message}</Alert> : null}

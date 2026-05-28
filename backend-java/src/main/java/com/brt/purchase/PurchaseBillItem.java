@@ -26,14 +26,14 @@ public class PurchaseBillItem {
     @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 
-    @Column(name = "mark_id")
-    private Long markId;
+    @Column(name = "mark")
+    private String mark;
 
-    @Column(name = "brand_id")
-    private Long brandId;
+    @Column(name = "brand")
+    private String brand;
 
     @Column(name = "bags")
-    private Integer bags = 0;
+    private String bags;
 
     @Column(name = "avg_weight", columnDefinition = "NUMERIC(12,2) DEFAULT 0")
     private BigDecimal avgWeight = BigDecimal.ZERO;
