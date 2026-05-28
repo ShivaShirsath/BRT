@@ -1,11 +1,13 @@
 package com.brt.purchase;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 
+@Data
 @Entity
 @Table(name = "purchase", schema = "txn")
 public class Purchase {
@@ -22,18 +24,4 @@ public class Purchase {
   @Column(nullable = false) private BigDecimal amount;
   @Column(name = "created_by", nullable = false) private String createdBy;
   @Column(name = "created_at", nullable = false) private OffsetDateTime createdAt;
-
-  public void setFirmId(String firmId) { this.firmId = firmId; }
-  public void setVoucherNo(String voucherNo) { this.voucherNo = voucherNo; }
-  public void setBusinessDate(LocalDate businessDate) { this.businessDate = businessDate; }
-  public void setSupplierAcno(String supplierAcno) { this.supplierAcno = supplierAcno; }
-  public void setItemCode(String itemCode) { this.itemCode = itemCode; }
-  public void setQty(BigDecimal qty) { this.qty = qty; }
-  public void setRate(BigDecimal rate) { this.rate = rate; }
-  public void setAmount(BigDecimal amount) { this.amount = amount; }
-  public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
-  public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
-  public Long getId() { return id; }
-  public String getVoucherNo() { return voucherNo; }
-  public BigDecimal getAmount() { return amount; }
 }
