@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
@@ -36,6 +36,7 @@ const chargeFields = [
 export function PurchasePage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
 
+  const [billId, setBillId] = useState<number | null>(null);
   const [billNo, setBillNo] = useState("001186");
   const [date, setDate] = useState("08.11.2025");
   const [entryType, setEntryType] = useState("Select market");
@@ -55,7 +56,67 @@ export function PurchasePage() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
+  // Auto-load existing bill when billNo changes or on blur
+  async function loadExistingBill(no: string) {
+    if (!no.trim()) return;
+    try {
+      const { data } = await api.get(`/purchase/${no.trim()}`);
+      if (data) {
+        setBillId(data.id);
+        setDate(data.date || "");
+        setEntryType(data.entryType || "Select market");
+        setCessCondition(data.cessCondition || "Order");
+        setSeller(data.seller || "");
+        setVehicleNo(data.vehicleNo || "");
+        setPartyBillNo(data.partyBillNo || "");
+        setNote(data.note || "");
+        
+        let fetchedRows = (data.items || []).map((item: any) => ({
+          commodity: item.commodity || "",
+          mark: item.mark || "",
+          brand: item.brand || "",
+          bags: item.bags || "",
+          avgWt: item.avgWt || "",
+          purWt: item.purWt || "",
+          packingWeight: item.packingWeight || "",
+          netWt: item.netWt || "",
+          rate: item.rate || "",
+        }));
+
+        while (fetchedRows.length < 6) {
+          fetchedRows.push(mkRow());
+        }
+        setRows(fetchedRows);
+
+        if (data.charges) {
+          setCharges(data.charges);
+        }
+        setMessage(`Loaded existing bill: ${no}`);
+        setError("");
+      }
+    } catch (e) {
+      // Bill does not exist, treat as a new bill
+      setBillId(null);
+      if (message.startsWith("Loaded")) {
+        setMessage("");
+      }
+    }
+  }
+
   function setCell(rowIndex: number, key: keyof PurchaseItemRow, value: string) {
+    // Validate number fields: allow only digits and optional single decimal point
+    const numFields: (keyof PurchaseItemRow)[] = ["bags", "avgWt", "purWt", "packingWeight", "netWt", "rate"];
+    if (numFields.includes(key)) {
+      if (key === "bags") {
+        value = value.replace(/[^0-9]/g, "");
+      } else {
+        value = value.replace(/[^0-9.]/g, "");
+        const parts = value.split(".");
+        if (parts.length > 2) {
+          value = parts[0] + "." + parts.slice(1).join("");
+        }
+      }
+    }
     setRows((prev) => prev.map((r, i) => (i === rowIndex ? { ...r, [key]: value } : r)));
   }
 
@@ -79,9 +140,46 @@ export function PurchasePage() {
     return `${p[2]}-${p[1]}-${p[0]}`;
   }
 
-  const total = useMemo(() => {
+  // Calculate items sum
+  const itemsTotal = useMemo(() => {
     return rows.reduce((sum, r) => sum + Number(r.netWt || 0) * Number(r.rate || 0), 0);
   }, [rows]);
+
+  // Sync "Purchase amt." in charges with the items total
+  useEffect(() => {
+    setCharges((c) => ({
+      ...c,
+      "Purchase amt.": itemsTotal.toFixed(2),
+    }));
+  }, [itemsTotal]);
+
+  // Calculate net total with charges & taxes
+  const netTotal = useMemo(() => {
+    const purchaseAmt = Number(charges["Purchase amt."] || 0);
+    const mTax = Number(charges["M. Tax"] || 0);
+    const commission = Number(charges["Commission"] || 0);
+    const purComm = Number(charges["Pur. Comm"] || 0);
+    const freight = Number(charges["Freight"] || 0);
+    const packing = Number(charges["Packing"] || 0);
+    const loading = Number(charges["Loading"] || 0);
+    const levy = Number(charges["Leivy"] || charges["Levy"] || 0);
+    const tolai = Number(charges["Tolai"] || 0);
+    const hamali = Number(charges["Hamali"] || 0);
+    const discount = Number(charges["Discount"] || 0);
+    const igst = Number(charges["IGST"] || 0);
+    const sgst = Number(charges["SGST"] || 0);
+    const cgst = Number(charges["CGST"] || 0);
+    const tds = Number(charges["TDS"] || 0);
+    const khandani = Number(charges["Khandani"] || 0);
+    const ourExpenses = Number(charges["Our expenses"] || 0);
+    const exp2 = Number(charges["Exp. 2"] || 0);
+    const exp3 = Number(charges["Exp. 3"] || 0);
+    const exp4 = Number(charges["Exp. 4"] || 0);
+
+    const total = purchaseAmt + mTax + commission + purComm + freight + packing + loading + levy + tolai + hamali + khandani + ourExpenses + exp2 + exp3 + exp4 - discount;
+    const net = total + igst + sgst + cgst - tds;
+    return isNaN(net) ? 0 : net;
+  }, [charges]);
 
   async function onSave() {
     setError("");
@@ -92,23 +190,38 @@ export function PurchasePage() {
       return;
     }
 
-    const qty = activeRows.reduce((s, r) => s + Number(r.netWt || 0), 0);
-    const totalAmount = activeRows.reduce((s, r) => s + Number(r.netWt || 0) * Number(r.rate || 0), 0);
-    const rate = qty > 0 ? totalAmount / qty : 0;
-    const first = activeRows[0];
-
     setLoading(true);
     try {
       const payload = {
+        id: billId,
         voucherNo: billNo,
         businessDate: toIsoDate(date),
-        supplierAcno: (seller || "SUPP001").toUpperCase(),
-        itemCode: (first.commodity || "ITEM001").toUpperCase().replace(/\s+/g, "_"),
-        qty: qty > 0 ? qty : 1,
-        rate,
+        entryType,
+        cessCondition,
+        supplierAcno: seller || "SUPP001",
+        vehicleNo,
+        partyBillNo,
+        note,
+        print,
+        billReceived,
+        lockState,
+        items: activeRows.map((r) => ({
+          commodity: r.commodity.toUpperCase(),
+          mark: r.mark,
+          brand: r.brand,
+          bags: r.bags ? parseInt(r.bags) : 0,
+          avgWt: r.avgWt ? parseFloat(r.avgWt) : 0.0,
+          purWt: r.purWt ? parseFloat(r.purWt) : 0.0,
+          packingWeight: r.packingWeight ? parseFloat(r.packingWeight) : 0.0,
+          netWt: r.netWt ? parseFloat(r.netWt) : 0.0,
+          rate: r.rate ? parseFloat(r.rate) : 0.0,
+        })),
+        charges,
       };
+
       const { data } = await api.post("/purchase", payload);
-      setMessage(`Purchase saved. ID: ${data.id}`);
+      setMessage(`Purchase saved successfully. ID: ${data.id}`);
+      setBillId(data.id);
     } catch (e: any) {
       setError(e?.response?.data?.error ?? "Failed to save purchase");
     } finally {
@@ -128,7 +241,13 @@ export function PurchasePage() {
         <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 1.5, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
           <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>BILL DETAILS</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 1.6 }}>
-            <TextField label="Bill no." size="small" value={billNo} onChange={(e) => setBillNo(e.target.value)} />
+            <TextField 
+              label="Bill no." 
+              size="small" 
+              value={billNo} 
+              onChange={(e) => setBillNo(e.target.value)} 
+              onBlur={() => loadExistingBill(billNo)}
+            />
             <TextField label="Date" size="small" value={date} onChange={(e) => setDate(e.target.value)} />
             <TextField label="Entry Type" size="small" select value={entryType} onChange={(e) => setEntryType(e.target.value)}>
               <MenuItem value="Select market">Select market</MenuItem>
@@ -187,10 +306,24 @@ export function PurchasePage() {
           <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>Charges & Taxes</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: 1.2 }}>
             {chargeFields.map((f) => (
-              <TextField key={f} size="small" label={f} value={charges[f]} onChange={(e) => setCharges((c) => ({ ...c, [f]: e.target.value }))} />
+              <TextField 
+                key={f} 
+                size="small" 
+                label={f} 
+                value={charges[f]} 
+                onChange={(e) => {
+                  let value = e.target.value;
+                  value = value.replace(/[^0-9.]/g, "");
+                  const parts = value.split(".");
+                  if (parts.length > 2) {
+                    value = parts[0] + "." + parts.slice(1).join("");
+                  }
+                  setCharges((c) => ({ ...c, [f]: value }));
+                }} 
+              />
             ))}
           </Box>
-          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Total ₹ {total.toFixed(2)} | Net total ₹ {total.toFixed(2)}</Typography>
+          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Total ₹ {netTotal.toFixed(2)} | Net total ₹ {netTotal.toFixed(2)}</Typography>
         </Box>
 
         {message ? <Alert severity="success" sx={{ mt: 1.2 }}>{message}</Alert> : null}
