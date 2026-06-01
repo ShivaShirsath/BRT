@@ -3,6 +3,8 @@ import { CssBaseline } from "@mui/material";
 import { ProtectedRoute } from "./app/ProtectedRoute";
 import { AuthPage } from "./pages/AuthPage";
 import { FirmSelectionPage } from "./pages/FirmSelectionPage";
+import { CreateFirmPage } from "./pages/CreateFirmPage";
+import { CreateUserPage } from "./pages/CreateUserPage";
 import { MenuPage } from "./pages/MenuPage";
 import { PurchasePage } from "./pages/PurchasePage";
 import { SalesPage } from "./pages/SalesPage";
@@ -49,6 +51,8 @@ export default function App() {
             <Route path="/auth" element={<AuthPage />} />
             <Route element={<ProtectedRoute />}>
               <Route path="/firm-selection" element={<FirmSelectionPage />} />
+              <Route path="/create-firm" element={<CreateFirmPage />} />
+              <Route path="/create-user" element={<CreateUserPage />} />
               <Route path="/menu" element={<MenuPage />} />
               <Route path="/data-entry" element={<DataEntryPage />} />
               <Route path="/purchase" element={<PurchasePage />} />
@@ -61,3 +65,4 @@ export default function App() {
     </>
   );
 }
+

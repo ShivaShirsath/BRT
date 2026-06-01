@@ -126,7 +126,49 @@ export function FirmSelectionPage() {
             })}
           </Box>
 
-          <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/create-firm")}
+                sx={{
+                  height: "52px",
+                  borderRadius: "12px",
+                  fontSize: 20,
+                  fontWeight: 600,
+                  textTransform: "none",
+                  borderColor: "#b5c7e5",
+                  color: "#2b4066",
+                  px: 3,
+                  "&:hover": {
+                    borderColor: "#1470e5",
+                    bgcolor: "#f2f7ff"
+                  }
+                }}
+              >
+                + Create Firm
+              </Button>
+              <Button
+                variant="outlined"
+                onClick={() => navigate("/create-user")}
+                sx={{
+                  height: "52px",
+                  borderRadius: "12px",
+                  fontSize: 20,
+                  fontWeight: 600,
+                  textTransform: "none",
+                  borderColor: "#b5c7e5",
+                  color: "#2b4066",
+                  px: 3,
+                  "&:hover": {
+                    borderColor: "#1470e5",
+                    bgcolor: "#f2f7ff"
+                  }
+                }}
+              >
+                + Create User
+              </Button>
+            </Box>
             <Button
               variant="contained"
               disabled={!selected}

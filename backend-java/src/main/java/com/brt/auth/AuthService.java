@@ -6,6 +6,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 public class AuthService {
   private final AppUserRepository users;
@@ -37,6 +40,30 @@ public class AuthService {
     String token = jwt.generateToken(userCode, firm, user.getRoleCode());
     return new AuthDtos.AuthResponse(token, userCode, user.getFullName(), user.getRoleCode(), firm);
   }
+
+  @Transactional
+  public List<AppUser> createUser(AuthDtos.UserCreateRequest req) {
+    List<AppUser> createdUsers = new ArrayList<>();
+    String encodedPassword = encoder.encode(req.password());
+    
+    for (String fc : req.firmCodes()) {
+      String firm = fc.trim().toUpperCase();
+      String userCode = req.userCode().trim().toUpperCase();
+      if (users.existsByFirmIdAndUserCodeIgnoreCase(firm, userCode)) {
+        throw new IllegalArgumentException("User already exists in firm: " + firm);
+      }
+      AppUser user = new AppUser();
+      user.setFirmId(firm);
+      user.setUserCode(userCode);
+      user.setPasswordHash(encodedPassword);
+      user.setFullName(req.fullName().trim());
+      user.setRoleCode(req.roleCode().trim().toUpperCase());
+      user.setActive(true);
+      createdUsers.add(users.save(user));
+    }
+    return createdUsers;
+  }
+
 
   public AuthDtos.AuthResponse signin(AuthDtos.SigninRequest req) {
     String firm = req.firmCode().trim().toUpperCase();

@@ -1,9 +1,8 @@
 package com.brt.firm;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 @RestController
@@ -17,6 +16,49 @@ public class FirmController {
 
   @GetMapping
   public Map<String, Object> list() {
-    return Map.of("firms", firms.findByActiveTrueOrderByNameAsc().stream().map(f -> Map.of("code", f.getCode(), "name", f.getName())).toList());
+    return Map.of("firms", firms.findByActiveTrueOrderByNameAsc().stream().map(f -> Map.of(
+      "code", f.getCode(),
+      "name", f.getName(),
+      "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
+      "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
+      "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
+    )).toList());
   }
+
+  @PostMapping
+  public Firm create(@RequestBody FirmCreateRequest req) {
+    if (req.name() == null || req.name().trim().isEmpty()) {
+      throw new IllegalArgumentException("Firm name is required");
+    }
+    
+    // Generate a unique firm code using name prefix + random 4 digit suffix
+    String prefix = req.name().replaceAll("[^a-zA-Z0-9]", "").toUpperCase();
+    if (prefix.length() > 6) {
+      prefix = prefix.substring(0, 6);
+    } else if (prefix.isEmpty()) {
+      prefix = "FRM";
+    }
+    String code = prefix + String.format("%04d", (int)(Math.random() * 10000));
+    if (code.length() > 32) {
+      code = code.substring(0, 32);
+    }
+
+    Firm f = new Firm();
+    f.setCode(code);
+    f.setName(req.name().trim());
+    f.setBookStartDate(req.bookStartDate());
+    f.setBusinessType(req.businessType());
+    f.setFinancialYear(req.financialYear());
+    f.setActive(true);
+
+    return firms.save(f);
+  }
+
+  public record FirmCreateRequest(
+    String name,
+    LocalDate bookStartDate,
+    String businessType,
+    String financialYear
+  ) {}
 }
+

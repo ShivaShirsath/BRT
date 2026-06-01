@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.brt.security.JwtPrincipal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -19,6 +20,12 @@ public class AuthController {
   public AuthDtos.AuthResponse signup(@Valid @RequestBody AuthDtos.SignupRequest req) {
     return authService.signup(req);
   }
+
+  @PostMapping("/users")
+  public List<AppUser> createUser(@Valid @RequestBody AuthDtos.UserCreateRequest req) {
+    return authService.createUser(req);
+  }
+
 
   @PostMapping("/signin")
   public AuthDtos.AuthResponse signin(@Valid @RequestBody AuthDtos.SigninRequest req) {
