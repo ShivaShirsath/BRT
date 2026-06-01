@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert } from "@mui/material";
+import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 
@@ -37,6 +37,11 @@ export function PurchasePage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
 
   const [billNo, setBillNo] = useState("001186");
+  const [billNoInput, setBillNoInput] = useState("001186");
+  const [isDirty, setIsDirty] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [pendingBillNo, setPendingBillNo] = useState("");
+
   const [date, setDate] = useState("08.11.2025");
   const [entryType, setEntryType] = useState("Select market");
   const [cessCondition, setCessCondition] = useState("Order");
@@ -51,17 +56,52 @@ export function PurchasePage() {
   const [lockState, setLockState] = useState("No");
   const [charges, setCharges] = useState<Record<string, string>>(() => Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
 
+  const setDateDirty = (val: string) => {
+    setDate(val);
+    setIsDirty(true);
+  };
+  const setEntryTypeDirty = (val: string) => {
+    setEntryType(val);
+    setIsDirty(true);
+  };
+  const setCessConditionDirty = (val: string) => {
+    setCessCondition(val);
+    setIsDirty(true);
+  };
+  const setSellerDirty = (val: string) => {
+    setSeller(val);
+    setIsDirty(true);
+  };
+  const setVehicleNoDirty = (val: string) => {
+    setVehicleNo(val);
+    setIsDirty(true);
+  };
+  const setPartyBillNoDirty = (val: string) => {
+    setPartyBillNo(val);
+    setIsDirty(true);
+  };
+  const setNoteDirty = (val: string) => {
+    setNote(val);
+    setIsDirty(true);
+  };
+  const setChargesDirty = (val: Record<string, string> | ((prev: Record<string, string>) => Record<string, string>)) => {
+    setCharges(val);
+    setIsDirty(true);
+  };
+
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
 
   function setCell(rowIndex: number, key: keyof PurchaseItemRow, value: string) {
     setRows((prev) => prev.map((r, i) => (i === rowIndex ? { ...r, [key]: value } : r)));
+    setIsDirty(true);
   }
 
   function addRow() {
     setRows((prev) => [...prev, mkRow()]);
     setSelectedRowIndex(rows.length);
+    setIsDirty(true);
   }
 
   function removeSelectedRow() {
@@ -71,6 +111,37 @@ export function PurchasePage() {
       return next;
     });
     setSelectedRowIndex((i) => Math.max(0, i - 1));
+    setIsDirty(true);
+  }
+
+  function handleBillNoChange(newVal: string) {
+    const trimmed = newVal.trim();
+    if (trimmed === billNo) return;
+
+    if (isDirty) {
+      setPendingBillNo(trimmed);
+      setConfirmDialogOpen(true);
+    } else {
+      setBillNo(trimmed);
+    }
+  }
+
+  function handleConfirmDiscard() {
+    setConfirmDialogOpen(false);
+    setBillNo(pendingBillNo);
+    setIsDirty(false);
+  }
+
+  async function handleConfirmSave() {
+    setConfirmDialogOpen(false);
+    await onSave();
+    setBillNo(pendingBillNo);
+    setIsDirty(false);
+  }
+
+  function handleConfirmCancel() {
+    setConfirmDialogOpen(false);
+    setBillNoInput(billNo);
   }
 
   function toIsoDate(ddmmyyyy: string) {
@@ -169,6 +240,7 @@ export function PurchasePage() {
       };
       const { data } = await api.post("/purchase", payload);
       setMessage(`Purchase saved. ID: ${data.id}`);
+      setIsDirty(false);
     } catch (e: any) {
       setError(e?.response?.data?.error ?? "Failed to save purchase");
     } finally {
@@ -188,6 +260,7 @@ export function PurchasePage() {
     setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
     setMessage("");
     setError("");
+    setIsDirty(false);
   }
 
   async function checkExistingBill(num: string) {
@@ -199,6 +272,7 @@ export function PurchasePage() {
       const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
       if (data && data.id) {
         setBillNo(data.billNo || "");
+        setBillNoInput(data.billNo || "");
         if (data.billDate) {
           const parts = data.billDate.split("-");
           if (parts.length === 3) {
@@ -268,6 +342,7 @@ export function PurchasePage() {
 
         setMessage(`Loaded details for Bill no. ${data.billNo}`);
         setError("");
+        setIsDirty(false);
       } else {
         resetForm();
       }
@@ -278,13 +353,9 @@ export function PurchasePage() {
   }
 
   useEffect(() => {
-    if (!billNo.trim()) return;
-    const handler = setTimeout(() => {
+    if (billNo) {
       checkExistingBill(billNo);
-    }, 500);
-    return () => {
-      clearTimeout(handler);
-    };
+    }
   }, [billNo]);
 
   return (
@@ -302,22 +373,29 @@ export function PurchasePage() {
             <TextField
               label="Bill no."
               size="small"
-              value={billNo}
-              onChange={(e) => setBillNo(e.target.value)}
-              onBlur={(e) => checkExistingBill(e.target.value)}
+              value={billNoInput}
+              onChange={(e) => setBillNoInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  handleBillNoChange(billNoInput);
+                }
+              }}
+              onBlur={() => {
+                handleBillNoChange(billNoInput);
+              }}
             />
-            <TextField label="Date" size="small" value={date} onChange={(e) => setDate(e.target.value)} />
-            <TextField label="Entry Type" size="small" select value={entryType} onChange={(e) => setEntryType(e.target.value)}>
+            <TextField label="Date" size="small" value={date} onChange={(e) => setDateDirty(e.target.value)} />
+            <TextField label="Entry Type" size="small" select value={entryType} onChange={(e) => setEntryTypeDirty(e.target.value)}>
               <MenuItem value="Select market">Select market</MenuItem>
               <MenuItem value="Market A">Market A</MenuItem>
             </TextField>
-            <TextField label="Cess Condition" size="small" select value={cessCondition} onChange={(e) => setCessCondition(e.target.value)}>
+            <TextField label="Cess Condition" size="small" select value={cessCondition} onChange={(e) => setCessConditionDirty(e.target.value)}>
               <MenuItem value="Order">Order</MenuItem>
               <MenuItem value="Direct">Direct</MenuItem>
             </TextField>
-            <TextField label="Seller" size="small" value={seller} onChange={(e) => setSeller(e.target.value)} sx={{ gridColumn: "1 / span 2" }} placeholder="Search Customer" />
-            <TextField label="Vehicle No." size="small" value={vehicleNo} onChange={(e) => setVehicleNo(e.target.value)} />
-            <TextField label="Party Bill No." size="small" value={partyBillNo} onChange={(e) => setPartyBillNo(e.target.value)} />
+            <TextField label="Seller" size="small" value={seller} onChange={(e) => setSellerDirty(e.target.value)} sx={{ gridColumn: "1 / span 2" }} placeholder="Search Customer" />
+            <TextField label="Vehicle No." size="small" value={vehicleNo} onChange={(e) => setVehicleNoDirty(e.target.value)} />
+            <TextField label="Party Bill No." size="small" value={partyBillNo} onChange={(e) => setPartyBillNoDirty(e.target.value)} />
           </Box>
         </Box>
 
@@ -356,7 +434,7 @@ export function PurchasePage() {
               );
             })}
 
-            <input value={note} onChange={(e) => setNote(e.target.value)} placeholder="Note" style={{ width: "100%", padding: "14px 12px", border: "none", fontSize: 28, background: "#e2e7ef", color: "#6a7990" }} />
+            <input value={note} onChange={(e) => setNoteDirty(e.target.value)} placeholder="Note" style={{ width: "100%", padding: "14px 12px", border: "none", fontSize: 28, background: "#e2e7ef", color: "#6a7990" }} />
           </Box>
         </Box>
 
@@ -369,7 +447,7 @@ export function PurchasePage() {
                 size="small"
                 label={f}
                 value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
-                onChange={(e) => setCharges((c) => ({ ...c, [f]: e.target.value }))}
+                onChange={(e) => setChargesDirty((c) => ({ ...c, [f]: e.target.value }))}
                 disabled={f === "Purchase amt."}
               />
             ))}
@@ -402,6 +480,29 @@ export function PurchasePage() {
           </Box>
         </Box>
       </Box>
+
+      <Dialog
+        open={confirmDialogOpen}
+        onClose={handleConfirmCancel}
+      >
+        <DialogTitle sx={{ fontSize: 32, fontWeight: 700 }}>Unsaved Changes</DialogTitle>
+        <DialogContent>
+          <DialogContentText sx={{ fontSize: 28 }}>
+            You have unsaved changes in this purchase entry. Would you like to save them before changing the bill number?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleConfirmCancel} variant="outlined" sx={{ textTransform: "none", fontSize: 26 }}>
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDiscard} variant="outlined" color="error" sx={{ textTransform: "none", fontSize: 26 }}>
+            Discard Changes
+          </Button>
+          <Button onClick={handleConfirmSave} variant="contained" sx={{ textTransform: "none", fontSize: 26 }}>
+            Save & Continue
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 }
