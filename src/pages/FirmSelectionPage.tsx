@@ -10,7 +10,9 @@ export function FirmSelectionPage() {
   const [firms, setFirms] = useState<Firm[]>([]);
   const [selected, setSelected] = useState<Firm | null>(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const setFirm = useAuthStore((s) => s.setFirm);
+  const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
 
@@ -171,11 +173,21 @@ export function FirmSelectionPage() {
             </Box>
             <Button
               variant="contained"
-              disabled={!selected}
-              onClick={() => {
+              disabled={!selected || loading}
+              onClick={async () => {
                 if (!selected) return;
-                setFirm(selected);
-                navigate("/menu");
+                setLoading(true);
+                setError("");
+                try {
+                  const { data } = await api.post("/auth/select-firm", { firmCode: selected.code });
+                  setAuth(data);
+                  setFirm(selected);
+                  navigate("/menu");
+                } catch (e: any) {
+                  setError(e?.response?.data?.error ?? "Unable to select firm");
+                } finally {
+                  setLoading(false);
+                }
               }}
               sx={{
                 width: "146px",
@@ -187,7 +199,7 @@ export function FirmSelectionPage() {
                 bgcolor: "#0088ff",
               }}
             >
-              Continue
+              {loading ? "Loading..." : "Continue"}
             </Button>
           </Box>
         </Box>

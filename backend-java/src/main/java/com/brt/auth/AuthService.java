@@ -66,19 +66,46 @@ public class AuthService {
 
 
   public AuthDtos.AuthResponse signin(AuthDtos.SigninRequest req) {
-    String firm = req.firmCode().trim().toUpperCase();
     String userCode = req.userCode().trim().toUpperCase();
-    AppUser user = users.findByFirmIdAndUserCodeIgnoreCase(firm, userCode)
-      .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
-
-    boolean passwordMatches = encoder.matches(req.password(), user.getPasswordHash())
-      || req.password().equals(user.getPasswordHash());
-    if (!user.isActive() || !passwordMatches) {
+    List<AppUser> userList = users.findByUserCodeIgnoreCase(userCode);
+    if (userList.isEmpty()) {
       throw new IllegalArgumentException("Invalid credentials");
     }
+
+    AppUser matchingUser = null;
+    for (AppUser user : userList) {
+      boolean passwordMatches = encoder.matches(req.password(), user.getPasswordHash())
+        || req.password().equals(user.getPasswordHash());
+      if (user.isActive() && passwordMatches) {
+        matchingUser = user;
+        break;
+      }
+    }
+
+    if (matchingUser == null) {
+      throw new IllegalArgumentException("Invalid credentials");
+    }
+
+    String token = jwt.generateToken(matchingUser.getUserCode(), matchingUser.getFirmId(), matchingUser.getRoleCode());
+    return new AuthDtos.AuthResponse(token, matchingUser.getUserCode(), matchingUser.getFullName(), matchingUser.getRoleCode(), matchingUser.getFirmId());
+  }
+
+  public AuthDtos.AuthResponse selectFirm(JwtPrincipal principal, AuthDtos.SelectFirmRequest req) {
+    if (principal == null) {
+      throw new IllegalArgumentException("Unauthorized");
+    }
+    String firmCode = req.firmCode().trim().toUpperCase();
+    AppUser user = users.findByFirmIdAndUserCodeIgnoreCase(firmCode, principal.userCode())
+      .orElseThrow(() -> new IllegalArgumentException("User does not have access to selected firm"));
+
+    if (!user.isActive()) {
+      throw new IllegalArgumentException("Inactive user");
+    }
+
     String token = jwt.generateToken(user.getUserCode(), user.getFirmId(), user.getRoleCode());
     return new AuthDtos.AuthResponse(token, user.getUserCode(), user.getFullName(), user.getRoleCode(), user.getFirmId());
   }
+
 
   public AuthDtos.AuthResponse me(JwtPrincipal principal) {
     if (principal == null) {

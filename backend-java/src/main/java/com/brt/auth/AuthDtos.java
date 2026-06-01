@@ -13,10 +13,14 @@ public class AuthDtos {
   ) {}
 
   public record SigninRequest(
-    @NotBlank(message = "Firm is required") String firmCode,
     @NotBlank(message = "User code is required") String userCode,
     @NotBlank(message = "Password is required") String password
   ) {}
+
+  public record SelectFirmRequest(
+    @NotBlank(message = "Firm code is required") String firmCode
+  ) {}
+
 
   public record UserCreateRequest(
     @NotEmpty(message = "At least one firm is required") List<String> firmCodes,

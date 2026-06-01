@@ -32,6 +32,12 @@ public class AuthController {
     return authService.signin(req);
   }
 
+  @PostMapping("/select-firm")
+  public AuthDtos.AuthResponse selectFirm(@AuthenticationPrincipal JwtPrincipal principal, @Valid @RequestBody AuthDtos.SelectFirmRequest req) {
+    return authService.selectFirm(principal, req);
+  }
+
+
   @GetMapping("/me")
   public AuthDtos.AuthResponse me(@AuthenticationPrincipal JwtPrincipal principal) {
     return authService.me(principal);

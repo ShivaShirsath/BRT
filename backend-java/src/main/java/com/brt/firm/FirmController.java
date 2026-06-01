@@ -1,5 +1,9 @@
 package com.brt.firm;
 
+import com.brt.auth.AppUserRepository;
+import com.brt.auth.AppUser;
+import com.brt.security.JwtPrincipal;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -9,21 +13,47 @@ import java.util.Map;
 @RequestMapping("/api/v1/firms")
 public class FirmController {
   private final FirmRepository firms;
+  private final AppUserRepository appUsers;
 
-  public FirmController(FirmRepository firms) {
+  public FirmController(FirmRepository firms, AppUserRepository appUsers) {
     this.firms = firms;
+    this.appUsers = appUsers;
   }
 
   @GetMapping
-  public Map<String, Object> list() {
-    return Map.of("firms", firms.findByActiveTrueOrderByNameAsc().stream().map(f -> Map.of(
-      "code", f.getCode(),
-      "name", f.getName(),
-      "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
-      "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
-      "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
-    )).toList());
+  public Map<String, Object> list(@AuthenticationPrincipal JwtPrincipal principal) {
+    var allFirms = firms.findByActiveTrueOrderByNameAsc();
+    if (principal == null) {
+      return Map.of("firms", allFirms.stream().map(f -> Map.of(
+        "code", f.getCode(),
+        "name", f.getName()
+      )).toList());
+    }
+
+    if ("ADMIN".equalsIgnoreCase(principal.roleCode())) {
+      return Map.of("firms", allFirms.stream().map(f -> Map.of(
+        "code", f.getCode(),
+        "name", f.getName(),
+        "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
+        "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
+        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
+      )).toList());
+    }
+
+    java.util.List<String> userFirmCodes = appUsers.findByUserCodeIgnoreCase(principal.userCode())
+      .stream().map(AppUser::getFirmId).toList();
+
+    return Map.of("firms", allFirms.stream()
+      .filter(f -> userFirmCodes.contains(f.getCode()))
+      .map(f -> Map.of(
+        "code", f.getCode(),
+        "name", f.getName(),
+        "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
+        "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
+        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
+      )).toList());
   }
+
 
   @PostMapping
   public Firm create(@RequestBody FirmCreateRequest req) {

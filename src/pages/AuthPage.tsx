@@ -7,10 +7,10 @@ import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
 
-const signinSchema = z.object({ firmCode: z.string().min(1), userCode: z.string().min(1), password: z.string().min(1) });
+const signinSchema = z.object({ userCode: z.string().min(1), password: z.string().min(1) });
 const signupSchema = z.object({ firmCode: z.string().min(1), userCode: z.string().min(1), fullName: z.string().min(2), password: z.string().min(6) });
 
-type SigninForm = { firmCode: string; userCode: string; password: string };
+type SigninForm = { userCode: string; password: string };
 type SignupForm = { firmCode: string; userCode: string; fullName: string; password: string };
 
 export function AuthPage() {
@@ -25,7 +25,7 @@ export function AuthPage() {
     if (token) navigate("/firm-selection");
   }, [token, navigate]);
 
-  const signin = useForm<SigninForm>({ defaultValues: { firmCode: "BRT01", userCode: "", password: "" } });
+  const signin = useForm<SigninForm>({ defaultValues: { userCode: "", password: "" } });
   const signup = useForm<SignupForm>({ defaultValues: { firmCode: "BRT01", userCode: "", fullName: "", password: "" } });
 
   async function handleSignin(values: SigninForm) {
@@ -98,7 +98,6 @@ export function AuthPage() {
           {mode === "signin" ? (
             <Box component="form" onSubmit={signin.handleSubmit(handleSignin)}>
               <Stack spacing={2}>
-                <TextField label="Firm Code" placeholder="BRT01" {...signin.register("firmCode")} />
                 <TextField label="User Code" placeholder="ADMIN" {...signin.register("userCode")} />
                 <TextField type="password" label="Password" placeholder="••••••••••" {...signin.register("password")} />
                 <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
