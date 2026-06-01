@@ -122,4 +122,75 @@ public class PurchaseService {
   public List<PurchaseBill> recent(String firmId) {
     return purchases.findTop20ByOrderByIdDesc();
   }
+
+  public java.util.Map<String, Object> getBillDetailsByNo(String billNo) {
+    return purchases.findByBillNo(billNo.trim())
+      .map(p -> {
+        java.util.Map<String, Object> res = new java.util.HashMap<>();
+        res.put("id", p.getId());
+        res.put("billNo", p.getBillNo());
+        res.put("note", p.getNote());
+        
+        if (p.getDetail() != null) {
+          PurchaseBillDetail d = p.getDetail();
+          res.put("billDate", d.getBillDate());
+          res.put("entryType", d.getEntryType());
+          res.put("cessCondition", d.getCessCondition());
+          res.put("sellerId", d.getSellerId());
+          res.put("vehicleNo", d.getVehicleNo());
+          res.put("partyBillNo", d.getPartyBillNo());
+        }
+        
+        java.util.List<java.util.Map<String, Object>> itemsList = new java.util.ArrayList<>();
+        if (p.getItems() != null) {
+          for (PurchaseBillItem item : p.getItems()) {
+            java.util.Map<String, Object> itemMap = new java.util.HashMap<>();
+            itemMap.put("itemNo", item.getItemNo());
+            itemMap.put("commodity", item.getProduct() != null ? item.getProduct().getEnglishName() : "");
+            itemMap.put("mark", item.getMark());
+            itemMap.put("brand", item.getBrand());
+            itemMap.put("bags", item.getBags());
+            itemMap.put("avgWeight", item.getAvgWeight());
+            itemMap.put("purchaseWeight", item.getPurchaseWeight());
+            itemMap.put("packingWeight", item.getPackingWeight());
+            itemMap.put("netWeight", item.getNetWeight());
+            itemMap.put("rate", item.getRate());
+            itemMap.put("amount", item.getAmount());
+            itemsList.add(itemMap);
+          }
+        }
+        res.put("items", itemsList);
+        
+        if (p.getCharges() != null) {
+          PurchaseBillChargesTaxes c = p.getCharges();
+          java.util.Map<String, Object> chg = new java.util.HashMap<>();
+          chg.put("purchaseAmount", c.getPurchaseAmount());
+          chg.put("mTax", c.getMTax());
+          chg.put("commission", c.getCommission());
+          chg.put("purchaseCommission", c.getPurchaseCommission());
+          chg.put("freight", c.getFreight());
+          chg.put("packing", c.getPacking());
+          chg.put("loading", c.getLoading());
+          chg.put("levy", c.getLevy());
+          chg.put("tolai", c.getTolai());
+          chg.put("hamali", c.getHamali());
+          chg.put("discount", c.getDiscount());
+          chg.put("igst", c.getIgst());
+          chg.put("sgst", c.getSgst());
+          chg.put("cgst", c.getCgst());
+          chg.put("tds", c.getTds());
+          chg.put("khandani", c.getKhandani());
+          chg.put("ourExpenses", c.getOurExpenses());
+          chg.put("exp2", c.getExp2());
+          chg.put("exp3", c.getExp3());
+          chg.put("exp4", c.getExp4());
+          chg.put("total", c.getTotal());
+          chg.put("netTotal", c.getNetTotal());
+          res.put("charges", chg);
+        }
+        
+        return res;
+      })
+      .orElse(null);
+  }
 }

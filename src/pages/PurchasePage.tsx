@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
@@ -176,6 +176,117 @@ export function PurchasePage() {
     }
   }
 
+  function resetForm() {
+    setDate("08.11.2025");
+    setEntryType("Select market");
+    setCessCondition("Order");
+    setSeller("");
+    setVehicleNo("--");
+    setPartyBillNo("--");
+    setNote("");
+    setRows(Array.from({ length: 6 }, () => mkRow()));
+    setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+    setMessage("");
+    setError("");
+  }
+
+  async function checkExistingBill(num: string) {
+    if (!num.trim()) {
+      resetForm();
+      return;
+    }
+    try {
+      const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
+      if (data && data.id) {
+        setBillNo(data.billNo || "");
+        if (data.billDate) {
+          const parts = data.billDate.split("-");
+          if (parts.length === 3) {
+            setDate(`${parts[2]}.${parts[1]}.${parts[0]}`);
+          } else {
+            setDate(data.billDate);
+          }
+        }
+        setEntryType(data.entryType || "Select market");
+        setCessCondition(data.cessCondition || "Order");
+        setSeller(data.sellerId ? String(data.sellerId) : "");
+        setVehicleNo(data.vehicleNo || "--");
+        setPartyBillNo(data.partyBillNo || "--");
+        setNote(data.note || "");
+
+        if (data.items && data.items.length > 0) {
+          const mappedRows = data.items.map((it: any) => ({
+            commodity: it.commodity || "",
+            mark: it.mark || "",
+            brand: it.brand || "",
+            bags: it.bags || "",
+            avgWt: it.avgWeight !== undefined ? String(it.avgWeight) : "",
+            purWt: it.purchaseWeight !== undefined ? String(it.purchaseWeight) : "",
+            packingWeight: it.packingWeight !== undefined ? String(it.packingWeight) : "",
+            netWt: it.netWeight !== undefined ? String(it.netWeight) : "",
+            rate: it.rate !== undefined ? String(it.rate) : "",
+          }));
+          while (mappedRows.length < 6) {
+            mappedRows.push(mkRow());
+          }
+          setRows(mappedRows);
+        } else {
+          setRows(Array.from({ length: 6 }, () => mkRow()));
+        }
+
+        if (data.charges) {
+          const loadedCharges: Record<string, string> = {};
+          const chargesMapReverse: Record<string, string> = {
+            purchaseAmount: "Purchase amt.",
+            mTax: "M. Tax",
+            commission: "Commission",
+            purchaseCommission: "Pur. Comm",
+            freight: "Freight",
+            packing: "Packing",
+            loading: "Loading",
+            levy: "Leivy",
+            tolai: "Tolai",
+            hamali: "Hamali",
+            discount: "Discount",
+            igst: "IGST",
+            sgst: "SGST",
+            cgst: "CGST",
+            tds: "TDS",
+            khandani: "Khandani",
+            ourExpenses: "Our expenses",
+            exp2: "Exp. 2",
+            exp3: "Exp. 3",
+            exp4: "Exp. 4",
+          };
+          for (const [apiField, uiField] of Object.entries(chargesMapReverse)) {
+            loadedCharges[uiField] = data.charges[apiField] !== undefined ? String(data.charges[apiField]) : "0.00";
+          }
+          setCharges(loadedCharges);
+        } else {
+          setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+        }
+
+        setMessage(`Loaded details for Bill no. ${data.billNo}`);
+        setError("");
+      } else {
+        resetForm();
+      }
+    } catch (e: any) {
+      console.error("Failed to fetch existing bill details", e);
+      resetForm();
+    }
+  }
+
+  useEffect(() => {
+    if (!billNo.trim()) return;
+    const handler = setTimeout(() => {
+      checkExistingBill(billNo);
+    }, 500);
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [billNo]);
+
   return (
     <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 2 }}>
       <Typography sx={{ fontSize: 42, color: "#9aa0a9", mb: 1.2 }}>Purchase Bill Entry</Typography>
@@ -188,7 +299,13 @@ export function PurchasePage() {
         <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 1.5, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
           <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>BILL DETAILS</Typography>
           <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 1.6 }}>
-            <TextField label="Bill no." size="small" value={billNo} onChange={(e) => setBillNo(e.target.value)} />
+            <TextField
+              label="Bill no."
+              size="small"
+              value={billNo}
+              onChange={(e) => setBillNo(e.target.value)}
+              onBlur={(e) => checkExistingBill(e.target.value)}
+            />
             <TextField label="Date" size="small" value={date} onChange={(e) => setDate(e.target.value)} />
             <TextField label="Entry Type" size="small" select value={entryType} onChange={(e) => setEntryType(e.target.value)}>
               <MenuItem value="Select market">Select market</MenuItem>

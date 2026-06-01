@@ -28,4 +28,11 @@ public class PurchaseController {
       "id", p.getId(), "billNo", p.getBillNo(), "amount", p.getCharges() != null ? p.getCharges().getNetTotal() : null
     )).toList());
   }
+
+  @GetMapping("/by-bill-no/{billNo}")
+  public Map<String, Object> getByBillNo(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable String billNo) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    Map<String, Object> details = purchaseService.getBillDetailsByNo(billNo);
+    return details != null ? details : Map.of();
+  }
 }
