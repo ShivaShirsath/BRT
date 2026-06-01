@@ -22,7 +22,10 @@ public class AuthController {
   }
 
   @PostMapping("/users")
-  public List<AppUser> createUser(@Valid @RequestBody AuthDtos.UserCreateRequest req) {
+  public List<AppUser> createUser(@AuthenticationPrincipal JwtPrincipal principal, @Valid @RequestBody AuthDtos.UserCreateRequest req) {
+    if (principal == null || !"ADMIN".equalsIgnoreCase(principal.roleCode())) {
+      throw new IllegalArgumentException("Access Denied: Only Admins can create users");
+    }
     return authService.createUser(req);
   }
 

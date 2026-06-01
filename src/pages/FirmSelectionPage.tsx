@@ -14,7 +14,10 @@ export function FirmSelectionPage() {
   const setFirm = useAuthStore((s) => s.setFirm);
   const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+  const roleCode = useAuthStore((s) => s.roleCode);
   const navigate = useNavigate();
+
+  const isAdmin = roleCode?.toUpperCase() === "ADMIN";
 
   useEffect(() => {
     (async () => {
@@ -150,26 +153,28 @@ export function FirmSelectionPage() {
               >
                 + Create Firm
               </Button>
-              <Button
-                variant="outlined"
-                onClick={() => navigate("/create-user")}
-                sx={{
-                  height: "52px",
-                  borderRadius: "12px",
-                  fontSize: 20,
-                  fontWeight: 600,
-                  textTransform: "none",
-                  borderColor: "#b5c7e5",
-                  color: "#2b4066",
-                  px: 3,
-                  "&:hover": {
-                    borderColor: "#1470e5",
-                    bgcolor: "#f2f7ff"
-                  }
-                }}
-              >
-                + Create User
-              </Button>
+              {isAdmin && (
+                <Button
+                  variant="outlined"
+                  onClick={() => navigate("/create-user")}
+                  sx={{
+                    height: "52px",
+                    borderRadius: "12px",
+                    fontSize: 20,
+                    fontWeight: 600,
+                    textTransform: "none",
+                    borderColor: "#b5c7e5",
+                    color: "#2b4066",
+                    px: 3,
+                    "&:hover": {
+                      borderColor: "#1470e5",
+                      bgcolor: "#f2f7ff"
+                    }
+                  }}
+                >
+                  + Create User
+                </Button>
+              )}
             </Box>
             <Button
               variant="contained"
