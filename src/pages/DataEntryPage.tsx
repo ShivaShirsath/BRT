@@ -46,6 +46,7 @@ export function DataEntryPage() {
   function routeFor(title: string) {
     if (title === "Purchase Bill") return "/purchase";
     if (title === "Sales Patti Entry") return "/sales";
+    if (title === "Opening Balance") return "/opening-balances";
     return null;
   }
 
