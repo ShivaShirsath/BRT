@@ -6,8 +6,8 @@ import java.util.List;
 
 import java.util.Optional;
 
-public interface PurchaseBillRepository extends JpaRepository<PurchaseBill, Long> {
-  List<PurchaseBill> findTop20ByOrderByIdDesc();
+public interface PurchaseBillRepository extends JpaRepository<PurchaseBill, java.util.UUID> {
+  List<PurchaseBill> findTop20ByOrderByCreatedAtDesc();
   Optional<PurchaseBill> findByBillNo(String billNo);
 }
 

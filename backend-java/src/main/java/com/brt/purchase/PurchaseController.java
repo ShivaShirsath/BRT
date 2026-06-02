@@ -21,6 +21,12 @@ public class PurchaseController {
     return Map.of("id", p.getId(), "billNo", p.getBillNo(), "amount", p.getCharges() != null ? p.getCharges().getNetTotal() : null);
   }
 
+  @PostMapping("/bulk")
+  public Map<String, Object> createBulk(@AuthenticationPrincipal JwtPrincipal principal, @RequestBody java.util.List<PurchaseRequest> reqs) {
+    java.util.List<Map<String, Object>> results = purchaseService.createBulk(principal, reqs);
+    return Map.of("results", results);
+  }
+
   @GetMapping
   public Map<String, Object> recent(@AuthenticationPrincipal JwtPrincipal principal) {
     if (principal == null) throw new IllegalArgumentException("Unauthorized");

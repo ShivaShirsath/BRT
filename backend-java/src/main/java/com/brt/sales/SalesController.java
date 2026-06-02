@@ -22,6 +22,12 @@ public class SalesController {
                   "amount", patti.getTotals() != null ? patti.getTotals().getPattiNetTotal() : null);
   }
 
+  @PostMapping("/bulk")
+  public Map<String, Object> createBulk(@AuthenticationPrincipal JwtPrincipal principal, @RequestBody java.util.List<SalesRequest> reqs) {
+    java.util.List<Map<String, Object>> results = salesService.createBulk(principal, reqs);
+    return Map.of("results", results);
+  }
+
   @GetMapping
   public Map<String, Object> recent(@AuthenticationPrincipal JwtPrincipal principal) {
     if (principal == null) throw new IllegalArgumentException("Unauthorized");
@@ -29,5 +35,12 @@ public class SalesController {
       "id", patti.getId(), "salePattiNo", patti.getSalePattiNo(),
       "amount", patti.getTotals() != null ? patti.getTotals().getPattiNetTotal() : null
     )).toList());
+  }
+
+  @GetMapping("/by-patti-no/{pattiNo}")
+  public Map<String, Object> getByPattiNo(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable String pattiNo) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    Map<String, Object> details = salesService.getSalePattiDetailsByNo(pattiNo);
+    return details != null ? details : Map.of();
   }
 }

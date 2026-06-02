@@ -12,8 +12,7 @@ import java.time.OffsetDateTime;
 @Table(name = "purchase", schema = "txn")
 public class Purchase {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private java.util.UUID id;
   @Column(name = "firm_id", nullable = false) private String firmId;
   @Column(name = "voucher_no", nullable = false) private String voucherNo;
   @Column(name = "business_date", nullable = false) private LocalDate businessDate;

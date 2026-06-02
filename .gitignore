@@ -22,3 +22,32 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Java/Maven files
+*.class
+target/
+backend-java/target/
+.project
+.classpath
+.factorypath
+.settings/
+*.jar
+*.war
+*.ear
+
+# Python virtualenv and cache files
+venv/
+.venv/
+env/
+ENV/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IntelliJ IDEA project files
+*.iml
+*.ipr
+*.iws
+.idea/
+

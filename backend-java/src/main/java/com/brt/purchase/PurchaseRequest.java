@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public record PurchaseRequest(
+  java.util.UUID id,
   @NotBlank String voucherNo,
   @NotNull LocalDate businessDate,
   String entryType,
