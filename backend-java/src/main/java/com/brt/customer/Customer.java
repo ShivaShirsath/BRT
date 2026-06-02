@@ -3,6 +3,7 @@ package com.brt.customer;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -109,6 +110,83 @@ public class Customer {
 
     @Column(name = "discount_percentage", precision = 5, scale = 2)
     private BigDecimal discountPercentage = BigDecimal.ZERO;
+
+    // Other Details
+    @Column(name = "guarantor")
+    private String guarantor;
+
+    @Column(name = "credit_amt", precision = 12, scale = 2)
+    private BigDecimal creditAmt = BigDecimal.ZERO;
+
+    @Column(name = "credit_days")
+    private Integer creditDays = 0;
+
+    @Column(name = "gst", length = 100)
+    private String gst;
+
+    @Column(name = "mst", length = 100)
+    private String mst;
+
+    @Column(name = "cst", length = 100)
+    private String cst;
+
+    @Column(name = "ecc_no", length = 100)
+    private String eccNo;
+
+    @Column(name = "range", length = 100)
+    private String range;
+
+    @Column(name = "division", length = 100)
+    private String division;
+
+    @Column(name = "collector", length = 100)
+    private String collector;
+
+    @Column(name = "pati_code", length = 100)
+    private String patiCode;
+
+    @Column(name = "marriage_date")
+    private LocalDate marriageDate;
+
+    @Column(name = "dob")
+    private LocalDate dob;
+
+    @Column(name = "monthly_wages", precision = 12, scale = 2)
+    private BigDecimal monthlyWages = BigDecimal.ZERO;
+
+    // RTGS Details
+    @Column(name = "rtgs_ifsc", length = 50)
+    private String rtgsIfsc;
+
+    @Column(name = "rtgs_bank_name")
+    private String rtgsBankName;
+
+    @Column(name = "rtgs_branch_name")
+    private String rtgsBranchName;
+
+    @Column(name = "rtgs_location")
+    private String rtgsLocation;
+
+    @Column(name = "rtgs_ac_no", length = 100)
+    private String rtgsAcNo;
+
+    @Column(name = "rtgs_ac_type", length = 100)
+    private String rtgsAcType;
+
+    @Column(name = "rtgs_ac_no_confirm", length = 100)
+    private String rtgsAcNoConfirm;
+
+    @Column(name = "rtgs_form_no", length = 100)
+    private String rtgsFormNo;
+
+    @Column(name = "rtgs_format", length = 100)
+    private String rtgsFormat;
+
+    @Column(name = "rtgs_report", length = 100)
+    private String rtgsReport;
+
+    @Column(name = "note", columnDefinition = "TEXT")
+    private String note;
 
     @Column(name = "created_at", columnDefinition = "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;

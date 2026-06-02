@@ -65,6 +65,33 @@ export function AccountGenerationModal({
     licenseNo: "",
     tinNo: "",
     discountPercentage: 0,
+    // Other Details
+    guarantor: "",
+    creditAmt: 0,
+    creditDays: 0,
+    mst: "",
+    cst: "",
+    eccNo: "",
+    range: "",
+    division: "",
+    collector: "",
+    patiCode: "",
+    marriageDate: "",
+    dob: "",
+    monthlyWages: 0,
+    gst: "",
+    // RTGS Details
+    rtgsIfsc: "",
+    rtgsBankName: "",
+    rtgsBranchName: "",
+    rtgsLocation: "",
+    rtgsAcNo: "",
+    rtgsAcType: "",
+    rtgsAcNoConfirm: "",
+    rtgsFormNo: "",
+    rtgsFormat: "",
+    rtgsReport: "",
+    note: "",
   });
 
   useEffect(() => {
@@ -106,6 +133,31 @@ export function AccountGenerationModal({
         licenseNo: "",
         tinNo: "",
         discountPercentage: 0,
+        guarantor: "",
+        creditAmt: 0,
+        creditDays: 0,
+        mst: "",
+        cst: "",
+        eccNo: "",
+        range: "",
+        division: "",
+        collector: "",
+        patiCode: "",
+        marriageDate: "",
+        dob: "",
+        monthlyWages: 0,
+        gst: "",
+        rtgsIfsc: "",
+        rtgsBankName: "",
+        rtgsBranchName: "",
+        rtgsLocation: "",
+        rtgsAcNo: "",
+        rtgsAcType: "",
+        rtgsAcNoConfirm: "",
+        rtgsFormNo: "",
+        rtgsFormat: "",
+        rtgsReport: "",
+        note: "",
       });
     }
     setTabValue(0);
@@ -360,7 +412,6 @@ export function AccountGenerationModal({
               <Tab label="Other Details" />
               <Tab label="RTGS Details" />
               <Tab label="Note" />
-              <Tab label="GST, VAT, TIN, & CST" />
             </Tabs>
           </Box>
 
@@ -521,11 +572,293 @@ export function AccountGenerationModal({
             </Box>
           )}
 
-          {tabValue > 0 && (
-            <Box sx={{ py: 3, textAlign: "center" }}>
-              <Typography variant="body1" color="text.secondary">
-                Additional Details and Settings for {formData.name || "this account"}
-              </Typography>
+          {tabValue === 1 && (
+            <Box sx={{ py: 2 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Guarantor"
+                    value={formData.guarantor}
+                    onChange={(e) => handleChange("guarantor", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Pati Code"
+                    value={formData.patiCode}
+                    onChange={(e) => handleChange("patiCode", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Credit Amt."
+                    value={formData.creditAmt}
+                    onChange={(e) => handleChange("creditAmt", Number(e.target.value))}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Credit Days"
+                    value={formData.creditDays}
+                    onChange={(e) => handleChange("creditDays", Number(e.target.value))}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    label="Marriage Date"
+                    value={formData.marriageDate || ""}
+                    onChange={(e) => handleChange("marriageDate", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="License"
+                    value={formData.licenseNo}
+                    onChange={(e) => handleChange("licenseNo", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="date"
+                    InputLabelProps={{ shrink: true }}
+                    label="Date of Birth"
+                    value={formData.dob || ""}
+                    onChange={(e) => handleChange("dob", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="GST"
+                    value={formData.gst}
+                    onChange={(e) => handleChange("gst", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    type="number"
+                    label="Monthly Wages"
+                    value={formData.monthlyWages}
+                    onChange={(e) => handleChange("monthlyWages", Number(e.target.value))}
+                  />
+                </Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="MST"
+                    value={formData.mst}
+                    onChange={(e) => handleChange("mst", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="CST"
+                    value={formData.cst}
+                    onChange={(e) => handleChange("cst", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="ECC No."
+                    value={formData.eccNo}
+                    onChange={(e) => handleChange("eccNo", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Range"
+                    value={formData.range}
+                    onChange={(e) => handleChange("range", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Division"
+                    value={formData.division}
+                    onChange={(e) => handleChange("division", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Collector"
+                    value={formData.collector}
+                    onChange={(e) => handleChange("collector", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4}></Grid>
+              </Grid>
+            </Box>
+          )}
+
+          {tabValue === 2 && (
+            <Box sx={{ py: 2 }}>
+              <Grid container spacing={2}>
+                <Grid item xs={8}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="IFSC Code"
+                    value={formData.rtgsIfsc}
+                    onChange={(e) => handleChange("rtgsIfsc", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
+                  <Button variant="contained" color="secondary" fullWidth sx={{ height: "40px" }}>
+                    Get Bank
+                  </Button>
+                </Grid>
+
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Bank Name"
+                    value={formData.rtgsBankName}
+                    onChange={(e) => handleChange("rtgsBankName", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Branch Name"
+                    value={formData.rtgsBranchName}
+                    onChange={(e) => handleChange("rtgsBranchName", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Location"
+                    value={formData.rtgsLocation}
+                    onChange={(e) => handleChange("rtgsLocation", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="A/C No"
+                    value={formData.rtgsAcNo}
+                    onChange={(e) => handleChange("rtgsAcNo", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="A/C Type"
+                    value={formData.rtgsAcType}
+                    onChange={(e) => handleChange("rtgsAcType", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="A/C No Conform"
+                    value={formData.rtgsAcNoConfirm}
+                    onChange={(e) => handleChange("rtgsAcNoConfirm", e.target.value)}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="Form No."
+                    value={formData.rtgsFormNo}
+                    onChange={(e) => handleChange("rtgsFormNo", e.target.value)}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    select
+                    label="RTGS Format"
+                    value={formData.rtgsFormat}
+                    onChange={(e) => handleChange("rtgsFormat", e.target.value)}
+                  >
+                    <MenuItem value="">Select Format</MenuItem>
+                    <MenuItem value="PDF">PDF</MenuItem>
+                    <MenuItem value="Excel">Excel</MenuItem>
+                  </TextField>
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    size="small"
+                    label="RTGS Report"
+                    value={formData.rtgsReport}
+                    onChange={(e) => handleChange("rtgsReport", e.target.value)}
+                  />
+                </Grid>
+              </Grid>
+            </Box>
+          )}
+
+          {tabValue === 3 && (
+            <Box sx={{ py: 2 }}>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                label="Note"
+                placeholder="Enter general notes or comments here..."
+                value={formData.note || ""}
+                onChange={(e) => handleChange("note", e.target.value)}
+              />
             </Box>
           )}
         </Box>
