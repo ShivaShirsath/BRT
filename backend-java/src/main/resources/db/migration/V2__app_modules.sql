@@ -9,7 +9,7 @@ alter table core.app_user add column if not exists full_name varchar(128);
 alter table core.app_user add column if not exists role_code varchar(32) not null default 'OPERATOR';
 
 create table if not exists txn.purchase (
-  id bigserial primary key,
+  id uuid primary key,
   firm_id varchar(32) not null,
   voucher_no varchar(64) not null,
   business_date date not null,
@@ -23,7 +23,7 @@ create table if not exists txn.purchase (
 );
 
 create table if not exists txn.sale (
-  id bigserial primary key,
+  id uuid primary key,
   firm_id varchar(32) not null,
   voucher_no varchar(64) not null,
   business_date date not null,

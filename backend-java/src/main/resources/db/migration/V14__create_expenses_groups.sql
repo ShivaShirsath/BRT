@@ -66,6 +66,18 @@ CREATE TABLE IF NOT EXISTS mst.expenses_groups (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS mst.products (
+    id BIGSERIAL PRIMARY KEY,
+    code VARCHAR(50) NOT NULL UNIQUE,
+    marathi_name VARCHAR(255),
+    english_name VARCHAR(255),
+    bharti_weight NUMERIC(12,2) DEFAULT 0,
+    gst_item_code VARCHAR(50),
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 CREATE TABLE IF NOT EXISTS mst.product_expense_groups (
     product_id BIGINT NOT NULL,
     expense_group_id BIGINT NOT NULL,
