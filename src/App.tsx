@@ -1,5 +1,4 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
 import { ProtectedRoute } from "./app/ProtectedRoute";
 import { AuthPage } from "./pages/AuthPage";
 import { FirmSelectionPage } from "./pages/FirmSelectionPage";
@@ -39,25 +38,47 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+import { useThemeStore } from "./store/themeStore";
+
 export default function App() {
+  const themeId = useThemeStore((s) => s.themeId);
+  const darkMode = useThemeStore((s) => s.darkMode);
+
+  useEffect(() => {
+    // 1. Swap theme stylesheet
+    let link = document.getElementById("theme-link") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement("link");
+      link.id = "theme-link";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    link.href = `${import.meta.env.BASE_URL}themes/theme-${themeId}.css`;
+
+    // 2. Toggle dark mode class on document element
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [themeId, darkMode]);
+
   return (
-    <>
-      <CssBaseline />
-      <SessionBootstrap>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/auth" element={<AuthPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route path="/firm-selection" element={<FirmSelectionPage />} />
-              <Route path="/menu" element={<MenuPage />} />
-              <Route path="/data-entry" element={<DataEntryPage />} />
-              <Route path="/purchase" element={<PurchasePage />} />
-              <Route path="/sales" element={<SalesPage />} />
-            </Route>
-            <Route path="*" element={<Navigate to="/auth" replace />} />
-          </Routes>
-        </BrowserRouter>
-      </SessionBootstrap>
-    </>
+    <SessionBootstrap>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/auth" element={<AuthPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route path="/firm-selection" element={<FirmSelectionPage />} />
+            <Route path="/menu" element={<MenuPage />} />
+            <Route path="/data-entry" element={<DataEntryPage />} />
+            <Route path="/purchase" element={<PurchasePage />} />
+            <Route path="/sales" element={<SalesPage />} />
+          </Route>
+          <Route path="*" element={<Navigate to="/auth" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </SessionBootstrap>
   );
 }

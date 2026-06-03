@@ -1,10 +1,24 @@
 import { useEffect, useMemo, useState } from "react";
-import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
+import { Select } from "../components/ui/select";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter, DialogHeader } from "../components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -154,41 +168,10 @@ export function PurchasePage() {
   function removeSelectedRow() {
     setRows((prev) => {
       if (prev.length <= 1) return prev;
-      const next = prev.filter((_, i) => i !== selectedRowIndex);
-      return next;
+      return prev.filter((_, i) => i !== selectedRowIndex);
     });
     setSelectedRowIndex((i) => Math.max(0, i - 1));
     setIsDirty(true);
-  }
-
-  function handleBillNoChange(newVal: string) {
-    const trimmed = newVal.trim();
-    if (trimmed === billNo) return;
-
-    if (isDirty) {
-      setPendingBillNo(trimmed);
-      setConfirmDialogOpen(true);
-    } else {
-      setBillNo(trimmed);
-    }
-  }
-
-  function handleConfirmDiscard() {
-    setConfirmDialogOpen(false);
-    setBillNo(pendingBillNo);
-    setIsDirty(false);
-  }
-
-  async function handleConfirmSave() {
-    setConfirmDialogOpen(false);
-    await onSave();
-    setBillNo(pendingBillNo);
-    setIsDirty(false);
-  }
-
-  function handleConfirmCancel() {
-    setConfirmDialogOpen(false);
-    setBillNoInput(billNo);
   }
 
   function toIsoDate(ddmmyyyy: string) {
@@ -223,7 +206,7 @@ export function PurchasePage() {
     let sum = total;
     const additionFields = [
       "M. Tax", "Commission", "Pur. Comm", "Freight", "Packing", "Loading", "Leivy",
-      "Tolai", "Hamali", "IGST", "SGST", "CGST", "Khandani", "Our expenses", "Exp. 2", "Exp. 3", "Exp. 4"
+      "Tolai", "Hamali", "Discount", "IGST", "SGST", "CGST", "Khandani", "Our expenses", "Exp. 2", "Exp. 3", "Exp. 4"
     ];
     additionFields.forEach((f) => {
       sum += parseNumber(charges[f]);
@@ -352,19 +335,57 @@ export function PurchasePage() {
             return v.toString(16);
           })
     );
+    setBillNoInput("");
+    setBillNo("");
     setDate("08.11.2025");
     setEntryType("Select market");
     setCessCondition("Order");
     setSeller("");
     setVehicleNo("--");
     setPartyBillNo("--");
-    setNote("");
     setRows(Array.from({ length: 6 }, () => mkRow()));
+    setNote("");
     setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+    setIsDirty(false);
     setMessage("");
     setError("");
-    setIsDirty(false);
   }
+
+  const handleBillNoChange = (newVal: string) => {
+    if (isDirty) {
+      setPendingBillNo(newVal);
+      setConfirmDialogOpen(true);
+    } else {
+      setBillNo(newVal.trim());
+      setBillNoInput(newVal.trim());
+    }
+  };
+
+  const handleConfirmSave = async () => {
+    setConfirmDialogOpen(false);
+    await onSave();
+    if (pendingBillNo) {
+      setBillNo(pendingBillNo.trim());
+      setBillNoInput(pendingBillNo.trim());
+      setPendingBillNo("");
+    }
+  };
+
+  const handleConfirmDiscard = () => {
+    setConfirmDialogOpen(false);
+    setIsDirty(false);
+    if (pendingBillNo) {
+      setBillNo(pendingBillNo.trim());
+      setBillNoInput(pendingBillNo.trim());
+      setPendingBillNo("");
+    }
+  };
+
+  const handleConfirmCancel = () => {
+    setConfirmDialogOpen(false);
+    setBillNoInput(billNo);
+    setPendingBillNo("");
+  };
 
   async function checkExistingBill(num: string) {
     if (!num.trim()) {
@@ -375,16 +396,8 @@ export function PurchasePage() {
       const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
       if (data && data.id) {
         setPurchaseId(data.id);
-        setBillNo(data.billNo || "");
-        setBillNoInput(data.billNo || "");
-        if (data.billDate) {
-          const parts = data.billDate.split("-");
-          if (parts.length === 3) {
-            setDate(`${parts[2]}.${parts[1]}.${parts[0]}`);
-          } else {
-            setDate(data.billDate);
-          }
-        }
+        setBillNo(data.voucherNo || "");
+        setBillNoInput(data.voucherNo || "");
         setEntryType(data.entryType || "Select market");
         setCessCondition(data.cessCondition || "Order");
         setSeller(data.sellerId ? String(data.sellerId) : "");
@@ -392,17 +405,26 @@ export function PurchasePage() {
         setPartyBillNo(data.partyBillNo || "--");
         setNote(data.note || "");
 
+        if (data.businessDate) {
+          const parts = data.businessDate.split("-");
+          if (parts.length === 3) {
+            setDate(`${parts[2]}.${parts[1]}.${parts[0]}`);
+          } else {
+            setDate(data.businessDate);
+          }
+        }
+
         if (data.items && data.items.length > 0) {
           const mappedRows = data.items.map((it: any) => ({
             commodity: it.commodity || "",
             mark: it.mark || "",
             brand: it.brand || "",
             bags: it.bags || "",
-            avgWt: it.avgWeight !== undefined ? String(it.avgWeight) : "",
-            purWt: it.purchaseWeight !== undefined ? String(it.purchaseWeight) : "",
-            packingWeight: it.packingWeight !== undefined ? String(it.packingWeight) : "",
-            netWt: it.netWeight !== undefined ? String(it.netWeight) : "",
-            rate: it.rate !== undefined ? String(it.rate) : "",
+            avgWt: it.avgWeight ? String(it.avgWeight) : "",
+            purWt: it.purchaseWeight ? String(it.purchaseWeight) : "",
+            packingWeight: it.packingWeight ? String(it.packingWeight) : "",
+            netWt: it.netWeight ? String(it.netWeight) : "",
+            rate: it.rate ? String(it.rate) : "",
           }));
           while (mappedRows.length < 6) {
             mappedRows.push(mkRow());
@@ -415,7 +437,6 @@ export function PurchasePage() {
         if (data.charges) {
           const loadedCharges: Record<string, string> = {};
           const chargesMapReverse: Record<string, string> = {
-            purchaseAmount: "Purchase amt.",
             mTax: "M. Tax",
             commission: "Commission",
             purchaseCommission: "Pur. Comm",
@@ -444,7 +465,7 @@ export function PurchasePage() {
           setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
         }
 
-        setMessage(`Loaded details for Bill no. ${data.billNo}`);
+        setMessage(`Loaded details for Bill no. ${data.voucherNo}`);
         setError("");
         setIsDirty(false);
       } else {
@@ -463,163 +484,290 @@ export function PurchasePage() {
   }, [billNo]);
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 2 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.2 }}>
-        <Typography sx={{ fontSize: 42, color: "#9aa0a9" }}>Purchase Bill Entry</Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, bgcolor: isOnline ? "#e8f5e9" : "#ffebee", px: 2, py: 0.5, borderRadius: "20px", border: isOnline ? "1px solid #c8e6c9" : "1px solid #ffcdd2" }}>
-          <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: isOnline ? "#4caf50" : "#f44336" }} />
-          <Typography sx={{ fontSize: 24, fontWeight: 600, color: isOnline ? "#2e7d32" : "#c62828" }}>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="border-b bg-card text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Purchase Bill Entry</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
+          <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
+          <span className="text-muted-foreground">
             {isOnline ? "Online" : "Offline"}
-          </Typography>
-        </Box>
-      </Box>
+          </span>
+        </div>
+      </header>
 
-      <Box sx={{ bgcolor: "#cfd9e8", border: "1px solid #b8c7db", p: 2.2 }}>
-        <Typography sx={{ fontSize: 30, fontWeight: 700, color: "#1e2e46", mb: 0.6 }}>
-          {selectedFirm?.name || "BRT Trading Co."} <Typography component="span" sx={{ color: "#1e2e46", fontSize: 30 }}>›</Typography> Data Entry <Typography component="span" sx={{ color: "#1e2e46", fontSize: 30 }}>›</Typography> Purchase Bill Entry
-        </Typography>
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground font-semibold">
+          <span>{selectedFirm?.name || "BRT Trading Co."}</span>
+          <span>›</span>
+          <span>Data Entry</span>
+          <span>›</span>
+          <span>Purchase Bill Entry</span>
+        </div>
 
-        <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 1.5, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
-          <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>BILL DETAILS</Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 1.6 }}>
-            <TextField
-              label="Bill no."
-              size="small"
-              value={billNoInput}
-              onChange={(e) => setBillNoInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+        {message && (
+          <Alert variant="success">
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <Card>
+          <CardHeader className="p-4 border-b">
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Bill Details</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Bill no.</label>
+              <Input
+                value={billNoInput}
+                onChange={(e) => setBillNoInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleBillNoChange(billNoInput);
+                  }
+                }}
+                onBlur={() => {
                   handleBillNoChange(billNoInput);
-                }
-              }}
-              onBlur={() => {
-                handleBillNoChange(billNoInput);
-              }}
-            />
-            <TextField label="Date" size="small" value={date} onChange={(e) => setDateDirty(e.target.value)} />
-            <TextField label="Entry Type" size="small" select value={entryType} onChange={(e) => setEntryTypeDirty(e.target.value)}>
-              <MenuItem value="Select market">Select market</MenuItem>
-              <MenuItem value="Market A">Market A</MenuItem>
-            </TextField>
-            <TextField label="Cess Condition" size="small" select value={cessCondition} onChange={(e) => setCessConditionDirty(e.target.value)}>
-              <MenuItem value="Order">Order</MenuItem>
-              <MenuItem value="Direct">Direct</MenuItem>
-            </TextField>
-            <TextField label="Seller" size="small" value={seller} onChange={(e) => setSellerDirty(e.target.value)} sx={{ gridColumn: "1 / span 2" }} placeholder="Search Customer" />
-            <TextField label="Vehicle No." size="small" value={vehicleNo} onChange={(e) => setVehicleNoDirty(e.target.value)} />
-            <TextField label="Party Bill No." size="small" value={partyBillNo} onChange={(e) => setPartyBillNoDirty(e.target.value)} />
-          </Box>
-        </Box>
-
-        <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 2.2, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.2 }}>
-            <Typography sx={{ color: "#667d9d", fontSize: 40 }}>ITEMS</Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button variant="contained" onClick={addRow} sx={{ textTransform: "none", borderRadius: "10px", fontSize: 34, px: 2.2 }}>+ Add row</Button>
-              <Button variant="outlined" onClick={removeSelectedRow} sx={{ textTransform: "none", borderRadius: "10px", fontSize: 34, px: 2.2 }}>Remove</Button>
-            </Box>
-          </Box>
-
-          <Box sx={{ border: "1px solid #aebfd5", bgcolor: "#d7dce5" }}>
-            <Box sx={{ display: "grid", gridTemplateColumns: "0.4fr 1.8fr 1.2fr 1.2fr 0.9fr 0.9fr 0.9fr 1.3fr 0.9fr 0.9fr 1.1fr", px: 1, py: 0.7, borderBottom: "1px solid #aebfd5" }}>
-              {["#", "Commodity", "Mark", "Brand", "Bags", "Avg. Wt.", "Pur. Wt.", "Packing Weight", "Net Wt.", "Rate", "Amount"].map((h) => (
-                <Typography key={h} sx={{ color: "#617897", fontSize: 31 }}>{h}</Typography>
-              ))}
-            </Box>
-
-            {rows.map((r, rowIndex) => {
-              const amount = (parseNumber(r.netWt) * parseNumber(r.rate)).toFixed(2);
-              return (
-                <Box key={rowIndex} onClick={() => setSelectedRowIndex(rowIndex)} sx={{ display: "grid", gridTemplateColumns: "0.4fr 1.8fr 1.2fr 1.2fr 0.9fr 0.9fr 0.9fr 1.3fr 0.9fr 0.9fr 1.1fr", px: 1, py: 0.6, borderBottom: "1px solid #aebfd5", bgcolor: selectedRowIndex === rowIndex ? "#e8edf6" : "transparent" }}>
-                  <Typography sx={{ fontSize: 28 }}>{rowIndex + 1}</Typography>
-                  <input value={r.commodity} onChange={(e) => setCell(rowIndex, "commodity", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.mark} onChange={(e) => setCell(rowIndex, "mark", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.brand} onChange={(e) => setCell(rowIndex, "brand", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.bags} onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.avgWt} onChange={(e) => setCell(rowIndex, "avgWt", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.purWt} onChange={(e) => setCell(rowIndex, "purWt", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.packingWeight} onChange={(e) => setCell(rowIndex, "packingWeight", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.netWt} onChange={(e) => setCell(rowIndex, "netWt", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.rate} onChange={(e) => setCell(rowIndex, "rate", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <Typography sx={{ fontSize: 28 }}>{amount}</Typography>
-                </Box>
-              );
-            })}
-
-            <input value={note} onChange={(e) => setNoteDirty(e.target.value)} placeholder="Note" style={{ width: "100%", padding: "14px 12px", border: "none", fontSize: 28, background: "#e2e7ef", color: "#6a7990" }} />
-          </Box>
-        </Box>
-
-        <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 2.2, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
-          <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>Charges & Taxes</Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "repeat(8, 1fr)", gap: 1.2 }}>
-            {chargeFields.map((f) => (
-              <TextField
-                key={f}
-                size="small"
-                label={f}
-                value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
-                onChange={(e) => setChargesDirty((c) => ({ ...c, [f]: sanitizeNumeric(e.target.value) }))}
-                disabled={f === "Purchase amt."}
+                }}
               />
-            ))}
-          </Box>
-          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Total ₹ {total.toFixed(2)} | Net total ₹ {netTotal.toFixed(2)}</Typography>
-        </Box>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Date</label>
+              <Input value={date} onChange={(e) => setDateDirty(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Entry Type</label>
+              <Select value={entryType} onChange={(e) => setEntryTypeDirty(e.target.value)}>
+                <option value="Select market">Select market</option>
+                <option value="Market A">Market A</option>
+              </Select>
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Cess Condition</label>
+              <Select value={cessCondition} onChange={(e) => setCessConditionDirty(e.target.value)}>
+                <option value="Order">Order</option>
+                <option value="Direct">Direct</option>
+              </Select>
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <label className="text-xs font-semibold text-slate-500">Seller</label>
+              <Input value={seller} onChange={(e) => setSellerDirty(e.target.value)} placeholder="Search Customer" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
+              <Input value={vehicleNo} onChange={(e) => setVehicleNoDirty(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Party Bill No.</label>
+              <Input value={partyBillNo} onChange={(e) => setPartyBillNoDirty(e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
 
-        {message ? <Alert severity="success" sx={{ mt: 1.2 }}>{message}</Alert> : null}
-        {error ? <Alert severity="error" sx={{ mt: 1.2 }}>{error}</Alert> : null}
+        <Card>
+          <CardHeader className="p-4 border-b flex flex-row justify-between items-center">
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Items</CardTitle>
+            <div className="flex space-x-2">
+              <Button variant="outline" size="sm" onClick={addRow}>+ Add row</Button>
+              <Button variant="outline" size="sm" onClick={removeSelectedRow}>Remove</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 space-y-4">
+            <div className="border rounded-md overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12 text-center">#</TableHead>
+                    <TableHead>Commodity</TableHead>
+                    <TableHead>Mark</TableHead>
+                    <TableHead>Brand</TableHead>
+                    <TableHead className="w-20">Bags</TableHead>
+                    <TableHead className="w-24">Avg. Wt.</TableHead>
+                    <TableHead className="w-24">Pur. Wt.</TableHead>
+                    <TableHead className="w-32">Packing Weight</TableHead>
+                    <TableHead className="w-24">Net Wt.</TableHead>
+                    <TableHead className="w-24">Rate</TableHead>
+                    <TableHead className="w-32 text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.map((r, rowIndex) => {
+                    const amount = (parseNumber(r.netWt) * parseNumber(r.rate)).toFixed(2);
+                    const active = selectedRowIndex === rowIndex;
+                    return (
+                      <TableRow
+                        key={rowIndex}
+                        onClick={() => setSelectedRowIndex(rowIndex)}
+                        className={active ? "bg-muted/50" : ""}
+                      >
+                        <TableCell className="text-center font-medium">{rowIndex + 1}</TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.commodity}
+                            onChange={(e) => setCell(rowIndex, "commodity", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.mark}
+                            onChange={(e) => setCell(rowIndex, "mark", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.brand}
+                            onChange={(e) => setCell(rowIndex, "brand", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.bags}
+                            onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.avgWt}
+                            onChange={(e) => setCell(rowIndex, "avgWt", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.purWt}
+                            onChange={(e) => setCell(rowIndex, "purWt", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.packingWeight}
+                            onChange={(e) => setCell(rowIndex, "packingWeight", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.netWt}
+                            onChange={(e) => setCell(rowIndex, "netWt", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.rate}
+                            onChange={(e) => setCell(rowIndex, "rate", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-sm font-semibold">{amount}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+            <Input
+              value={note}
+              onChange={(e) => setNoteDirty(e.target.value)}
+              placeholder="Add details/note..."
+              className="bg-slate-100 dark:bg-slate-900 border-0"
+            />
+          </CardContent>
+        </Card>
 
-        <Box sx={{ mt: 2, borderTop: "1px solid #90a7c6", pt: 1.4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-            <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />
-            <Typography sx={{ fontSize: 32 }}>Print</Typography>
-            <Typography sx={{ fontSize: 32, color: "#6a7f9d" }}>Bill received?</Typography>
-            <TextField size="small" select value={billReceived} onChange={(e) => setBillReceived(e.target.value)} sx={{ width: 120 }}>
-              <MenuItem value="No">No</MenuItem>
-              <MenuItem value="Yes">Yes</MenuItem>
-            </TextField>
-            <Typography sx={{ fontSize: 32, color: "#6a7f9d" }}>Lock?</Typography>
-            <TextField size="small" select value={lockState} onChange={(e) => setLockState(e.target.value)} sx={{ width: 100 }}>
-              <MenuItem value="No">No</MenuItem>
-              <MenuItem value="Yes">Yes</MenuItem>
-            </TextField>
-          </Box>
-          <Box sx={{ display: "flex", gap: 1 }}>
-            <Button variant="outlined" sx={{ textTransform: "none", fontSize: 34 }}>Delete</Button>
-            <Button variant="contained" onClick={onSave} disabled={loading} sx={{ textTransform: "none", fontSize: 34 }}>{loading ? "Saving..." : "Save"}</Button>
-            <Button variant="outlined" sx={{ textTransform: "none", fontSize: 34 }} onClick={() => history.back()}>Close</Button>
-          </Box>
-        </Box>
-      </Box>
+        <Card>
+          <CardHeader className="p-4 border-b">
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Charges & Taxes</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 space-y-4">
+            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
+              {chargeFields.map((f) => (
+                <div key={f} className="space-y-1">
+                  <label className="text-[10px] font-bold uppercase tracking-wide text-slate-500 block truncate" title={f}>{f}</label>
+                  <Input
+                    value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
+                    onChange={(e) => setChargesDirty((c) => ({ ...c, [f]: sanitizeNumeric(e.target.value) }))}
+                    disabled={f === "Purchase amt."}
+                    className="h-8 text-xs font-mono"
+                  />
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-end space-x-6 text-sm font-semibold border-t pt-4">
+              <span>Total: <span className="font-mono text-base">₹ {total.toFixed(2)}</span></span>
+              <span className="text-slate-400">|</span>
+              <span className="text-primary">Net Total: <span className="font-mono text-base">₹ {netTotal.toFixed(2)}</span></span>
+            </div>
+          </CardContent>
+        </Card>
 
-      <Dialog
-        open={confirmDialogOpen}
-        onClose={handleConfirmCancel}
-      >
-        <DialogTitle sx={{ fontSize: 32, fontWeight: 700 }}>Unsaved Changes</DialogTitle>
-        <DialogContent>
-          <DialogContentText sx={{ fontSize: 28 }}>
-            You have unsaved changes in this purchase entry. Would you like to save them before changing the bill number?
-          </DialogContentText>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t pt-4 pb-12">
+          <div className="flex items-center space-x-6">
+            <label className="flex items-center space-x-2 text-sm font-semibold cursor-pointer">
+              <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />
+              <span>Print</span>
+            </label>
+            <div className="flex items-center space-x-2">
+              <span className="text-xs font-semibold text-slate-500">Bill received?</span>
+              <Select value={billReceived} onChange={(e) => setBillReceived(e.target.value)} className="w-24 h-9">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </Select>
+            </div>
+            <div className="flex items-center space-x-2">
+              <span className="text-xs font-semibold text-slate-500">Lock?</span>
+              <Select value={lockState} onChange={(e) => setLockState(e.target.value)} className="w-24 h-9">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </Select>
+            </div>
+          </div>
+          <div className="flex space-x-2 w-full sm:w-auto">
+            <Button variant="outline" className="flex-1 sm:flex-none">Delete</Button>
+            <Button onClick={onSave} disabled={loading} className="flex-1 sm:flex-none">
+              {loading ? "Saving..." : "Save"}
+            </Button>
+            <Button variant="outline" onClick={() => history.back()} className="flex-1 sm:flex-none">Close</Button>
+          </div>
+        </div>
+      </main>
+
+      <Dialog open={confirmDialogOpen} onOpenChange={(val) => { if (!val) handleConfirmCancel(); }}>
+        <DialogContent className="sm:max-w-[500px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold text-slate-900 dark:text-slate-50">Unsaved Changes</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground mt-2">
+              You have unsaved changes in this purchase entry. Would you like to save them before changing the bill number?
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4 flex flex-col sm:flex-row gap-2 justify-end">
+            <Button variant="outline" onClick={handleConfirmCancel}>
+              Cancel
+            </Button>
+            <Button variant="destructive" onClick={handleConfirmDiscard}>
+              Discard Changes
+            </Button>
+            <Button onClick={handleConfirmSave}>
+              Save & Continue
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={handleConfirmCancel} variant="outlined" sx={{ textTransform: "none", fontSize: 26 }}>
-            Cancel
-          </Button>
-          <Button onClick={handleConfirmDiscard} variant="outlined" color="error" sx={{ textTransform: "none", fontSize: 26 }}>
-            Discard Changes
-          </Button>
-          <Button onClick={handleConfirmSave} variant="contained" sx={{ textTransform: "none", fontSize: 26 }}>
-            Save & Continue
-          </Button>
-        </DialogActions>
       </Dialog>
+
       <ValidationErrorsDialog
         open={validationDialogOpen}
         onClose={() => setValidationDialogOpen(false)}
         errors={validationErrors}
       />
-    </Box>
+    </div>
   );
 }

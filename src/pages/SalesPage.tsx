@@ -1,10 +1,23 @@
 import { useEffect, useMemo, useState } from "react";
-import { Alert, Box, Button, Checkbox, MenuItem, TextField, Typography } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
+import { Select } from "../components/ui/select";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 type SalesRow = {
   bookDate: string;
@@ -330,122 +343,230 @@ export function SalesPage() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 2 }}>
-      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.2 }}>
-        <Typography sx={{ fontSize: 42, color: "#9aa0a9" }}>{title}</Typography>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1.2, bgcolor: isOnline ? "#e8f5e9" : "#ffebee", px: 2, py: 0.5, borderRadius: "20px", border: isOnline ? "1px solid #c8e6c9" : "1px solid #ffcdd2" }}>
-          <Box sx={{ width: 10, height: 10, borderRadius: "50%", bgcolor: isOnline ? "#4caf50" : "#f44336" }} />
-          <Typography sx={{ fontSize: 24, fontWeight: 600, color: isOnline ? "#2e7d32" : "#c62828" }}>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="border-b bg-card text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-2xl font-extrabold tracking-tight text-foreground">{title}</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
+          <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
+          <span className="text-muted-foreground">
             {isOnline ? "Online" : "Offline"}
-          </Typography>
-        </Box>
-      </Box>
+          </span>
+        </div>
+      </header>
 
-      <Box sx={{ bgcolor: "#cfd9e8", border: "1px solid #b8c7db", p: 2.2 }}>
-        <Typography sx={{ fontSize: 30, fontWeight: 700, color: "#1e2e46", mb: 0.6 }}>
-          {selectedFirm?.name || "BRT Trading Co."} <Typography component="span" sx={{ color: "#1e2e46", fontSize: 30 }}>›</Typography> Data Entry <Typography component="span" sx={{ color: "#1e2e46", fontSize: 30 }}>›</Typography> Sale patti Entry
-        </Typography>
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+        <div className="flex items-center space-x-2 text-sm text-muted-foreground font-semibold">
+          <span>{selectedFirm?.name || "BRT Trading Co."}</span>
+          <span>›</span>
+          <span>Data Entry</span>
+          <span>›</span>
+          <span>Sale patti Entry</span>
+        </div>
 
-        <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 1.5, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
-          <Typography sx={{ color: "#667d9d", fontSize: 34, mb: 1 }}>PATTI DETAILS</Typography>
-          <Box sx={{ display: "grid", gridTemplateColumns: "1.2fr 2fr 2fr 1.2fr 1.2fr 1.1fr", gap: 1.6 }}>
-            <TextField
-              label="Voucher No."
-              size="small"
-              value={voucherNoInput}
-              onChange={(e) => setVoucherNoInput(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
+        {message && (
+          <Alert variant="success">
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        <Card>
+          <CardHeader className="p-4 border-b">
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Patti Details</CardTitle>
+          </CardHeader>
+          <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Voucher No.</label>
+              <Input
+                value={voucherNoInput}
+                onChange={(e) => setVoucherNoInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    setVoucherNo(voucherNoInput.trim());
+                  }
+                }}
+                onBlur={() => {
                   setVoucherNo(voucherNoInput.trim());
-                }
-              }}
-              onBlur={() => {
-                setVoucherNo(voucherNoInput.trim());
-              }}
-            />
-            <TextField label="Customer" size="small" value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="Search Customer" />
-            <TextField label="Delivered to" size="small" value={deliveredTo} onChange={(e) => setDeliveredTo(e.target.value)} />
-            <TextField label="Vehicle No." size="small" value={vehicleNo} onChange={(e) => setVehicleNo(e.target.value)} />
-            <TextField label="Party Bill No." size="small" value={partyBillNo} onChange={(e) => setPartyBillNo(e.target.value)} />
-            <TextField label="Date" size="small" value={date} onChange={(e) => setDate(e.target.value)} />
-          </Box>
-        </Box>
+                }}
+              />
+            </div>
+            <div className="space-y-1 md:col-span-2">
+              <label className="text-xs font-semibold text-slate-500">Customer</label>
+              <Input value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="Search Customer" />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Delivered to</label>
+              <Input value={deliveredTo} onChange={(e) => setDeliveredTo(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
+              <Input value={vehicleNo} onChange={(e) => setVehicleNo(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Party Bill No.</label>
+              <Input value={partyBillNo} onChange={(e) => setPartyBillNo(e.target.value)} />
+            </div>
+            <div className="space-y-1">
+              <label className="text-xs font-semibold text-slate-500">Date</label>
+              <Input value={date} onChange={(e) => setDate(e.target.value)} />
+            </div>
+          </CardContent>
+        </Card>
 
-        <Box sx={{ bgcolor: "#becadd", borderRadius: "16px", p: 2, mt: 2.2, boxShadow: "0 3px 6px rgba(0,0,0,0.2)" }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 1.2 }}>
-            <Typography sx={{ color: "#667d9d", fontSize: 40 }}>PATTI ITEMS</Typography>
-            <Box sx={{ display: "flex", gap: 1 }}>
-              <Button variant="contained" onClick={addRow} sx={{ textTransform: "none", borderRadius: "10px", fontSize: 34, px: 2.2 }}>+ Add row</Button>
-              <Button variant="outlined" onClick={removeSelectedRow} sx={{ textTransform: "none", borderRadius: "10px", fontSize: 34, px: 2.2 }}>Remove</Button>
-            </Box>
-          </Box>
+        <Card>
+          <CardHeader className="p-4 border-b flex flex-row justify-between items-center">
+            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Patti Items</CardTitle>
+            <div className="flex space-x-2">
+              <Button variant="outline" size="sm" onClick={addRow}>+ Add row</Button>
+              <Button variant="outline" size="sm" onClick={removeSelectedRow}>Remove</Button>
+            </div>
+          </CardHeader>
+          <CardContent className="p-4 space-y-4">
+            <div className="border rounded-md overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-12 text-center">#</TableHead>
+                    <TableHead>Book date</TableHead>
+                    <TableHead>Patti no.</TableHead>
+                    <TableHead>Patti date</TableHead>
+                    <TableHead className="w-20">Bags</TableHead>
+                    <TableHead className="w-24">Patti wt.</TableHead>
+                    <TableHead className="w-24">Patti freight</TableHead>
+                    <TableHead className="w-24">Commission</TableHead>
+                    <TableHead className="w-20">TDS %</TableHead>
+                    <TableHead className="w-24 text-right">TDS amt.</TableHead>
+                    <TableHead className="w-32 text-right">Patti net</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {rows.map((r, rowIndex) => {
+                    const tds = rowTdsAmount(r).toFixed(2);
+                    const net = rowNet(r).toFixed(2);
+                    const active = selectedRowIndex === rowIndex;
+                    return (
+                      <TableRow
+                        key={rowIndex}
+                        onClick={() => setSelectedRowIndex(rowIndex)}
+                        className={active ? "bg-muted/50" : ""}
+                      >
+                        <TableCell className="text-center font-medium">{rowIndex + 1}</TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.bookDate}
+                            onChange={(e) => setCell(rowIndex, "bookDate", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.pattiNo}
+                            onChange={(e) => setCell(rowIndex, "pattiNo", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.pattiDate}
+                            onChange={(e) => setCell(rowIndex, "pattiDate", e.target.value)}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.bags}
+                            onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.pattiWt}
+                            onChange={(e) => setCell(rowIndex, "pattiWt", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.pattiFreight}
+                            onChange={(e) => setCell(rowIndex, "pattiFreight", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.commission}
+                            onChange={(e) => setCell(rowIndex, "commission", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="p-1">
+                          <input
+                            value={r.tdsPercent}
+                            onChange={(e) => setCell(rowIndex, "tdsPercent", sanitizeNumeric(e.target.value))}
+                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                          />
+                        </TableCell>
+                        <TableCell className="text-right font-mono text-sm">{tds}</TableCell>
+                        <TableCell className="text-right font-mono text-sm font-semibold">{net}</TableCell>
+                      </TableRow>
+                    );
+                  })}
+                </TableBody>
+              </Table>
+            </div>
+            <div className="flex justify-end space-x-6 text-sm font-semibold border-t pt-4">
+              <span className="text-primary font-bold">Patti Net Total: <span className="font-mono text-base">₹ {pattiNetTotal.toFixed(2)}</span></span>
+            </div>
+          </CardContent>
+        </Card>
 
-          <Box sx={{ border: "1px solid #aebfd5", bgcolor: "#d7dce5" }}>
-            <Box sx={{ display: "grid", gridTemplateColumns: "0.4fr 1.2fr 1fr 1.2fr 0.8fr 1fr 1fr 1fr 0.8fr 1fr 1fr", px: 1, py: 0.7, borderBottom: "1px solid #aebfd5" }}>
-              {["#", "Book date", "Patti no.", "Patti date", "Bags", "Patti wt.", "Patti freight", "Commission", "TDS %", "TDS amt.", "Patti net"].map((h) => (
-                <Typography key={h} sx={{ color: "#617897", fontSize: 31 }}>{h}</Typography>
-              ))}
-            </Box>
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t pt-4 pb-12">
+          <div className="flex items-center space-x-6">
+            <Button
+              variant={transport ? "default" : "outline"}
+              onClick={() => setTransport((v) => !v)}
+              className="h-9"
+            >
+              Transporter
+            </Button>
+            <Button
+              variant={remark ? "default" : "outline"}
+              onClick={() => setRemark((v) => !v)}
+              className="h-9"
+            >
+              Remark
+            </Button>
+            <div className="flex items-center space-x-2">
+              <span className="text-xs font-semibold text-slate-500">Sales Complete?</span>
+              <Select value={salesComplete} onChange={(e) => setSalesComplete(e.target.value)} className="w-24 h-9">
+                <option value="No">No</option>
+                <option value="Yes">Yes</option>
+              </Select>
+            </div>
+          </div>
+          <div className="flex space-x-2 w-full sm:w-auto">
+            <label className="flex items-center space-x-2 text-sm font-semibold cursor-pointer mr-4">
+              <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />
+              <span>Print</span>
+            </label>
+            <Button onClick={handleSave} disabled={loading} className="flex-1 sm:flex-none">
+              {loading ? "Saving..." : "Save"}
+            </Button>
+            <Button variant="outline" onClick={() => history.back()} className="flex-1 sm:flex-none">Close</Button>
+          </div>
+        </div>
+      </main>
 
-            {rows.map((r, rowIndex) => {
-              const tds = rowTdsAmount(r).toFixed(2);
-              const net = rowNet(r).toFixed(2);
-              return (
-                <Box key={rowIndex} onClick={() => setSelectedRowIndex(rowIndex)} sx={{ display: "grid", gridTemplateColumns: "0.4fr 1.2fr 1fr 1.2fr 0.8fr 1fr 1fr 1fr 0.8fr 1fr 1fr", px: 1, py: 0.6, borderBottom: "1px solid #aebfd5", bgcolor: selectedRowIndex === rowIndex ? "#e8edf6" : "transparent" }}>
-                  <Typography sx={{ fontSize: 28 }}>{rowIndex + 1}</Typography>
-                  <input value={r.bookDate} onChange={(e) => setCell(rowIndex, "bookDate", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.pattiNo} onChange={(e) => setCell(rowIndex, "pattiNo", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.pattiDate} onChange={(e) => setCell(rowIndex, "pattiDate", e.target.value)} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.bags} onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.pattiWt} onChange={(e) => setCell(rowIndex, "pattiWt", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.pattiFreight} onChange={(e) => setCell(rowIndex, "pattiFreight", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.commission} onChange={(e) => setCell(rowIndex, "commission", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <input value={r.tdsPercent} onChange={(e) => setCell(rowIndex, "tdsPercent", sanitizeNumeric(e.target.value))} style={{ fontSize: 28, border: "none", background: "transparent", width: "100%" }} />
-                  <Typography sx={{ fontSize: 28 }}>{tds}</Typography>
-                  <Typography sx={{ fontSize: 28 }}>{net}</Typography>
-                </Box>
-              );
-            })}
-
-            <Box sx={{ display: "grid", gridTemplateColumns: "0.4fr 1.2fr 1fr 1.2fr 0.8fr 1fr 1fr 1fr 0.8fr 1fr 1fr", px: 1, py: 0.7, borderTop: "1px solid #aebfd5" }}>
-              <Typography sx={{ fontSize: 31, color: "#617897", gridColumn: "1 / span 8" }}>As per challan</Typography>
-              <Box sx={{ borderLeft: "1px solid #aebfd5" }} />
-              <Box sx={{ borderLeft: "1px solid #aebfd5" }} />
-              <Box sx={{ borderLeft: "1px solid #aebfd5" }} />
-            </Box>
-            <Typography sx={{ fontSize: 34, color: "#1f65d0", px: 1, py: 0.6 }}>+/- Adjustment</Typography>
-          </Box>
-
-          <Typography sx={{ textAlign: "right", mt: 1, color: "#667d9d", fontSize: 31 }}>Patti net total ₹ {pattiNetTotal.toFixed(2)}</Typography>
-        </Box>
-
-        {message ? <Alert severity="success" sx={{ mt: 1.2 }}>{message}</Alert> : null}
-        {error ? <Alert severity="error" sx={{ mt: 1.2 }}>{error}</Alert> : null}
-
-        <Box sx={{ mt: 2, borderTop: "1px solid #90a7c6", pt: 1.4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1.2 }}>
-            <Button variant={transport ? "contained" : "outlined"} onClick={() => setTransport((v) => !v)} sx={{ textTransform: "none", fontSize: 31 }}>Transporter</Button>
-            <Button variant={remark ? "contained" : "outlined"} onClick={() => setRemark((v) => !v)} sx={{ textTransform: "none", fontSize: 31 }}>Remark</Button>
-            <Typography sx={{ fontSize: 32, color: "#6a7f9d" }}>| Sales Complete?</Typography>
-            <TextField size="small" select value={salesComplete} onChange={(e) => setSalesComplete(e.target.value)} sx={{ width: 120 }}>
-              <MenuItem value="No">No</MenuItem>
-              <MenuItem value="Yes">Yes</MenuItem>
-            </TextField>
-          </Box>
-
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-            <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />
-            <Typography sx={{ fontSize: 32 }}>Print</Typography>
-            <Button variant="contained" onClick={handleSave} disabled={loading} sx={{ textTransform: "none", fontSize: 34 }}>{loading ? "Saving..." : "Save"}</Button>
-            <Button variant="outlined" sx={{ textTransform: "none", fontSize: 34 }} onClick={() => history.back()}>Close</Button>
-          </Box>
-        </Box>
-      </Box>
       <ValidationErrorsDialog
         open={validationDialogOpen}
         onClose={() => setValidationDialogOpen(false)}
         errors={validationErrors}
       />
-    </Box>
+    </div>
   );
 }
