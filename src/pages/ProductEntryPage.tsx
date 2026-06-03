@@ -117,7 +117,7 @@ export function ProductEntryPage() {
   // Load products initially
   const loadProducts = async () => {
     try {
-      const { data } = await api.get("/api/v1/products");
+      const { data } = await api.get("/products");
       setProducts(data);
       if (data.length > 0 && !selectedProduct) {
         setSelectedProduct(data[0]);
@@ -134,7 +134,7 @@ export function ProductEntryPage() {
   // Load expense groups for selected product
   const loadExpenseGroupsForProduct = async (productId: number) => {
     try {
-      const { data } = await api.get(`/api/v1/products/${productId}/expense-groups`);
+      const { data } = await api.get(`/products/${productId}/expense-groups`);
       setExpenseGroups(data);
       if (data.length > 0) {
         setSelectedGroup(data[0]);
@@ -150,7 +150,7 @@ export function ProductEntryPage() {
   // Load products in selected expense group
   const loadGroupProducts = async (groupId: number) => {
     try {
-      const { data } = await api.get(`/api/v1/expense-groups/${groupId}/products`);
+      const { data } = await api.get(`/expense-groups/${groupId}/products`);
       setGroupProducts(data);
     } catch (err) {
       console.error("Failed to load products in group", err);
@@ -196,7 +196,7 @@ export function ProductEntryPage() {
     if (!productForm.code.trim()) return alert("Code is required");
     try {
       const payload = editingProduct ? { ...editingProduct, ...productForm } : productForm;
-      await api.post("/api/v1/products", payload);
+      await api.post("/products", payload);
       setProductModalOpen(false);
       loadProducts();
     } catch (err: any) {
@@ -208,7 +208,7 @@ export function ProductEntryPage() {
     if (!selectedProduct) return;
     if (confirm(`Are you sure you want to delete product ${selectedProduct.code}?`)) {
       try {
-        await api.delete(`/api/v1/products/${selectedProduct.id}`);
+        await api.delete(`/products/${selectedProduct.id}`);
         setSelectedProduct(null);
         loadProducts();
       } catch (err) {
@@ -225,10 +225,10 @@ export function ProductEntryPage() {
 
   const handleSaveExpenseGroup = async (groupData: any) => {
     try {
-      const { data: savedGroup } = await api.post("/api/v1/expense-groups", groupData);
+      const { data: savedGroup } = await api.post("/expense-groups", groupData);
       // Link it to current product if it's a new or updated group
       if (selectedProduct) {
-        await api.post(`/api/v1/expense-groups/${savedGroup.id}/products/${selectedProduct.id}`);
+        await api.post(`/expense-groups/${savedGroup.id}/products/${selectedProduct.id}`);
       }
       setExpenseModalOpen(false);
       if (selectedProduct) {
@@ -241,7 +241,7 @@ export function ProductEntryPage() {
 
   const handleDeleteExpenseGroup = async (groupId: number) => {
     try {
-      await api.delete(`/api/v1/expense-groups/${groupId}`);
+      await api.delete(`/expense-groups/${groupId}`);
       setExpenseModalOpen(false);
       if (selectedProduct) {
         loadExpenseGroupsForProduct(selectedProduct.id);
@@ -254,7 +254,7 @@ export function ProductEntryPage() {
   // Load all expense groups to link period
   const handleOpenLinkPeriod = async () => {
     try {
-      const { data } = await api.get("/api/v1/expense-groups");
+      const { data } = await api.get("/expense-groups");
       // filter out already linked
       const unlinked = data.filter(
         (g: ExpenseGroup) => !expenseGroups.some((eg) => eg.id === g.id)
@@ -270,7 +270,7 @@ export function ProductEntryPage() {
   const handleLinkPeriod = async () => {
     if (!selectedPeriodToLink || !selectedProduct) return;
     try {
-      await api.post(`/api/v1/expense-groups/${selectedPeriodToLink}/products/${selectedProduct.id}`);
+      await api.post(`/expense-groups/${selectedPeriodToLink}/products/${selectedProduct.id}`);
       setLinkPeriodOpen(false);
       loadExpenseGroupsForProduct(selectedProduct.id);
     } catch (err) {
@@ -287,7 +287,7 @@ export function ProductEntryPage() {
   const handleLinkProductToGroup = async () => {
     if (!selectedProductToLink || !selectedGroup) return;
     try {
-      await api.post(`/api/v1/expense-groups/${selectedGroup.id}/products/${selectedProductToLink}`);
+      await api.post(`/expense-groups/${selectedGroup.id}/products/${selectedProductToLink}`);
       setAddItemOpen(false);
       loadGroupProducts(selectedGroup.id);
     } catch (err) {
