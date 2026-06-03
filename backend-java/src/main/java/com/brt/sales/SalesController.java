@@ -1,58 +1,46 @@
 package com.brt.sales;
 
 import com.brt.security.JwtPrincipal;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.OffsetDateTime;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/sales")
 public class SalesController {
-  public record SalesRequest(
-    @NotBlank String voucherNo,
-    @NotNull LocalDate businessDate,
-    @NotBlank String customerAcno,
-    @NotBlank String itemCode,
-    @NotNull @DecimalMin("0.001") BigDecimal qty,
-    @NotNull @DecimalMin("0.00") BigDecimal rate
-  ) {}
+  private final SalesService salesService;
 
-  private final SaleRepository sales;
-
-  public SalesController(SaleRepository sales) {
-    this.sales = sales;
+  public SalesController(SalesService salesService) {
+    this.salesService = salesService;
   }
 
   @PostMapping
   public Map<String, Object> create(@AuthenticationPrincipal JwtPrincipal principal, @RequestBody SalesRequest req) {
-    if (principal == null) throw new IllegalArgumentException("Unauthorized");
-    Sale s = new Sale();
-    s.setFirmId(principal.firmCode());
-    s.setVoucherNo(req.voucherNo().trim());
-    s.setBusinessDate(req.businessDate());
-    s.setCustomerAcno(req.customerAcno().trim().toUpperCase());
-    s.setItemCode(req.itemCode().trim().toUpperCase());
-    s.setQty(req.qty());
-    s.setRate(req.rate());
-    s.setAmount(req.qty().multiply(req.rate()));
-    s.setCreatedBy(principal.userCode());
-    s.setCreatedAt(OffsetDateTime.now());
-    sales.save(s);
-    return Map.of("id", s.getId(), "voucherNo", s.getVoucherNo(), "amount", s.getAmount());
+    SalePatti patti = salesService.create(principal, req);
+    return Map.of("id", patti.getId(), "salePattiNo", patti.getSalePattiNo(),
+                  "amount", patti.getTotals() != null ? patti.getTotals().getPattiNetTotal() : null);
+  }
+
+  @PostMapping("/bulk")
+  public Map<String, Object> createBulk(@AuthenticationPrincipal JwtPrincipal principal, @RequestBody java.util.List<SalesRequest> reqs) {
+    java.util.List<Map<String, Object>> results = salesService.createBulk(principal, reqs);
+    return Map.of("results", results);
   }
 
   @GetMapping
   public Map<String, Object> recent(@AuthenticationPrincipal JwtPrincipal principal) {
     if (principal == null) throw new IllegalArgumentException("Unauthorized");
-    return Map.of("rows", sales.findTop20ByFirmIdOrderByIdDesc(principal.firmCode()).stream().map(s -> Map.of(
-      "id", s.getId(), "voucherNo", s.getVoucherNo(), "amount", s.getAmount()
+    return Map.of("rows", salesService.recent().stream().map(patti -> Map.of(
+      "id", patti.getId(), "salePattiNo", patti.getSalePattiNo(),
+      "amount", patti.getTotals() != null ? patti.getTotals().getPattiNetTotal() : null
     )).toList());
+  }
+
+  @GetMapping("/by-patti-no/{pattiNo}")
+  public Map<String, Object> getByPattiNo(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable String pattiNo) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    Map<String, Object> details = salesService.getSalePattiDetailsByNo(pattiNo);
+    return details != null ? details : Map.of();
   }
 }

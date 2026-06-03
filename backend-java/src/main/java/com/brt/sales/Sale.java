@@ -10,8 +10,7 @@ import java.time.OffsetDateTime;
 @Table(name = "sale", schema = "txn")
 public class Sale {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long id;
+  private java.util.UUID id;
   @Column(name = "firm_id", nullable = false) private String firmId;
   @Column(name = "voucher_no", nullable = false) private String voucherNo;
   @Column(name = "business_date", nullable = false) private LocalDate businessDate;
@@ -33,7 +32,8 @@ public class Sale {
   public void setAmount(BigDecimal amount) { this.amount = amount; }
   public void setCreatedBy(String createdBy) { this.createdBy = createdBy; }
   public void setCreatedAt(OffsetDateTime createdAt) { this.createdAt = createdAt; }
-  public Long getId() { return id; }
+  public java.util.UUID getId() { return id; }
+  public void setId(java.util.UUID id) { this.id = id; }
   public String getVoucherNo() { return voucherNo; }
   public BigDecimal getAmount() { return amount; }
 }

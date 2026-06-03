@@ -1,8 +1,30 @@
 import { useEffect, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { useNetwork } from "../hooks/useNetwork";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "../lib/db";
+import { triggerSync } from "../api/syncEngine";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { useThemeStore, THEMES } from "../store/themeStore";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "../components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../components/ui/table";
 
 type MenuItem = { code: string; label: string; route: string; sortOrder: number };
 
@@ -12,6 +34,33 @@ export function MenuPage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const logout = useAuthStore((s) => s.logout);
   const navigate = useNavigate();
+
+  const themeId = useThemeStore((s) => s.themeId);
+  const setTheme = useThemeStore((s) => s.setTheme);
+  const darkMode = useThemeStore((s) => s.darkMode);
+  const toggleDarkMode = useThemeStore((s) => s.toggleDarkMode);
+
+  const [setupDialogOpen, setSetupDialogOpen] = useState(false);
+
+  const isOnline = useNetwork();
+  const [syncDialogOpen, setSyncDialogOpen] = useState(false);
+  const [syncingManual, setSyncingManual] = useState(false);
+
+  const pendingCount = useLiveQuery(() => db.syncOutbox.count()) ?? 0;
+  const outboxItems = useLiveQuery(() => db.syncOutbox.toArray()) ?? [];
+  const cachedPurchases = useLiveQuery(() => db.purchases.toArray()) ?? [];
+  const cachedSales = useLiveQuery(() => db.sales.toArray()) ?? [];
+
+  async function handleManualSync() {
+    setSyncingManual(true);
+    try {
+      await triggerSync();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setSyncingManual(false);
+    }
+  }
 
   useEffect(() => {
     (async () => {
@@ -36,7 +85,7 @@ export function MenuPage() {
     "Tally Export",
   ];
 
-  const centerItems = ["Data Entry", "Printing", "Setup", "Miscellaneous", "Personal", "Exit"];
+  const centerItems = ["Data Entry", "Sync", "Printing", "Setup", "Miscellaneous", "Personal", "Exit"];
   const rightItems = [
     "Delivery Challan Entry",
     "Purchase Bill Entry",
@@ -55,126 +104,282 @@ export function MenuPage() {
       navigate("/auth");
       return;
     }
+    if (label === "Sync") {
+      setSyncDialogOpen(true);
+      return;
+    }
+    if (label === "Setup") {
+      setSetupDialogOpen(true);
+      return;
+    }
     if (label === "Data Entry") {
       const hasPurchase = items.some((i) => i.route === "/purchase");
       const hasSales = items.some((i) => i.route === "/sales");
-      if (hasPurchase) {
-        navigate("/data-entry");
-        return;
-      }
-      if (hasSales) {
+      if (hasPurchase || hasSales) {
         navigate("/data-entry");
       }
     }
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2" }}>
-      <Box
-        sx={{
-          bgcolor: "#fff",
-          height: "120px",
-          display: "grid",
-          placeItems: "center",
-          textAlign: "center",
-          px: 2,
-        }}
-      >
-        <Box>
-          <Typography sx={{ color: "#172e57", fontSize: { xs: 38, md: 56 }, fontWeight: 700, lineHeight: 1 }}>
-            {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
-          </Typography>
-          <Typography sx={{ color: "#1f262e", fontSize: { xs: 22, md: 40 }, fontWeight: 600 }}>
-            Financial Year: 01.04.2025 to 31.03.2026
-          </Typography>
-        </Box>
-      </Box>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="border-b bg-card text-card-foreground shadow-sm py-6 px-6 text-center relative">
+        <div className="absolute top-4 left-4">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSetupDialogOpen(true)}
+            className="font-bold border flex items-center space-x-1.5 h-8 text-xs bg-background shadow-sm"
+          >
+            <span 
+              className="h-3.5 w-3.5 rounded-full border border-black/15 shrink-0" 
+              style={{ backgroundColor: THEMES.find(t => t.id === themeId)?.colorHex }} 
+            />
+            <span>Theme / Display</span>
+          </Button>
+        </div>
+        <div className="absolute top-4 right-4 flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
+          <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
+          <span className="text-muted-foreground">
+            {isOnline ? "Online" : "Offline"} {pendingCount > 0 ? `(${pendingCount} pending)` : ""}
+          </span>
+        </div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+          {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
+        </h1>
+        <p className="text-sm font-semibold text-muted-foreground mt-1">
+          Financial Year: 01.04.2025 to 31.03.2026
+        </p>
+      </header>
 
-      <Box sx={{ maxWidth: "1360px", mx: "auto", mt: 6, px: 2, display: "grid", gridTemplateColumns: { xs: "1fr", lg: "362px 380px 381px" }, gap: 3 }}>
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div className="flex flex-col space-y-2">
           {quickItems.map((item) => {
             const disabled = item === "Update Purchase";
             return (
               <Button
                 key={item}
+                variant="outline"
                 disabled={disabled}
-                sx={{
-                  justifyContent: "flex-start",
-                  height: "50px",
-                  borderRadius: "10px",
-                  border: "1px solid #cfdbed",
-                  bgcolor: disabled ? "#e5e8ed" : "#f7faff",
-                  color: disabled ? "#8c94a1" : "#1f2b3b",
-                  fontWeight: 600,
-                  fontSize: 24,
-                  textTransform: "none",
-                  px: 2,
-                }}
+                className="w-full justify-start h-12 text-sm font-medium px-4 border"
               >
                 {item}
               </Button>
             );
           })}
-        </Box>
+        </div>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 1 }}>
+        <div className="flex flex-col space-y-2">
           {centerItems.map((item, idx) => {
             const active = idx === 0;
             return (
               <Button
                 key={item}
+                variant={active ? "default" : "outline"}
                 onClick={() => onMainAction(item)}
-                sx={{
-                  height: "66px",
-                  borderRadius: "12px",
-                  border: active ? "2px solid #2b7ded" : "1px solid #d4deed",
-                  bgcolor: active ? "#f2f7ff" : "#fafafc",
-                  color: "#1f242b",
-                  fontWeight: active ? 700 : 400,
-                  fontSize: 56,
-                  textTransform: "none",
-                  justifyContent: "center",
-                  boxShadow: active ? "none" : "0px 1px 2px rgba(0,0,0,0.12)",
-                }}
+                className="w-full h-14 text-lg font-bold border"
               >
                 {item}
               </Button>
             );
           })}
-        </Box>
+        </div>
 
-        <Box
-          sx={{
-            bgcolor: "#d4deed",
-            border: "2px solid #dee5f2",
-            borderRadius: "16px",
-            boxShadow: "0px 4px 4px rgba(0,0,0,0.25)",
-            p: 3,
-          }}
-        >
-          <Box
-            sx={{
-              width: "297px",
-              height: "52px",
-              bgcolor: "#1470e5",
-              borderRadius: "10px",
-              display: "flex",
-              alignItems: "center",
-              px: 2,
-              mb: 2,
-            }}
-          >
-            <Typography sx={{ color: "#fff", fontWeight: 700, fontSize: 44, lineHeight: 1 }}>Contract Expired</Typography>
-          </Box>
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 1.4 }}>
+        <Card className="bg-slate-900 text-slate-50 border-0 p-6 flex flex-col space-y-4 shadow-lg">
+          <div className="bg-primary-foreground/20 text-white font-extrabold px-4 py-2 rounded-md shadow-sm self-start">
+            Contract Expired
+          </div>
+          <div className="flex flex-col space-y-3 pt-2">
             {rightItems.map((item) => (
-              <Typography key={item} sx={{ color: "#1f242b", fontWeight: 600, fontSize: 41, lineHeight: 1.1 }}>
+              <span key={item} className="text-base font-semibold tracking-wide text-slate-200">
                 {item}
-              </Typography>
+              </span>
             ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </Card>
+      </main>
+
+      <Dialog open={syncDialogOpen} onOpenChange={setSyncDialogOpen}>
+        <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Data Synchronization Status</DialogTitle>
+            <DialogDescription>
+              Check connection and pending synchronization records for local database.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="grid grid-cols-2 gap-4 my-4">
+            <Card className={`p-4 flex flex-col items-center justify-center text-center ${isOnline ? "bg-emerald-50/50 dark:bg-emerald-950/20 border-emerald-500/20" : "bg-destructive/5 border-destructive/20"}`}>
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Connection State</span>
+              <span className={`text-2xl font-bold mt-1 ${isOnline ? "text-emerald-600 dark:text-emerald-400" : "text-destructive"}`}>
+                {isOnline ? "ONLINE" : "OFFLINE"}
+              </span>
+            </Card>
+            <Card className="p-4 flex flex-col items-center justify-center text-center bg-muted/30">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Pending Outbox Queue</span>
+              <span className="text-2xl font-bold mt-1 text-foreground">{pendingCount} records</span>
+            </Card>
+          </div>
+
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Purchase Entries Cache</h4>
+              {cachedPurchases.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4 border rounded-md">No purchase entries stored locally</p>
+              ) : (
+                <div className="border rounded-md max-h-[150px] overflow-y-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="py-2 h-8">Voucher No.</TableHead>
+                        <TableHead className="py-2 h-8">Type</TableHead>
+                        <TableHead className="py-2 h-8">Status</TableHead>
+                        <TableHead className="py-2 h-8">Sync Error / Details</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {cachedPurchases.map((p) => {
+                        const isPending = outboxItems.some((item) => item.payload.id === p.id);
+                        return (
+                          <TableRow key={p.id}>
+                            <TableCell className="py-2 h-8 font-medium">{p.billNo}</TableCell>
+                            <TableCell className="py-2 h-8">Purchase</TableCell>
+                            <TableCell className="py-2 h-8">
+                              <span className={`font-semibold ${p.synced ? "text-emerald-600 dark:text-emerald-400" : (isPending ? "text-amber-600" : "text-destructive")}`}>
+                                {p.synced ? "Synced" : (isPending ? "Pending Sync" : "Error")}
+                              </span>
+                            </TableCell>
+                            <TableCell className={`py-2 h-8 text-xs ${p.syncError ? "text-destructive" : "text-muted-foreground"}`}>
+                              {p.syncError || (p.synced ? "Success" : "Waiting for network...")}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h4 className="text-sm font-semibold mb-2">Sales Entries Cache</h4>
+              {cachedSales.length === 0 ? (
+                <p className="text-sm text-muted-foreground text-center py-4 border rounded-md">No sales entries stored locally</p>
+              ) : (
+                <div className="border rounded-md max-h-[150px] overflow-y-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="py-2 h-8">Voucher No.</TableHead>
+                        <TableHead className="py-2 h-8">Type</TableHead>
+                        <TableHead className="py-2 h-8">Status</TableHead>
+                        <TableHead className="py-2 h-8">Sync Error / Details</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {cachedSales.map((s) => {
+                        const isPending = outboxItems.some((item) => item.payload.id === s.id);
+                        return (
+                          <TableRow key={s.id}>
+                            <TableCell className="py-2 h-8 font-medium">{s.billNo}</TableCell>
+                            <TableCell className="py-2 h-8">Sale</TableCell>
+                            <TableCell className="py-2 h-8">
+                              <span className={`font-semibold ${s.synced ? "text-emerald-600 dark:text-emerald-400" : (isPending ? "text-amber-600" : "text-destructive")}`}>
+                                {s.synced ? "Synced" : (isPending ? "Pending Sync" : "Error")}
+                              </span>
+                            </TableCell>
+                            <TableCell className={`py-2 h-8 text-xs ${s.syncError ? "text-destructive" : "text-muted-foreground"}`}>
+                              {s.syncError || (s.synced ? "Success" : "Waiting for network...")}
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+              )}
+            </div>
+          </div>
+
+          <DialogFooter className="mt-4">
+            <Button variant="outline" onClick={() => setSyncDialogOpen(false)}>
+              Close
+            </Button>
+            <Button
+              onClick={handleManualSync}
+              disabled={syncingManual || !isOnline || pendingCount === 0}
+            >
+              {syncingManual ? "Syncing..." : "Sync Now"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={setupDialogOpen} onOpenChange={setSetupDialogOpen}>
+        <DialogContent className="sm:max-w-[450px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">System Configuration</DialogTitle>
+            <DialogDescription>
+              Personalize your display options, active color theme, and appearance settings.
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="space-y-6 my-4">
+            {/* Dark Mode Control */}
+            <div className="flex items-center justify-between border-b pb-4">
+              <div>
+                <span className="block font-bold text-foreground">Dark Mode</span>
+                <span className="text-xs text-muted-foreground">Switch between light and dark backgrounds.</span>
+              </div>
+              <Button 
+                variant="outline" 
+                onClick={toggleDarkMode}
+                className="font-bold border"
+              >
+                {darkMode ? "Disable" : "Enable"}
+              </Button>
+            </div>
+
+            {/* Theme Color Selector */}
+            <div className="space-y-3">
+              <div>
+                <span className="block font-bold text-foreground">Color Theme</span>
+                <span className="text-xs text-muted-foreground">Choose your active interface palette.</span>
+              </div>
+              <div className="grid grid-cols-2 gap-2.5">
+                {THEMES.map((theme) => {
+                  const isSelected = theme.id === themeId;
+                  return (
+                    <button
+                      key={theme.id}
+                      onClick={() => setTheme(theme.id)}
+                      className={`flex items-center space-x-3 p-3 rounded-lg border-2 text-left transition-all hover:bg-muted ${
+                        isSelected 
+                          ? "border-primary bg-primary/5 shadow-sm" 
+                          : "border-border bg-card"
+                      }`}
+                    >
+                      <span 
+                        className="h-4 w-4 rounded-full border border-black/10 shrink-0" 
+                        style={{ backgroundColor: theme.colorHex }}
+                      />
+                      <span className="font-bold text-sm text-foreground">
+                        {theme.name.split(" (")[0]}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+
+          <DialogFooter>
+            <Button onClick={() => setSetupDialogOpen(false)} className="w-full font-bold">
+              Done
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 }
