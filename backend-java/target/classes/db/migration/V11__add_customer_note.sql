@@ -1,0 +1,2 @@
+ALTER TABLE mst.customer
+ADD COLUMN IF NOT EXISTS note TEXT;

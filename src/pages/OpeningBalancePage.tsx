@@ -1,4 +1,5 @@
 import { useEffect, useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Button,
@@ -24,6 +25,7 @@ import { useAuthStore } from "../store/authStore";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 
 export function OpeningBalancePage() {
+  const navigate = useNavigate();
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
 
   const [customers, setCustomers] = useState<any[]>([]);
@@ -155,7 +157,7 @@ export function OpeningBalancePage() {
         e.preventDefault();
         handleSaveAll();
       } else if (e.key === "Escape") {
-        history.back();
+        navigate(-1);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -362,7 +364,7 @@ export function OpeningBalancePage() {
           </Button>
           <Button
             variant="outlined"
-            onClick={() => history.back()}
+            onClick={() => navigate(-1)}
             sx={{
               borderColor: "#aebfd5",
               color: "#1e2e46",

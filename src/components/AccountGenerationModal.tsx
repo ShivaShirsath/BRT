@@ -185,11 +185,13 @@ export function AccountGenerationModal({
       onClose={onClose}
       maxWidth="md"
       fullWidth
-      PaperProps={{
-        sx: {
-          borderRadius: "20px",
-          bgcolor: "#f4f7fc",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: "20px",
+            bgcolor: "#f4f7fc",
+            boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+          },
         },
       }}
     >
@@ -218,7 +220,7 @@ export function AccountGenerationModal({
         <Box sx={{ mt: 1 }}>
           {/* Main Grid Fields */}
           <Grid container spacing={2}>
-            <Grid item xs={8}>
+            <Grid size={8}>
               <TextField
                 fullWidth
                 size="small"
@@ -229,7 +231,7 @@ export function AccountGenerationModal({
                 required
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -244,7 +246,7 @@ export function AccountGenerationModal({
               </TextField>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 fullWidth
                 size="small"
@@ -254,7 +256,7 @@ export function AccountGenerationModal({
               />
             </Grid>
 
-            <Grid item xs={8}>
+            <Grid size={8}>
               <TextField
                 fullWidth
                 size="small"
@@ -263,7 +265,7 @@ export function AccountGenerationModal({
                 onChange={(e) => handleChange("shortName", e.target.value)}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -279,7 +281,7 @@ export function AccountGenerationModal({
               </TextField>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -289,7 +291,7 @@ export function AccountGenerationModal({
                 onChange={(e) => handleChange("openingBalance", Number(e.target.value))}
               />
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -302,7 +304,7 @@ export function AccountGenerationModal({
                 <MenuItem value="C">Credit (C)</MenuItem>
               </TextField>
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -312,7 +314,7 @@ export function AccountGenerationModal({
               />
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 fullWidth
                 size="small"
@@ -328,7 +330,7 @@ export function AccountGenerationModal({
               </TextField>
             </Grid>
 
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -342,7 +344,7 @@ export function AccountGenerationModal({
                 <MenuItem value="Wholesale">Wholesale</MenuItem>
               </TextField>
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -355,7 +357,7 @@ export function AccountGenerationModal({
                 <MenuItem value="OUTSTATION">OUTSTATION</MenuItem>
               </TextField>
             </Grid>
-            <Grid item xs={4}>
+            <Grid size={4}>
               <TextField
                 fullWidth
                 size="small"
@@ -370,7 +372,7 @@ export function AccountGenerationModal({
               </TextField>
             </Grid>
 
-            <Grid item xs={6}>
+            <Grid size={6}>
               <TextField
                 fullWidth
                 size="small"
@@ -380,7 +382,7 @@ export function AccountGenerationModal({
                 onChange={(e) => handleChange("packingCharges", Number(e.target.value))}
               />
             </Grid>
-            <Grid item xs={6}>
+            <Grid size={6}>
               <TextField
                 fullWidth
                 size="small"
@@ -394,7 +396,7 @@ export function AccountGenerationModal({
               </TextField>
             </Grid>
 
-            <Grid item xs={12}>
+            <Grid size={12}>
               <TextField
                 fullWidth
                 size="small"
@@ -419,7 +421,7 @@ export function AccountGenerationModal({
           {tabValue === 0 && (
             <Box sx={{ py: 2 }}>
               <Grid container spacing={2}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     fullWidth
                     size="small"
@@ -431,7 +433,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("address", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     fullWidth
                     size="small"
@@ -441,7 +443,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("email", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -450,7 +452,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("city", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -459,7 +461,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("zone", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -468,7 +470,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("taluka", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -477,7 +479,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("dist", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -486,7 +488,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("pin", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -495,7 +497,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("phone", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     fullWidth
                     size="small"
@@ -504,7 +506,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("stateName", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -513,7 +515,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("mobileNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -522,7 +524,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("mobile2nd", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -531,7 +533,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("aadharNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -540,7 +542,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("panNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -549,7 +551,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("licenseNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -558,7 +560,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("tinNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
@@ -575,7 +577,7 @@ export function AccountGenerationModal({
           {tabValue === 1 && (
             <Box sx={{ py: 2 }}>
               <Grid container spacing={2}>
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -584,7 +586,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("guarantor", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
@@ -594,7 +596,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
@@ -604,7 +606,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("creditAmt", Number(e.target.value))}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
@@ -614,19 +616,19 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("creditDays", Number(e.target.value))}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
                     type="date"
-                    InputLabelProps={{ shrink: true }}
+                    slotProps={{ inputLabel: { shrink: true } }}
                     label="Marriage Date"
                     value={formData.marriageDate || ""}
                     onChange={(e) => handleChange("marriageDate", e.target.value)}
                   />
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -635,19 +637,19 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("licenseNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
                     type="date"
-                    InputLabelProps={{ shrink: true }}
+                    slotProps={{ inputLabel: { shrink: true } }}
                     label="Date of Birth"
                     value={formData.dob || ""}
                     onChange={(e) => handleChange("dob", e.target.value)}
                   />
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -656,7 +658,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("gst", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid size={4}>
                   <TextField
                     fullWidth
                     size="small"
@@ -667,7 +669,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -676,9 +678,9 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("mst", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -687,9 +689,9 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("cst", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -698,9 +700,9 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("eccNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -709,9 +711,9 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("range", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -720,9 +722,9 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("division", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
 
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -731,7 +733,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("collector", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4}></Grid>
+                <Grid size={4}></Grid>
               </Grid>
             </Box>
           )}
@@ -739,7 +741,7 @@ export function AccountGenerationModal({
           {tabValue === 2 && (
             <Box sx={{ py: 2 }}>
               <Grid container spacing={2}>
-                <Grid item xs={8}>
+                <Grid size={8}>
                   <TextField
                     fullWidth
                     size="small"
@@ -748,13 +750,13 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("rtgsIfsc", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={4} sx={{ display: "flex", alignItems: "center" }}>
+                <Grid size={4} sx={{ display: "flex", alignItems: "center" }}>
                   <Button variant="contained" color="secondary" fullWidth sx={{ height: "40px" }}>
                     Get Bank
                   </Button>
                 </Grid>
 
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     fullWidth
                     size="small"
@@ -764,7 +766,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -773,7 +775,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("rtgsBranchName", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -783,7 +785,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -792,7 +794,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("rtgsAcNo", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -802,7 +804,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -811,7 +813,7 @@ export function AccountGenerationModal({
                     onChange={(e) => handleChange("rtgsAcNoConfirm", e.target.value)}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -821,7 +823,7 @@ export function AccountGenerationModal({
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"
@@ -835,7 +837,7 @@ export function AccountGenerationModal({
                     <MenuItem value="Excel">Excel</MenuItem>
                   </TextField>
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <TextField
                     fullWidth
                     size="small"

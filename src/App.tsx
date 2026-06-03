@@ -10,6 +10,7 @@ import { PurchasePage } from "./pages/PurchasePage";
 import { SalesPage } from "./pages/SalesPage";
 import { DataEntryPage } from "./pages/DataEntryPage";
 import { OpeningBalancePage } from "./pages/OpeningBalancePage";
+import { ProductEntryPage } from "./pages/ProductEntryPage";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import api from "./api/client";
@@ -59,6 +60,7 @@ export default function App() {
               <Route path="/purchase" element={<PurchasePage />} />
               <Route path="/sales" element={<SalesPage />} />
               <Route path="/opening-balances" element={<OpeningBalancePage />} />
+              <Route path="/product-entry" element={<ProductEntryPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/auth" replace />} />
           </Routes>
