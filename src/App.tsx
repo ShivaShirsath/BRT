@@ -1,5 +1,4 @@
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import { CssBaseline } from "@mui/material";
 import { ProtectedRoute } from "./app/ProtectedRoute";
 import { AuthPage } from "./pages/AuthPage";
 import { FirmSelectionPage } from "./pages/FirmSelectionPage";
@@ -43,7 +42,33 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
   return <>{children}</>;
 }
 
+import { useThemeStore } from "./store/themeStore";
+import { CssBaseline } from "@mui/material";
+
 export default function App() {
+  const themeId = useThemeStore((s) => s.themeId);
+  const darkMode = useThemeStore((s) => s.darkMode);
+
+  useEffect(() => {
+    // 1. Swap theme stylesheet
+    let link = document.getElementById("theme-link") as HTMLLinkElement;
+    if (!link) {
+      link = document.createElement("link");
+      link.id = "theme-link";
+      link.rel = "stylesheet";
+      document.head.appendChild(link);
+    }
+    link.href = `${import.meta.env.BASE_URL}themes/theme-${themeId}.css`;
+
+    // 2. Toggle dark mode class on document element
+    const root = document.documentElement;
+    if (darkMode) {
+      root.classList.add("dark");
+    } else {
+      root.classList.remove("dark");
+    }
+  }, [themeId, darkMode]);
+
   return (
     <>
       <CssBaseline />

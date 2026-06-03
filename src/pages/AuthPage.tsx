@@ -2,10 +2,15 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Alert, Box, Button, Checkbox, FormControlLabel, Link, Stack, TextField, Typography } from "@mui/material";
+import { Box, FormControlLabel, Link, Stack, TextField } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Checkbox } from "../components/ui/checkbox";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
 
 const signinSchema = z.object({ userCode: z.string().min(1), password: z.string().min(1) });
 const signupSchema = z.object({ firmCode: z.string().min(1), userCode: z.string().min(1), fullName: z.string().min(2), password: z.string().min(6) });
@@ -61,76 +66,80 @@ export function AuthPage() {
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, bgcolor: "#f5faff" }}>
-      <Box
-        sx={{
-          display: { xs: "none", md: "block" },
-          color: "#fff",
-          background: "linear-gradient(113.274deg, #0A387D 7.3%, #297DD9 80.3%)",
-          p: "120px 80px",
-        }}
-      >
-        <Typography sx={{ fontWeight: 700, fontSize: 56, lineHeight: 1 }}>BRT</Typography>
-        <Typography sx={{ mt: 2, color: "#E3F2FF", fontSize: 32 }}>Built for reliable, fast access.</Typography>
-      </Box>
+    <div className="min-h-screen grid grid-cols-1 md:grid-cols-2 bg-background text-foreground">
+      <div className="hidden md:flex flex-col justify-center bg-zinc-950 text-zinc-50 p-16 border-r border-zinc-900">
+        <h1 className="text-6xl font-extrabold tracking-tight">BRT</h1>
+        <p className="mt-4 text-2xl text-zinc-300">Built for reliable, fast access.</p>
+      </div>
 
-      <Box sx={{ display: "grid", placeItems: "center", p: 3 }}>
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: 440,
-            bgcolor: "#fff",
-            border: "1px solid #E3EBF7",
-            borderRadius: "20px",
-            boxShadow: "0 14px 32px rgba(15,41,79,0.12)",
-            p: 4,
-          }}
-        >
-          <Typography sx={{ color: "#17263D", fontWeight: 700, fontSize: 40 }}>
-            {mode === "signin" ? "Welcome back" : "Create account"}
-          </Typography>
-          <Typography sx={{ color: "#637591", mt: 0.5, mb: 3, fontSize: 18 }}>
-            {mode === "signin" ? "Sign in to continue" : "Sign up to start using BRT"}
-          </Typography>
+      <div className="grid place-items-center p-6">
+        <Card className="w-full max-w-[440px]">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-3xl font-bold tracking-tight">
+              {mode === "signin" ? "Welcome back" : "Create account"}
+            </CardTitle>
+            <CardDescription className="text-base text-muted-foreground">
+              {mode === "signin" ? "Sign in to continue" : "Sign up to start using BRT"}
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {error && (
+              <Alert variant="destructive">
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
 
-          {error ? <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert> : null}
-
-          {mode === "signin" ? (
-            <Box component="form" onSubmit={signin.handleSubmit(handleSignin)}>
-              <Stack spacing={2}>
-                <TextField label="User Code" placeholder="ADMIN" {...signin.register("userCode")} />
-                <TextField type="password" label="Password" placeholder="••••••••••" {...signin.register("password")} />
-                <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                  <FormControlLabel control={<Checkbox />} label="Remember me" />
-                  <Link underline="hover" sx={{ fontWeight: 600, fontSize: 14 }}>Forgot password?</Link>
-                </Box>
-                <Button type="submit" disabled={loading} variant="contained" sx={{ height: 56, borderRadius: "12px", fontSize: 18, textTransform: "none", bgcolor: "#125CD9" }}>
-                  {loading ? "Signing In..." : "Sign In"}
-                </Button>
-              </Stack>
-            </Box>
-          ) : (
-            <Box component="form" onSubmit={signup.handleSubmit(handleSignup)}>
-              <Stack spacing={2}>
-                <TextField label="Firm Code" placeholder="BRT01" {...signup.register("firmCode")} />
-                <TextField label="User Code" placeholder="USER01" {...signup.register("userCode")} />
-                <TextField label="Full Name" placeholder="John Doe" {...signup.register("fullName")} />
-                <TextField type="password" label="Password" placeholder="Min 6 characters" {...signup.register("password")} />
-                <Button type="submit" disabled={loading} variant="contained" sx={{ height: 56, borderRadius: "12px", fontSize: 18, textTransform: "none", bgcolor: "#125CD9" }}>
+            {mode === "signin" ? (
+              <Box component="form" onSubmit={signin.handleSubmit(handleSignin)}>
+                <Stack spacing={2}>
+                  <TextField label="User Code" placeholder="ADMIN" {...signin.register("userCode")} />
+                  <TextField type="password" label="Password" placeholder="••••••••••" {...signin.register("password")} />
+                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <FormControlLabel control={<Checkbox />} label="Remember me" />
+                    <Link underline="hover" sx={{ fontWeight: 600, fontSize: 14 }}>Forgot password?</Link>
+                  </Box>
+                  <Button type="submit" disabled={loading} className="w-full h-11">
+                    {loading ? "Signing In..." : "Sign In"}
+                  </Button>
+                </Stack>
+              </Box>
+            ) : (
+              <form onSubmit={signup.handleSubmit(handleSignup)} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">Firm Code</label>
+                  <Input placeholder="BRT01" {...signup.register("firmCode")} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">User Code</label>
+                  <Input placeholder="USER01" {...signup.register("userCode")} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">Full Name</label>
+                  <Input placeholder="John Doe" {...signup.register("fullName")} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">Password</label>
+                  <Input type="password" placeholder="Min 6 characters" {...signup.register("password")} />
+                </div>
+                <Button type="submit" disabled={loading} className="w-full h-11">
                   {loading ? "Creating..." : "Sign Up"}
                 </Button>
-              </Stack>
-            </Box>
-          )}
+              </form>
+            )}
 
-          <Typography sx={{ textAlign: "center", mt: 3, color: "#576982", fontSize: 14 }}>
-            {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
-            <Link component="button" onClick={() => setMode(mode === "signin" ? "signup" : "signin")} sx={{ fontWeight: 600 }}>
-              {mode === "signin" ? "Sign up" : "Sign in"}
-            </Link>
-          </Typography>
-        </Box>
-      </Box>
-    </Box>
+            <div className="text-center mt-4 text-sm text-muted-foreground">
+              {mode === "signin" ? "Don't have an account? " : "Already have an account? "}
+              <button
+                type="button"
+                onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
+                className="font-semibold text-primary hover:underline bg-transparent border-0 cursor-pointer p-0"
+              >
+                {mode === "signin" ? "Sign up" : "Sign in"}
+              </button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
   );
 }

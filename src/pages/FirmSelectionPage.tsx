@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
-import { Alert, Box, Button, Typography } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
+import { Button } from "../components/ui/button";
+import { Card } from "../components/ui/card";
+import { Alert, AlertDescription } from "../components/ui/alert";
 
 type Firm = { code: string; name: string };
 
@@ -33,151 +35,68 @@ export function FirmSelectionPage() {
   }, []);
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#f2f7ff" }}>
-      <Box
-        sx={{
-          height: "74px",
-          bgcolor: "#fff",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          px: { xs: 2, md: 4 },
-        }}
-      >
-        <Typography sx={{ color: "#172e57", fontSize: 34, fontWeight: 700 }}>BRT Trading Platform</Typography>
-        <Typography sx={{ color: "#73859e", fontSize: 22, fontWeight: 600 }}>Select Firm</Typography>
-      </Box>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="h-[74px] border-b bg-background flex items-center justify-between px-6 md:px-12">
+        <span className="text-2xl font-bold tracking-tight text-foreground">BRT Trading Platform</span>
+        <span className="text-lg font-medium text-muted-foreground">Select Firm</span>
+      </header>
 
-      <Box sx={{ display: "grid", placeItems: "center", p: 3, pt: 8 }}>
-        <Box
-          sx={{
-            width: "100%",
-            maxWidth: "860px",
-            minHeight: "589px",
-            bgcolor: "#fff",
-            border: "1px solid #d4e3f5",
-            borderRadius: "20px",
-            boxShadow: "0 18px 40px rgba(20,51,97,0.12)",
-            p: 4,
-            position: "relative",
-          }}
-        >
+      <main className="flex-1 flex items-center justify-center p-6">
+        <Card className="w-full max-w-2xl relative p-8">
           <Button
+            variant="outline"
             onClick={() => {
               logout();
               navigate("/auth");
             }}
-            sx={{
-              position: "absolute",
-              top: 16,
-              right: 16,
-              minWidth: "53px",
-              height: "52px",
-              bgcolor: "#edf2fc",
-              border: "1px solid #b5c7e5",
-              color: "#2b4066",
-              fontSize: 24,
-              fontWeight: 600,
-              borderRadius: "12px",
-              textTransform: "none",
-            }}
+            className="absolute top-4 right-4 h-10 w-10 p-0 rounded-md"
           >
-            X
+            ✕
           </Button>
 
-          <Typography sx={{ color: "#172947", fontSize: 48, fontWeight: 700, lineHeight: 1.2 }}>Choose Your Firm</Typography>
-          <Typography sx={{ color: "#6e7d91", fontSize: 22, mt: 1 }}>
-            Same workflow as legacy app: user must select one firm before entering dashboard.
-          </Typography>
+          <div className="space-y-2 mb-6">
+            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Choose Your Firm</h1>
+            <p className="text-base text-muted-foreground">
+              Same workflow as legacy app: user must select one firm before entering dashboard.
+            </p>
+          </div>
 
-          {error ? <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert> : null}
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
 
-          <Box
-            sx={{
-              mt: 3,
-              p: 2,
-              borderRadius: "14px",
-              border: "1px solid #d6e3f2",
-              bgcolor: "#f7faff",
-              maxHeight: "340px",
-              overflowY: "auto",
-            }}
-          >
-            {(firms.length ? firms : []).map((firm) => {
+          <div className="border rounded-lg bg-muted/30 p-4 max-h-[340px] overflow-y-auto space-y-2">
+            {firms.map((firm) => {
               const active = selected?.code === firm.code;
               return (
                 <Button
                   key={firm.code}
-                  fullWidth
+                  variant={active ? "default" : "outline"}
                   onClick={() => setSelected(firm)}
-                  sx={{
-                    justifyContent: "flex-start",
-                    mb: 1,
-                    height: "54px",
-                    borderRadius: "10px",
-                    border: `1px solid ${active ? "#1470e5" : "#dee5f2"}`,
-                    bgcolor: active ? "#1470e5" : "#fff",
-                    color: active ? "#fff" : "#1a2433",
-                    fontWeight: 600,
-                    fontSize: 25,
-                    textTransform: "none",
-                    px: 2,
-                    "&:hover": { bgcolor: active ? "#1367d1" : "#f6f9ff" },
-                  }}
+                  className="w-full justify-start h-12 text-lg font-medium px-4"
                 >
                   {firm.name}
                 </Button>
               );
             })}
-          </Box>
+          </div>
 
-          <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2 }}>
-            <Box sx={{ display: "flex", gap: 2 }}>
+          <div className="flex justify-end mt-6">
+            <div style={{ display: "flex", gap: 2 }}>
               <Button
-                variant="outlined"
                 onClick={() => navigate("/create-firm")}
-                sx={{
-                  height: "52px",
-                  borderRadius: "12px",
-                  fontSize: 20,
-                  fontWeight: 600,
-                  textTransform: "none",
-                  borderColor: "#b5c7e5",
-                  color: "#2b4066",
-                  px: 3,
-                  "&:hover": {
-                    borderColor: "#1470e5",
-                    bgcolor: "#f2f7ff"
-                  }
-                }}
               >
                 + Create Firm
               </Button>
               {isAdmin && (
-                <Button
-                  variant="outlined"
-                  onClick={() => navigate("/create-user")}
-                  sx={{
-                    height: "52px",
-                    borderRadius: "12px",
-                    fontSize: 20,
-                    fontWeight: 600,
-                    textTransform: "none",
-                    borderColor: "#b5c7e5",
-                    color: "#2b4066",
-                    px: 3,
-                    "&:hover": {
-                      borderColor: "#1470e5",
-                      bgcolor: "#f2f7ff"
-                    }
-                  }}
-                >
+                <Button onClick={() => navigate("/create-user")}>
                   + Create User
                 </Button>
               )}
-            </Box>
+            </div>
             <Button
-              variant="contained"
               disabled={!selected || loading}
               onClick={async () => {
                 if (!selected) return;
@@ -194,21 +113,13 @@ export function FirmSelectionPage() {
                   setLoading(false);
                 }
               }}
-              sx={{
-                width: "146px",
-                height: "52px",
-                borderRadius: "12px",
-                fontSize: 22,
-                fontWeight: 600,
-                textTransform: "none",
-                bgcolor: "#0088ff",
-              }}
+              className="px-6 h-11 text-base font-semibold"
             >
               {loading ? "Loading..." : "Continue"}
             </Button>
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </div>
+        </Card >
+      </main >
+    </div >
   );
 }

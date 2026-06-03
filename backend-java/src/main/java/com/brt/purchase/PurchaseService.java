@@ -24,7 +24,19 @@ public class PurchaseService {
   public PurchaseBill create(JwtPrincipal principal, PurchaseRequest req) {
     if (principal == null) throw new IllegalArgumentException("Unauthorized");
 
+    java.util.UUID billId = req.id();
+    if (billId == null) {
+      billId = java.util.UUID.randomUUID();
+    } else {
+      java.util.Optional<PurchaseBill> existing = purchases.findById(billId);
+      if (existing.isPresent()) {
+        purchases.delete(existing.get());
+        purchases.flush();
+      }
+    }
+
     PurchaseBill p = new PurchaseBill();
+    p.setId(billId);
     p.setBillNo(req.voucherNo().trim());
     p.setNote(req.note());
     p.setCreatedAt(LocalDateTime.now());
@@ -120,7 +132,7 @@ public class PurchaseService {
   }
 
   public List<PurchaseBill> recent(String firmId) {
-    return purchases.findTop20ByOrderByIdDesc();
+    return purchases.findTop20ByOrderByCreatedAtDesc();
   }
 
   public java.util.Map<String, Object> getBillDetailsByNo(String billNo) {
@@ -192,5 +204,29 @@ public class PurchaseService {
         return res;
       })
       .orElse(null);
+  }
+
+  public java.util.List<java.util.Map<String, Object>> createBulk(JwtPrincipal principal, java.util.List<PurchaseRequest> requests) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    
+    java.util.List<java.util.Map<String, Object>> results = new java.util.ArrayList<>();
+    for (PurchaseRequest req : requests) {
+      try {
+        PurchaseBill p = create(principal, req);
+        results.add(java.util.Map.of(
+          "id", p.getId(),
+          "billNo", p.getBillNo(),
+          "status", "SUCCESS",
+          "amount", p.getCharges() != null ? p.getCharges().getNetTotal() : java.math.BigDecimal.ZERO
+        ));
+      } catch (Exception e) {
+        results.add(java.util.Map.of(
+          "billNo", req.voucherNo(),
+          "status", "ERROR",
+          "error", e.getMessage() != null ? e.getMessage() : "Unknown error"
+        ));
+      }
+    }
+    return results;
   }
 }

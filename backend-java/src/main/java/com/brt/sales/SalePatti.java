@@ -12,8 +12,7 @@ import java.util.List;
 @Table(name = "sale_patti", schema = "txn")
 public class SalePatti {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private java.util.UUID id;
 
     @Column(name = "sale_patti_no", unique = true, length = 50)
     private String salePattiNo;

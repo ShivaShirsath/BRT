@@ -12,8 +12,7 @@ import java.util.List;
 @Table(name = "purchase_bills", schema = "txn")
 public class PurchaseBill {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private java.util.UUID id;
 
     @Column(name = "bill_no", nullable = false, unique = true, length = 50)
     private String billNo;

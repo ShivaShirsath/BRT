@@ -1,6 +1,7 @@
-import { Box, Button, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { Button } from "../components/ui/button";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 
 export function DataEntryPage() {
   const navigate = useNavigate();
@@ -48,90 +49,49 @@ export function DataEntryPage() {
     if (title === "Sales Patti Entry") return "/sales";
     if (title === "Opening Balance") return "/opening-balances";
     if (title === "Product Master") return "/product-entry";
+    if (title === "Exit") return "/menu";
     return null;
   }
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 2 }}>
-      <Box
-        sx={{
-          bgcolor: "#fff",
-          height: "140px",
-          display: "grid",
-          placeItems: "center",
-          textAlign: "center",
-          px: 2,
-        }}
-      >
-        <Box>
-          <Typography sx={{ color: "#172e57", fontSize: { xs: 34, md: 60 }, fontWeight: 700, lineHeight: 1 }}>
-            {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
-          </Typography>
-          <Typography sx={{ color: "#1f262e", fontSize: { xs: 20, md: 48 }, fontWeight: 600 }}>
-            Financial Year: 01.04.2025 to 31.03.2026
-          </Typography>
-        </Box>
-      </Box>
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="border-b bg-card text-card-foreground shadow-sm py-6 px-6 text-center space-y-1">
+        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
+          {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
+        </h1>
+        <p className="text-sm font-semibold text-muted-foreground">
+          Financial Year: 01.04.2025 to 31.03.2026
+        </p>
+      </header>
 
-      <Box sx={{ maxWidth: "1360px", mx: "auto", mt: 2 }}>
-        <Box
-          sx={{
-            bgcolor: "#cfd9e8",
-            border: "1px solid #bccade",
-            borderRadius: "20px",
-            boxShadow: "0 8px 16px rgba(20,51,97,0.15)",
-            p: 3,
-          }}
-        >
-          <Box sx={{ display: "grid", placeItems: "center", mb: 3 }}>
-            <Box
-              sx={{
-                bgcolor: "#1d72e3",
-                borderRadius: "14px",
-                px: 3,
-                py: 0.8,
-              }}
-            >
-              <Typography sx={{ color: "#fff", fontSize: 52, fontWeight: 700, lineHeight: 1.1 }}>
-                Data Entry Menu
-              </Typography>
-            </Box>
-          </Box>
-
-          <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "1fr 1fr 1fr" }, gap: 3 }}>
+      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+        <Card>
+          <CardHeader className="flex flex-col items-center border-b pb-4">
+            <CardTitle className="text-2xl font-bold tracking-tight">Data Entry Menu</CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6">
             {[col1, col2, col3].map((col, ci) => (
-              <Box key={ci} sx={{ display: "flex", flexDirection: "column", gap: 1.6 }}>
+              <div key={ci} className="flex flex-col space-y-2">
                 {col.map((title) => {
                   const route = routeFor(title);
                   const enabled = Boolean(route);
                   return (
                     <Button
                       key={title}
+                      variant={enabled ? "outline" : "ghost"}
                       disabled={!enabled}
                       onClick={() => route && navigate(route)}
-                      sx={{
-                        height: "66px",
-                        justifyContent: "flex-start",
-                        borderRadius: "14px",
-                        border: "1px solid #c6d3e5",
-                        bgcolor: enabled ? "#f4f6fa" : "#e3e7ee",
-                        color: enabled ? "#262d37" : "#8b93a0",
-                        fontWeight: 500,
-                        fontSize: 22,
-                        textTransform: "none",
-                        px: 2,
-                        boxShadow: "0 3px 4px rgba(0,0,0,0.15)",
-                      }}
+                      className="w-full justify-start h-12 text-sm font-medium px-4 border"
                     >
                       {title}
                     </Button>
                   );
                 })}
-              </Box>
+              </div>
             ))}
-          </Box>
-        </Box>
-      </Box>
-    </Box>
+          </CardContent>
+        </Card>
+      </main>
+    </div>
   );
 }
