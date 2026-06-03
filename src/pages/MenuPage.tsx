@@ -364,7 +364,7 @@ export function MenuPage() {
                         style={{ backgroundColor: theme.colorHex }}
                       />
                       <span className="font-bold text-sm text-foreground">
-                        {theme.name.split(" ")[0]}
+                        {theme.name.split(" (")[0]}
                       </span>
                     </button>
                   );

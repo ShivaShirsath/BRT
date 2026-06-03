@@ -30,22 +30,24 @@ services:
     image: eclipse-temurin:21-jre
     container_name: brt-backend
     working_dir: /app
-    command: sh -c "test -f build/libs/app.jar && java -jar build/libs/app.jar || sleep infinity"
+    command: sh -c "test -f target/backend-java-0.0.1-SNAPSHOT.jar && java -jar target/backend-java-0.0.1-SNAPSHOT.jar || (echo 'Jar file not found in target/' && sleep infinity)"
     volumes:
       - ../backend-java:/app
     environment:
+      - SERVER_PORT=8081
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres:5432/brt
       - SPRING_DATASOURCE_USERNAME=brt
       - SPRING_DATASOURCE_PASSWORD=brt
+      - SPRING_FLYWAY_VALIDATE_ON_MIGRATE=false
       - SPRING_REDIS_HOST=redis
       - SPRING_RABBITMQ_HOST=rabbitmq
     depends_on:
       - postgres
       - redis
       - rabbitmq
-    expose:
-      - "8081"
+    ports:
+      - "8080:8081"
 
   dbf-service:
     image: python:3.12-slim
