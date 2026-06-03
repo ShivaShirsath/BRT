@@ -3,6 +3,8 @@ import { Alert, Box, Button, Checkbox, MenuItem, TextField, Typography } from "@
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
+import { z } from "zod";
+import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
 
 type SalesRow = {
   bookDate: string;
@@ -24,6 +26,36 @@ const mkRow = (): SalesRow => ({
   pattiFreight: "",
   commission: "",
   tdsPercent: "",
+});
+
+function isValidDate(dateStr: string): boolean {
+  const parts = dateStr.trim().split(".");
+  if (parts.length !== 3) return false;
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const year = parseInt(parts[2], 10);
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+  const dateObj = new Date(year, month, day);
+  return dateObj.getFullYear() === year && dateObj.getMonth() === month && dateObj.getDate() === day;
+}
+
+const salesSchema = z.object({
+  voucherNo: z.string().trim().min(1, "Voucher No. is required"),
+  customer: z.string().trim().min(1, "Customer is required"),
+  date: z.string()
+    .trim()
+    .min(1, "Date is required")
+    .regex(/^\d{2}\.\d{2}\.\d{4}$/, "Date must be in DD.MM.YYYY format")
+    .refine(isValidDate, "Date must be a valid calendar date"),
+  activeRows: z.array(
+    z.object({
+      index: z.number(),
+      pattiNo: z.string().trim().min(1, "Patti No. is required"),
+      net: z.number().nonnegative("Net amount cannot be negative. Deductions exceed Gross Weight/Value."),
+    })
+  ).min(1, "Add at least one patti row"),
+  totalQty: z.number().gt(0, "Total bags must be greater than zero"),
+  avgRate: z.number().nonnegative("Calculated average rate cannot be negative. Please check patti weight, freight, and commission inputs."),
 });
 
 export function SalesPage() {
@@ -60,6 +92,8 @@ export function SalesPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [validationDialogOpen, setValidationDialogOpen] = useState(false);
 
   function setCell(rowIndex: number, key: keyof SalesRow, value: string) {
     setRows((prev) => prev.map((r, i) => (i === rowIndex ? { ...r, [key]: value } : r)));
@@ -208,48 +242,41 @@ export function SalesPage() {
     setMessage("");
     setError("");
 
-    if (!customer || !customer.trim()) {
-      setError("Customer is required");
-      return;
-    }
-
-    if (!date || !date.trim()) {
-      setError("Date is required");
-      return;
-    }
-
-    if (!/^\d{2}\.\d{2}\.\d{4}$/.test(date.trim())) {
-      setError("Date must be in DD.MM.YYYY format");
-      return;
-    }
-
-    if (!voucherNo || !voucherNo.trim()) {
-      setError("Voucher No. is required");
-      return;
-    }
-
     const activeRows = rows.filter((r) => r.pattiNo.trim() || parseNumber(r.bags) > 0 || parseNumber(r.pattiWt) > 0);
-    if (!activeRows.length) {
-      setError("Add at least one patti row");
-      return;
-    }
-
-    if (activeRows.some((r) => !r.pattiNo.trim())) {
-      setError("Patti No. is required for all entered patti rows");
-      return;
-    }
-
     const totalQty = activeRows.reduce((s, r) => s + parseNumber(r.bags), 0);
     const totalNet = activeRows.reduce((s, r) => s + rowNet(r), 0);
     const avgRate = totalQty > 0 ? totalNet / totalQty : 0;
 
-    if (totalQty <= 0) {
-      setError("Total bags must be greater than zero");
-      return;
-    }
+    const dataToValidate = {
+      voucherNo: voucherNoInput,
+      customer,
+      date,
+      activeRows: activeRows.map((r, i) => ({
+        index: i + 1,
+        pattiNo: r.pattiNo,
+        net: rowNet(r),
+      })),
+      totalQty,
+      avgRate,
+    };
 
-    if (avgRate < 0) {
-      setError("Calculated average rate cannot be negative. Please check patti weight, freight, and commission inputs.");
+    const validationResult = salesSchema.safeParse(dataToValidate);
+    if (!validationResult.success) {
+      const errMsgs = validationResult.error.issues.map((err) => {
+        if (err.path[0] === "activeRows" && typeof err.path[1] === "number") {
+          const rowIndex = dataToValidate.activeRows[err.path[1]].index;
+          const fieldName = err.path[2];
+          if (fieldName === "pattiNo") {
+            return `Row ${rowIndex}: Patti No. is required`;
+          }
+          if (fieldName === "net") {
+            return `Row ${rowIndex}: Net amount cannot be negative. Deductions (Freight + Commission + TDS) exceed the Gross Weight/Value.`;
+          }
+        }
+        return err.message;
+      });
+      setValidationErrors(errMsgs);
+      setValidationDialogOpen(true);
       return;
     }
 
@@ -414,6 +441,11 @@ export function SalesPage() {
           </Box>
         </Box>
       </Box>
+      <ValidationErrorsDialog
+        open={validationDialogOpen}
+        onClose={() => setValidationDialogOpen(false)}
+        errors={validationErrors}
+      />
     </Box>
   );
 }

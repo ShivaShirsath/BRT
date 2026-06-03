@@ -3,6 +3,8 @@ import { Box, Button, Checkbox, MenuItem, TextField, Typography, Alert, Dialog, 
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
+import { z } from "zod";
+import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -33,6 +35,37 @@ const chargeFields = [
   "Tolai", "Hamali", "Discount", "IGST", "SGST", "CGST", "TDS", "Khandani",
   "Our expenses", "Exp. 2", "Exp. 3", "Exp. 4",
 ];
+
+function isValidDate(dateStr: string): boolean {
+  const parts = dateStr.trim().split(".");
+  if (parts.length !== 3) return false;
+  const day = parseInt(parts[0], 10);
+  const month = parseInt(parts[1], 10) - 1;
+  const year = parseInt(parts[2], 10);
+  if (isNaN(day) || isNaN(month) || isNaN(year)) return false;
+  const dateObj = new Date(year, month, day);
+  return dateObj.getFullYear() === year && dateObj.getMonth() === month && dateObj.getDate() === day;
+}
+
+const purchaseSchema = z.object({
+  voucherNo: z.string().trim().min(1, "Voucher No. is required"),
+  date: z.string()
+    .trim()
+    .min(1, "Date is required")
+    .regex(/^\d{2}\.\d{2}\.\d{4}$/, "Date must be in DD.MM.YYYY format")
+    .refine(isValidDate, "Date must be a valid calendar date"),
+  entryType: z.string()
+    .trim()
+    .min(1, "Please select a market entry type")
+    .refine(val => val !== "Select market" && val.trim() !== "", "Please select a market entry type"),
+  activeRows: z.array(
+    z.object({
+      index: z.number(),
+      commodity: z.string().trim().min(1, "Commodity is required"),
+    })
+  ).min(1, "Add at least one item row"),
+  netTotal: z.number().nonnegative("Net Total cannot be negative. Please adjust Discount, TDS, or other charges."),
+});
 
 export function PurchasePage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
@@ -104,6 +137,8 @@ export function PurchasePage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [validationErrors, setValidationErrors] = useState<string[]>([]);
+  const [validationDialogOpen, setValidationDialogOpen] = useState(false);
 
   function setCell(rowIndex: number, key: keyof PurchaseItemRow, value: string) {
     setRows((prev) => prev.map((r, i) => (i === rowIndex ? { ...r, [key]: value } : r)));
@@ -202,34 +237,32 @@ export function PurchasePage() {
     setError("");
     setMessage("");
 
-    if (!billNoInput.trim()) {
-      setError("Voucher No. is required");
-      return;
-    }
-
-    if (!date.trim()) {
-      setError("Date is required");
-      return;
-    }
-
-    if (!/^\d{2}\.\d{2}\.\d{4}$/.test(date.trim())) {
-      setError("Date must be in DD.MM.YYYY format");
-      return;
-    }
-
-    if (!entryType || entryType === "Select market" || !entryType.trim()) {
-      setError("Please select a market entry type");
-      return;
-    }
-
     const activeRows = rows.filter((r) => r.commodity.trim() || parseNumber(r.netWt) > 0 || parseNumber(r.rate) > 0);
-    if (!activeRows.length) {
-      setError("Add at least one item row");
-      return;
-    }
+    const dataToValidate = {
+      voucherNo: billNoInput,
+      date,
+      entryType,
+      activeRows: activeRows.map((r, i) => ({
+        index: i + 1,
+        commodity: r.commodity,
+      })),
+      netTotal,
+    };
 
-    if (activeRows.some((r) => !r.commodity.trim())) {
-      setError("Commodity is required for all entered item rows");
+    const validationResult = purchaseSchema.safeParse(dataToValidate);
+    if (!validationResult.success) {
+      const errMsgs = validationResult.error.issues.map((err) => {
+        if (err.path[0] === "activeRows" && typeof err.path[1] === "number") {
+          const rowIndex = dataToValidate.activeRows[err.path[1]].index;
+          const fieldName = err.path[2];
+          if (fieldName === "commodity") {
+            return `Row ${rowIndex}: Commodity is required for all entered item rows`;
+          }
+        }
+        return err.message;
+      });
+      setValidationErrors(errMsgs);
+      setValidationDialogOpen(true);
       return;
     }
 
@@ -273,7 +306,7 @@ export function PurchasePage() {
 
     const chargesPayload: Record<string, number> = {};
     for (const [uiField, apiField] of Object.entries(chargesMap)) {
-      chargesPayload[apiField] = uiField === "Purchase amt." ? total : (Number(charges[uiField]) || 0);
+      chargesPayload[apiField] = uiField === "Purchase amt." ? total : parseNumber(charges[uiField]);
     }
 
     setLoading(true);
@@ -582,6 +615,11 @@ export function PurchasePage() {
           </Button>
         </DialogActions>
       </Dialog>
+      <ValidationErrorsDialog
+        open={validationDialogOpen}
+        onClose={() => setValidationDialogOpen(false)}
+        errors={validationErrors}
+      />
     </Box>
   );
 }
