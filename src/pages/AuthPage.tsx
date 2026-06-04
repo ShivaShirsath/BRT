@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Box, FormControlLabel, Link, Stack, TextField } from "@mui/material";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate } from "react-router-dom";
@@ -90,19 +89,30 @@ export function AuthPage() {
             )}
 
             {mode === "signin" ? (
-              <Box component="form" onSubmit={signin.handleSubmit(handleSignin)}>
-                <Stack spacing={2}>
-                  <TextField label="User Code" placeholder="ADMIN" {...signin.register("userCode")} />
-                  <TextField type="password" label="Password" placeholder="••••••••••" {...signin.register("password")} />
-                  <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <FormControlLabel control={<Checkbox />} label="Remember me" />
-                    <Link underline="hover" sx={{ fontWeight: 600, fontSize: 14 }}>Forgot password?</Link>
-                  </Box>
-                  <Button type="submit" disabled={loading} className="w-full h-11">
-                    {loading ? "Signing In..." : "Sign In"}
-                  </Button>
-                </Stack>
-              </Box>
+              <form onSubmit={signin.handleSubmit(handleSignin)} className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">User Code</label>
+                  <Input placeholder="ADMIN" {...signin.register("userCode")} />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-sm font-medium leading-none">Password</label>
+                  <Input type="password" placeholder="••••••••••" {...signin.register("password")} />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox id="remember" />
+                    <label htmlFor="remember" className="text-sm font-medium leading-none cursor-pointer select-none">
+                      Remember me
+                    </label>
+                  </div>
+                  <a href="#" className="text-sm font-semibold text-primary hover:underline">
+                    Forgot password?
+                  </a>
+                </div>
+                <Button type="submit" disabled={loading} className="w-full h-11">
+                  {loading ? "Signing In..." : "Sign In"}
+                </Button>
+              </form>
             ) : (
               <form onSubmit={signup.handleSubmit(handleSignup)} className="space-y-4">
                 <div className="space-y-2">
