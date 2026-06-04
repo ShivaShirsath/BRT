@@ -43,7 +43,6 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
 }
 
 import { useThemeStore } from "./store/themeStore";
-import { CssBaseline } from "@mui/material";
 
 export default function App() {
   const themeId = useThemeStore((s) => s.themeId);
@@ -71,7 +70,6 @@ export default function App() {
 
   return (
     <>
-      <CssBaseline />
       <SessionBootstrap>
         <BrowserRouter>
           <Routes>

@@ -1,25 +1,26 @@
 import { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  TextField,
-  MenuItem,
-} from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
 import { ExpensesGroupModal } from "../components/ExpensesGroupModal";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Select } from "../components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "../components/ui/dialog";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "../components/ui/table";
+
 
 interface Product {
   id: number;
@@ -296,51 +297,36 @@ export function ProductEntryPage() {
   };
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 3 }}>
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 p-6 text-foreground">
       {/* Outer Card Panel */}
-      <Paper
-        elevation={3}
-        sx={{
-          maxWidth: "1400px",
-          mx: "auto",
-          borderRadius: "16px",
-          overflow: "hidden",
-          bgcolor: "#f8fafc",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className="max-w-[1400px] mx-auto rounded-xl overflow-hidden bg-white dark:bg-zinc-900 border border-border shadow-lg flex flex-col">
         {/* Header Title */}
-        <Box sx={{ bgcolor: "#eff6ff", p: 2, borderBottom: "1px solid #cbd5e1" }}>
-          <Typography variant="h5" sx={{ fontWeight: 700, color: "#1e3a8a" }}>
-            Product Entry
-          </Typography>
-        </Box>
+        <div className="bg-slate-50 dark:bg-zinc-800/50 px-6 py-4 border-b border-border">
+          <h1 className="text-xl font-bold text-primary">Product Entry</h1>
+        </div>
 
         {/* Content Layout */}
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "55% 45%" }, p: 3, gap: 3 }}>
+        <div className="grid grid-cols-1 lg:grid-cols-[55%_45%] p-6 gap-6">
           
           {/* Left Column: Product Master List */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-            <TableContainer component={Paper} variant="outlined" sx={{ maxHeight: "500px", borderRadius: "8px" }}>
-              <Table stickyHeader size="small">
-                <TableHead>
+          <div className="flex flex-col gap-4">
+            <div className="overflow-auto border border-border rounded-lg bg-background max-h-[500px]">
+              <Table>
+                <TableHeader className="bg-muted/50 sticky top-0 z-10">
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Code</TableCell>
-                    <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Marathi Name</TableCell>
-                    <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>English Name</TableCell>
-                    <TableCell align="right" sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Bharti Wt.</TableCell>
-                    <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>GST Item Code</TableCell>
+                    <TableHead className="font-bold">Code</TableHead>
+                    <TableHead className="font-bold">Marathi Name</TableHead>
+                    <TableHead className="font-bold">English Name</TableHead>
+                    <TableHead className="text-right font-bold">Bharti Wt.</TableHead>
+                    <TableHead className="font-bold">GST Item Code</TableHead>
                   </TableRow>
-                </TableHead>
+                </TableHeader>
                 <TableBody>
                   {products.map((p) => {
                     const isSelected = selectedProduct?.id === p.id;
                     return (
                       <TableRow
                         key={p.id}
-                        hover
-                        selected={isSelected}
                         onClick={() => setSelectedProduct(p)}
                         onDoubleClick={() => {
                           setEditingProduct(p);
@@ -353,100 +339,79 @@ export function ProductEntryPage() {
                           });
                           setProductModalOpen(true);
                         }}
-                        sx={{
-                          cursor: "pointer",
-                          backgroundColor: isSelected ? "#e0f2fe !important" : "inherit",
-                        }}
+                        className={`cursor-pointer transition-colors ${
+                          isSelected ? "bg-primary/10 hover:bg-primary/15" : "hover:bg-muted/50"
+                        }`}
                       >
-                        <TableCell sx={{ color: "#0284c7", fontWeight: 600 }}>{p.code}</TableCell>
+                        <TableCell className="font-semibold text-primary">{p.code}</TableCell>
                         <TableCell>{p.marathiName}</TableCell>
                         <TableCell>{p.englishName}</TableCell>
-                        <TableCell align="right">{p.bhartiWeight.toFixed(2)}</TableCell>
+                        <TableCell className="text-right">{p.bhartiWeight.toFixed(2)}</TableCell>
                         <TableCell>{p.gstItemCode}</TableCell>
                       </TableRow>
                     );
                   })}
                   {products.length === 0 && (
                     <TableRow>
-                      <TableCell colSpan={5} align="center" sx={{ color: "#64748b", py: 4 }}>
+                      <TableCell colSpan={5} className="text-center text-muted-foreground py-8">
                         No products available. Click Add to create one.
                       </TableCell>
                     </TableRow>
                   )}
                 </TableBody>
               </Table>
-            </TableContainer>
+            </div>
 
             {/* Product Control Buttons */}
-            <Box sx={{ display: "flex", gap: 1.5 }}>
-              <Button
-                variant="contained"
-                onClick={handleOpenAddProduct}
-                sx={{
-                  bgcolor: "#2563eb",
-                  borderRadius: "8px",
-                  px: 4,
-                  textTransform: "none",
-                  fontWeight: 600,
-                  "&:hover": { bgcolor: "#1d4ed8" },
-                }}
-              >
+            <div className="flex gap-3">
+              <Button onClick={handleOpenAddProduct} className="px-6 font-semibold">
                 Add
               </Button>
               <Button
-                variant="contained"
-                color="error"
+                variant="destructive"
                 disabled={!selectedProduct}
                 onClick={handleDeleteProduct}
-                sx={{
-                  borderRadius: "8px",
-                  px: 4,
-                  textTransform: "none",
-                  fontWeight: 600,
-                }}
+                className="px-6 font-semibold"
               >
                 Delete
               </Button>
-            </Box>
-          </Box>
+            </div>
+          </div>
 
           {/* Right Column: Expense Group & Items */}
-          <Box sx={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          <div className="flex flex-col gap-6">
             
             {/* Expense Periods List */}
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <Typography variant="subtitle1" sx={{ fontWeight: 700, color: "#0f172a" }}>
+            <div className="flex flex-col gap-4">
+              <h2 className="text-md font-bold text-foreground">
                 {selectedProduct ? `${selectedProduct.code} - ${selectedProduct.englishName}` : "No Product Selected"}
-              </Typography>
+              </h2>
 
-              <TableContainer component={Paper} variant="outlined" sx={{ maxHeight: "220px", borderRadius: "8px" }}>
-                <Table stickyHeader size="small">
-                  <TableHead>
+              <div className="overflow-auto border border-border rounded-lg bg-background max-h-[220px]">
+                <Table>
+                  <TableHeader className="bg-muted/50 sticky top-0 z-10">
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Description</TableCell>
-                      <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Valid From</TableCell>
-                      <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Valid up to</TableCell>
+                      <TableHead className="font-bold">Description</TableHead>
+                      <TableHead className="font-bold">Valid From</TableHead>
+                      <TableHead className="font-bold">Valid up to</TableHead>
                     </TableRow>
-                  </TableHead>
+                  </TableHeader>
                   <TableBody>
                     {expenseGroups.map((g) => {
                       const isSelected = selectedGroup?.id === g.id;
                       return (
                         <TableRow
                           key={g.id}
-                          hover
-                          selected={isSelected}
                           onClick={() => setSelectedGroup(g)}
                           onDoubleClick={() => {
                             setEditingExpenseGroup(g);
                             setExpenseModalOpen(true);
                           }}
-                          sx={{
-                            cursor: "pointer",
-                            backgroundColor: isSelected ? "#e0f2fe !important" : "inherit",
-                          }}
+                          className={`cursor-pointer transition-colors ${
+                            isSelected ? "bg-primary/10 hover:bg-primary/15" : "hover:bg-muted/50"
+                          }`}
                         >
-                          <TableCell sx={{ color: "#0284c7" }}>{g.description}</TableCell>
+                          <TableCell className="font-semibold text-primary">{g.description}</TableCell>
                           <TableCell>{g.validFrom}</TableCell>
                           <TableCell>{g.validTo || ". ."}</TableCell>
                         </TableRow>
@@ -454,168 +419,145 @@ export function ProductEntryPage() {
                     })}
                     {expenseGroups.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={3} align="center" sx={{ color: "#64748b", py: 2 }}>
+                        <TableCell colSpan={3} className="text-center text-muted-foreground py-6">
                           No expense periods configured.
                         </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </div>
 
               {/* Group Period buttons */}
-              <Box sx={{ display: "flex", gap: 1.5 }}>
+              <div className="flex gap-3">
                 <Button
-                  variant="outlined"
+                  variant="outline"
                   onClick={handleOpenAddExpenseGroup}
                   disabled={!selectedProduct}
-                  sx={{
-                    borderRadius: "8px",
-                    textTransform: "none",
-                    borderColor: "#cbd5e1",
-                    color: "#334155",
-                    "&:hover": { borderColor: "#94a3b8" },
-                  }}
+                  className="font-medium bg-background border-border"
                 >
                   Add new expenses Group
                 </Button>
                 <Button
-                  variant="outlined"
+                  variant="outline"
                   onClick={handleOpenLinkPeriod}
                   disabled={!selectedProduct}
-                  sx={{
-                    borderRadius: "8px",
-                    textTransform: "none",
-                    borderColor: "#cbd5e1",
-                    color: "#334155",
-                    "&:hover": { borderColor: "#94a3b8" },
-                  }}
+                  className="font-medium bg-background border-border"
                 >
                   New Period
                 </Button>
-              </Box>
-            </Box>
+              </div>
+            </div>
 
             {/* Item List for Selected Expense Group */}
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, color: "#475569" }}>
+            <div className="flex flex-col gap-4">
+              <h3 className="text-sm font-bold text-muted-foreground uppercase tracking-wider">
                 ITEM LIST FOR SELECTED EXPENSES GROUP
-              </Typography>
+              </h3>
 
-              <TableContainer component={Paper} variant="outlined" sx={{ maxHeight: "200px", borderRadius: "8px" }}>
-                <Table stickyHeader size="small">
-                  <TableHead>
+              <div className="overflow-auto border border-border rounded-lg bg-background max-h-[200px]">
+                <Table>
+                  <TableHeader className="bg-muted/50 sticky top-0 z-10">
                     <TableRow>
-                      <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Code</TableCell>
-                      <TableCell sx={{ fontWeight: 700, bgcolor: "#f1f5f9" }}>Product Name</TableCell>
+                      <TableHead className="font-bold">Code</TableHead>
+                      <TableHead className="font-bold">Product Name</TableHead>
                     </TableRow>
-                  </TableHead>
+                  </TableHeader>
                   <TableBody>
                     {groupProducts.map((gp) => (
                       <TableRow key={gp.id}>
-                        <TableCell sx={{ color: "#0284c7" }}>{gp.code}</TableCell>
+                        <TableCell className="font-semibold text-primary">{gp.code}</TableCell>
                         <TableCell>{gp.englishName}</TableCell>
                       </TableRow>
                     ))}
                     {groupProducts.length === 0 && (
                       <TableRow>
-                        <TableCell colSpan={2} align="center" sx={{ color: "#64748b", py: 2 }}>
+                        <TableCell colSpan={2} className="text-center text-muted-foreground py-6">
                           No products mapped to this group.
                         </TableCell>
                       </TableRow>
                     )}
                   </TableBody>
                 </Table>
-              </TableContainer>
+              </div>
 
               {/* Bottom control buttons */}
-              <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 1.5, mt: 1 }}>
+              <div className="flex justify-end gap-3 mt-2">
                 <Button
-                  variant="outlined"
+                  variant="outline"
                   onClick={handleOpenAddItem}
                   disabled={!selectedGroup}
-                  sx={{
-                    borderRadius: "8px",
-                    borderColor: "#3b82f6",
-                    color: "#2563eb",
-                    textTransform: "none",
-                    fontWeight: 600,
-                  }}
+                  className="font-semibold border-primary/30 text-primary hover:bg-primary/5 bg-background"
                 >
                   Add Item
                 </Button>
                 <Button
-                  variant="contained"
                   onClick={() => navigate("/data-entry")}
-                  sx={{
-                    borderRadius: "8px",
-                    bgcolor: "#475569",
-                    textTransform: "none",
-                    fontWeight: 600,
-                    "&:hover": { bgcolor: "#334155" },
-                  }}
+                  className="font-semibold bg-slate-600 hover:bg-slate-700 text-white"
                 >
                   Close
                 </Button>
-              </Box>
-            </Box>
+              </div>
+            </div>
 
-          </Box>
-        </Box>
-      </Paper>
+          </div>
+        </div>
+      </div>
 
       {/* Product Add/Edit Dialog */}
-      <Dialog open={productModalOpen} onClose={() => setProductModalOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>
-          {editingProduct ? "Edit Product" : "Add Product"}
-        </DialogTitle>
-        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, pt: 1 }}>
-          <TextField
-            label="Product Code"
-            size="small"
-            fullWidth
-            value={productForm.code}
-            onChange={(e) => setProductForm({ ...productForm, code: e.target.value })}
-            disabled={!!editingProduct}
-          />
-          <TextField
-            label="Marathi Name"
-            size="small"
-            fullWidth
-            value={productForm.marathiName}
-            onChange={(e) => setProductForm({ ...productForm, marathiName: e.target.value })}
-          />
-          <TextField
-            label="English Name"
-            size="small"
-            fullWidth
-            value={productForm.englishName}
-            onChange={(e) => setProductForm({ ...productForm, englishName: e.target.value })}
-          />
-          <TextField
-            label="Bharti Weight"
-            size="small"
-            type="number"
-            fullWidth
-            value={productForm.bhartiWeight}
-            onChange={(e) => setProductForm({ ...productForm, bhartiWeight: parseFloat(e.target.value) || 0 })}
-          />
-          <TextField
-            label="GST Item Code"
-            size="small"
-            fullWidth
-            value={productForm.gstItemCode}
-            onChange={(e) => setProductForm({ ...productForm, gstItemCode: e.target.value })}
-          />
+      <Dialog open={productModalOpen} onOpenChange={(val) => !val && setProductModalOpen(false)}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>{editingProduct ? "Edit Product" : "Add Product"}</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">Product Code</label>
+              <Input
+                value={productForm.code}
+                onChange={(e) => setProductForm({ ...productForm, code: e.target.value })}
+                disabled={!!editingProduct}
+              />
+            </div>
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">Marathi Name</label>
+              <Input
+                value={productForm.marathiName}
+                onChange={(e) => setProductForm({ ...productForm, marathiName: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">English Name</label>
+              <Input
+                value={productForm.englishName}
+                onChange={(e) => setProductForm({ ...productForm, englishName: e.target.value })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">Bharti Weight</label>
+              <Input
+                type="number"
+                value={productForm.bhartiWeight}
+                onChange={(e) => setProductForm({ ...productForm, bhartiWeight: parseFloat(e.target.value) || 0 })}
+              />
+            </div>
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">GST Item Code</label>
+              <Input
+                value={productForm.gstItemCode}
+                onChange={(e) => setProductForm({ ...productForm, gstItemCode: e.target.value })}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setProductModalOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleSaveProduct}>
+              Save
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setProductModalOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button onClick={handleSaveProduct} variant="contained" color="primary">
-            Save
-          </Button>
-        </DialogActions>
       </Dialog>
 
       {/* Expenses Group Modal */}
@@ -628,69 +570,79 @@ export function ProductEntryPage() {
       />
 
       {/* Link Period Modal */}
-      <Dialog open={linkPeriodOpen} onClose={() => setLinkPeriodOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Select Expense Period Group</DialogTitle>
-        <DialogContent sx={{ pt: 1 }}>
-          <TextField
-            select
-            fullWidth
-            label="Select Group"
-            value={selectedPeriodToLink}
-            onChange={(e) => setSelectedPeriodToLink(Number(e.target.value))}
-          >
-            {allExpenseGroups.map((g) => (
-              <MenuItem key={g.id} value={g.id}>
-                {g.rateCode} - {g.description}
-              </MenuItem>
-            ))}
-            {allExpenseGroups.length === 0 && (
-              <MenuItem disabled value="">
-                No unlinked groups available. Click "Add new expenses Group" instead.
-              </MenuItem>
-            )}
-          </TextField>
+      <Dialog open={linkPeriodOpen} onOpenChange={(val) => !val && setLinkPeriodOpen(false)}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>Select Expense Period Group</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">Select Group</label>
+              <Select
+                value={selectedPeriodToLink}
+                onChange={(e) => setSelectedPeriodToLink(Number(e.target.value))}
+              >
+                <option value="">Select Group</option>
+                {allExpenseGroups.map((g) => (
+                  <option key={g.id} value={g.id}>
+                    {g.rateCode} - {g.description}
+                  </option>
+                ))}
+              </Select>
+              {allExpenseGroups.length === 0 && (
+                <p className="text-sm text-destructive mt-1">
+                  No unlinked groups available. Click "Add new expenses Group" instead.
+                </p>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setLinkPeriodOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleLinkPeriod} disabled={!selectedPeriodToLink}>
+              Link Period
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setLinkPeriodOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button onClick={handleLinkPeriod} variant="contained" color="primary" disabled={!selectedPeriodToLink}>
-            Link Period
-          </Button>
-        </DialogActions>
       </Dialog>
 
       {/* Add Item Modal */}
-      <Dialog open={addItemOpen} onClose={() => setAddItemOpen(false)} maxWidth="xs" fullWidth>
-        <DialogTitle sx={{ fontWeight: 700 }}>Add Product to selected Expense Group</DialogTitle>
-        <DialogContent sx={{ pt: 1 }}>
-          <TextField
-            select
-            fullWidth
-            label="Select Product"
-            value={selectedProductToLink}
-            onChange={(e) => setSelectedProductToLink(Number(e.target.value))}
-          >
-            {products
-              .filter((p) => !groupProducts.some((gp) => gp.id === p.id))
-              .map((p) => (
-                <MenuItem key={p.id} value={p.id}>
-                  {p.code} - {p.englishName}
-                </MenuItem>
-              ))}
-          </TextField>
+      <Dialog open={addItemOpen} onOpenChange={(val) => !val && setAddItemOpen(false)}>
+        <DialogContent className="sm:max-w-[420px]">
+          <DialogHeader>
+            <DialogTitle>Add Product to selected Expense Group</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="grid gap-2">
+              <label className="text-sm font-semibold text-muted-foreground">Select Product</label>
+              <Select
+                value={selectedProductToLink}
+                onChange={(e) => setSelectedProductToLink(Number(e.target.value))}
+              >
+                <option value="">Select Product</option>
+                {products
+                  .filter((p) => !groupProducts.some((gp) => gp.id === p.id))
+                  .map((p) => (
+                    <option key={p.id} value={p.id}>
+                      {p.code} - {p.englishName}
+                    </option>
+                  ))}
+              </Select>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAddItemOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleLinkProductToGroup} disabled={!selectedProductToLink}>
+              Add Item
+            </Button>
+          </DialogFooter>
         </DialogContent>
-        <DialogActions sx={{ p: 2 }}>
-          <Button onClick={() => setAddItemOpen(false)} color="inherit">
-            Cancel
-          </Button>
-          <Button onClick={handleLinkProductToGroup} variant="contained" color="primary" disabled={!selectedProductToLink}>
-            Add Item
-          </Button>
-        </DialogActions>
       </Dialog>
 
-    </Box>
+    </div>
   );
 }
 export default ProductEntryPage;

@@ -1,20 +1,12 @@
 import React, { useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Alert,
-  CircularProgress
-} from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Select } from "../components/ui/select";
+import { Button } from "../components/ui/button";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 export function CreateFirmPage() {
   const navigate = useNavigate();
@@ -68,226 +60,111 @@ export function CreateFirmPage() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#edf2fc",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 3
-      }}
-    >
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: "480px",
-          bgcolor: "#ffffff",
-          borderRadius: "20px",
-          boxShadow: "0 18px 40px rgba(20, 51, 97, 0.08)",
-          border: "1px solid rgba(212, 227, 245, 0.8)",
-          overflow: "visible"
-        }}
-      >
-        <CardContent sx={{ p: 4, "&:last-child": { pb: 4 } }}>
-          <Typography
-            sx={{
-              color: "#1e2e4a",
-              fontSize: "20px",
-              fontWeight: 700,
-              mb: 4,
-              borderBottom: "1px solid #edf2fc",
-              pb: 2
-            }}
-          >
-            Create Firm
-          </Typography>
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex items-center justify-center p-6 text-foreground">
+      <Card className="w-full max-w-[480px] shadow-lg border border-border">
+        <CardHeader className="border-b border-border pb-4 mb-4">
+          <CardTitle className="text-xl font-bold">Create Firm</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-2">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {success && (
+            <Alert className="bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/50">
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
 
-          {error && <Alert severity="error" sx={{ mb: 3, borderRadius: "10px" }}>{error}</Alert>}
-          {success && <Alert severity="success" sx={{ mb: 3, borderRadius: "10px" }}>{success}</Alert>}
-
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 3.5 }}>
-            
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Firm Name Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Firm Name
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
+              </label>
+              <Input
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter firm name"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& fieldset": { borderColor: "#d4e3f5" },
-                    "&:hover fieldset": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused fieldset": { borderColor: "#1470e5" }
-                  }
-                }}
+                className="flex-1"
               />
-            </Box>
+            </div>
 
             {/* Book Start Date Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Book Start Date
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
+              </label>
+              <Input
                 value={bookStartDate}
                 onChange={(e) => setBookStartDate(e.target.value)}
                 placeholder="DD.MM.YYYY"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& fieldset": { borderColor: "#d4e3f5" },
-                    "&:hover fieldset": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused fieldset": { borderColor: "#1470e5" }
-                  }
-                }}
+                className="flex-1"
               />
-            </Box>
+            </div>
 
             {/* Business Type Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Business Type
-              </Typography>
-              <FormControl fullWidth size="small">
-                <Select
-                  value={businessType}
-                  onChange={(e) => setBusinessType(e.target.value)}
-                  IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d4e3f5" },
-                    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1470e5" }
-                  }}
-                >
-                  <MenuItem value="Trader">Trader</MenuItem>
-                  <MenuItem value="Manufacturer">Manufacturer</MenuItem>
-                  <MenuItem value="Retailer">Retailer</MenuItem>
-                  <MenuItem value="Broker">Broker</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+              </label>
+              <Select
+                value={businessType}
+                onChange={(e) => setBusinessType(e.target.value)}
+                className="flex-1"
+              >
+                <option value="Trader">Trader</option>
+                <option value="Manufacturer">Manufacturer</option>
+                <option value="Retailer">Retailer</option>
+                <option value="Broker">Broker</option>
+              </Select>
+            </div>
 
             {/* Financial Year Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Financial Year
-              </Typography>
-              <FormControl fullWidth size="small">
-                <Select
-                  value={financialYear}
-                  onChange={(e) => setFinancialYear(e.target.value)}
-                  IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d4e3f5" },
-                    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1470e5" }
-                  }}
-                >
-                  <MenuItem value="2026-27">2026-27</MenuItem>
-                  <MenuItem value="2025-26">2025-26</MenuItem>
-                  <MenuItem value="2027-28">2027-28</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+              </label>
+              <Select
+                value={financialYear}
+                onChange={(e) => setFinancialYear(e.target.value)}
+                className="flex-1"
+              >
+                <option value="2026-27">2026-27</option>
+                <option value="2025-26">2025-26</option>
+                <option value="2027-28">2027-28</option>
+              </Select>
+            </div>
 
-            {/* Form Actions */}
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 3 }}>
+            {/* Actions */}
+            <div className="flex justify-end gap-3 pt-4 border-t border-border mt-6">
               <Button
                 type="button"
-                variant="outlined"
+                variant="outline"
                 onClick={() => navigate("/firm-selection")}
                 disabled={loading}
-                sx={{
-                  borderRadius: "10px",
-                  borderColor: "#dee5f2",
-                  color: "#6e7d91",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  px: 3,
-                  py: 1,
-                  "&:hover": {
-                    borderColor: "#b5c7e5",
-                    bgcolor: "#f7faff"
-                  }
-                }}
               >
                 Return
               </Button>
               <Button
                 type="submit"
-                variant="contained"
                 disabled={loading}
-                sx={{
-                  borderRadius: "10px",
-                  bgcolor: "#1470e5",
-                  color: "#fff",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  px: 3,
-                  py: 1,
-                  boxShadow: "none",
-                  "&:hover": {
-                    bgcolor: "#1160c4",
-                    boxShadow: "none"
-                  }
-                }}
+                className="min-w-[110px]"
               >
-                {loading ? <CircularProgress size={20} color="inherit" /> : "Create Firm"}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create Firm"
+                )}
               </Button>
-            </Box>
-
-          </Box>
+            </div>
+          </form>
         </CardContent>
       </Card>
-    </Box>
+    </div>
   );
 }

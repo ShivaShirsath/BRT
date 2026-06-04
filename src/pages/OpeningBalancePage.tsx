@@ -1,28 +1,21 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Box,
-  Button,
-  Checkbox,
-  FormControlLabel,
-  IconButton,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  Alert,
-} from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Trash2, Loader2 } from "lucide-react";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
+import { Button } from "../components/ui/button";
+import { Input } from "../components/ui/input";
+import { Select } from "../components/ui/select";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableHead,
+  TableCell,
+} from "../components/ui/table";
 
 export function OpeningBalancePage() {
   const navigate = useNavigate();
@@ -165,221 +158,167 @@ export function OpeningBalancePage() {
   }, [customers]);
 
   return (
-    <Box sx={{ minHeight: "100vh", bgcolor: "#dee5f2", p: 3, display: "flex", flexDirection: "column" }}>
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 p-6 flex flex-col text-foreground">
       {/* Top Breadcrumb */}
-      <Typography sx={{ color: "#1470e5", fontSize: 20, fontWeight: 700, mb: 2 }}>
+      <h1 className="text-primary text-xl font-bold mb-4 tracking-tight">
         {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."} &gt; DATA ENTRY &gt; OPENING BALANCE CHANGE
-      </Typography>
+      </h1>
 
       {/* Main Container */}
-      <Paper
-        sx={{
-          bgcolor: "#cfd9e8",
-          border: "1px solid #bccade",
-          borderRadius: "20px",
-          boxShadow: "0 8px 16px rgba(20,51,97,0.15)",
-          p: 3,
-          flex: 1,
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
+      <div className="flex-1 bg-white dark:bg-zinc-900 border border-border rounded-xl shadow-md p-6 flex flex-col">
         {/* Search */}
-        <Box sx={{ mb: 3 }}>
-          <Typography sx={{ fontSize: 20, fontWeight: 600, color: "#1e2e46", mb: 0.5 }}>
+        <div className="mb-4">
+          <label className="text-sm font-semibold text-muted-foreground block mb-1">
             Find Name:
-          </Typography>
-          <TextField
-            fullWidth
-            size="small"
+          </label>
+          <Input
             placeholder="Search customer name..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            sx={{
-              bgcolor: "#fff",
-              borderRadius: "8px",
-              "& .MuiOutlinedInput-root": {
-                borderRadius: "8px",
-              },
-            }}
+            className="w-full bg-background"
           />
-        </Box>
+        </div>
 
-        {message ? (
-          <Alert severity="success" sx={{ mb: 2 }} onClose={() => setMessage("")}>
-            {message}
+        {message && (
+          <Alert className="mb-4 bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/50">
+            <AlertDescription>{message}</AlertDescription>
           </Alert>
-        ) : null}
-        {error ? (
-          <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>
-            {error}
+        )}
+        {error && (
+          <Alert variant="destructive" className="mb-4">
+            <AlertDescription>{error}</AlertDescription>
           </Alert>
-        ) : null}
+        )}
 
         {/* Table wrapper */}
-        <TableContainer sx={{ flex: 1, maxHeight: "calc(100vh - 350px)", bgcolor: "#fff", borderRadius: "12px", border: "1px solid #bccade" }}>
-          <Table stickyHeader>
-            <TableHead>
+        <div className="flex-1 overflow-auto border border-border rounded-lg bg-background max-h-[calc(100vh-350px)]">
+          <Table>
+            <TableHeader className="bg-muted/50 sticky top-0 z-10">
               <TableRow>
-                <TableCell sx={{ fontWeight: 700, bgcolor: "#f4f6fa" }}>#</TableCell>
-                <TableCell sx={{ fontWeight: 700, bgcolor: "#f4f6fa" }}>CUSTOMER NAME</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 700, bgcolor: "#f4f6fa" }}>OPENING BALANCE</TableCell>
-                <TableCell sx={{ fontWeight: 700, bgcolor: "#f4f6fa" }}>CREDIT/DEBIT</TableCell>
-                <TableCell align="center" sx={{ fontWeight: 700, bgcolor: "#f4f6fa" }}>ACTION</TableCell>
+                <TableHead className="w-16 font-bold">#</TableHead>
+                <TableHead className="font-bold">CUSTOMER NAME</TableHead>
+                <TableHead className="text-right font-bold w-48">OPENING BALANCE</TableHead>
+                <TableHead className="font-bold w-36">CREDIT/DEBIT</TableHead>
+                <TableHead className="text-center font-bold w-24">ACTION</TableHead>
               </TableRow>
-            </TableHead>
+            </TableHeader>
             <TableBody>
               {customers.map((c, index) => (
-                <TableRow key={c.id} hover>
-                  <TableCell>{index + 1}</TableCell>
+                <TableRow key={c.id}>
+                  <TableCell className="font-medium">{index + 1}</TableCell>
                   <TableCell>
-                    <Button
+                    <button
                       onClick={() => {
                         setSelectedCustomer(c);
                         setModalOpen(true);
                       }}
-                      sx={{
-                        textTransform: "none",
-                        color: "#1e2e46",
-                        fontWeight: 600,
-                        justifyContent: "flex-start",
-                        p: 0,
-                        "&:hover": { textDecoration: "underline", bgcolor: "transparent" },
-                      }}
+                      className="text-left font-semibold hover:underline text-foreground bg-transparent border-0 cursor-pointer p-0"
                     >
                       {c.name}
-                    </Button>
+                    </button>
                   </TableCell>
-                  <TableCell align="right">
+                  <TableCell className="text-right">
                     <input
                       type="number"
                       step="0.01"
                       value={c.openingBalance}
                       onChange={(e) => handleBalanceChange(c.id, e.target.value)}
-                      style={{
-                        textAlign: "right",
-                        fontWeight: "bold",
-                        color: "#1470e5",
-                        border: "none",
-                        outline: "none",
-                        background: "transparent",
-                        width: "120px",
-                        fontSize: "1rem",
-                      }}
+                      className="text-right font-bold text-primary bg-transparent border-0 outline-none w-full max-w-[120px] focus:ring-1 focus:ring-ring focus:bg-background/50 rounded px-1"
                     />
                   </TableCell>
                   <TableCell>
                     <Select
-                      size="small"
                       value={c.openingBalanceType === "C" || c.openingBalanceType === "Credit" ? "C" : "D"}
                       onChange={(e) => handleTypeChange(c.id, e.target.value)}
-                      variant="standard"
-                      disableUnderline
-                      sx={{ fontWeight: 500 }}
+                      className="h-8 py-0"
                     >
-                      <MenuItem value="D">Debit</MenuItem>
-                      <MenuItem value="C">Credit</MenuItem>
+                      <option value="D">Debit</option>
+                      <option value="C">Credit</option>
                     </Select>
                   </TableCell>
-                  <TableCell align="center">
-                    <IconButton size="small" color="error" onClick={() => handleDeleteCustomer(c.id)}>
-                      <DeleteIcon fontSize="small" />
-                    </IconButton>
+                  <TableCell className="text-center">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="text-destructive hover:bg-destructive/10"
+                      onClick={() => handleDeleteCustomer(c.id)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
               {customers.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={5} align="center">
+                  <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
                     No customer accounts found. Click "+ New Account" to add one.
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
-        </TableContainer>
+        </div>
 
-        {/* Footer info inside paper */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", mt: 2, px: 1 }}>
-          <Typography sx={{ color: "#546e7a", fontWeight: 500 }}>
+        {/* Footer info */}
+        <div className="flex flex-col sm:flex-row sm:justify-between items-center gap-2 mt-4 pt-2 border-t border-border">
+          <span className="text-sm text-muted-foreground font-medium">
             Showing {customers.length} customer accounts
-          </Typography>
-          <Typography sx={{ color: "#1e2e46", fontWeight: 700 }}>
+          </span>
+          <span className="text-sm font-bold text-foreground">
             Total Debit: {totalDebit.toFixed(2)} &nbsp;&nbsp;|&nbsp;&nbsp; Total Credit: {totalCredit.toFixed(2)}
-          </Typography>
-        </Box>
-      </Paper>
+          </span>
+        </div>
+      </div>
 
       {/* Bottom Command Buttons Bar */}
-      <Box sx={{ mt: 3, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Box sx={{ display: "flex", gap: 2 }}>
+      <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+        <div className="flex items-center gap-4 w-full sm:w-auto">
           <Button
-            variant="contained"
+            variant="outline"
+            className="font-bold border-border shadow bg-background"
             onClick={() => {
               setSelectedCustomer(null);
               setModalOpen(true);
-            }}
-            sx={{
-              bgcolor: "#fff",
-              color: "#1e2e46",
-              fontWeight: 700,
-              textTransform: "none",
-              borderRadius: "10px",
-              boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
-              px: 3,
-              "&:hover": { bgcolor: "#f5f5f5" },
             }}
           >
             + New Account
           </Button>
 
-          <FormControlLabel
-            control={
-              <Checkbox
-                checked={printUponSaving}
-                onChange={(e) => setPrintUponSaving(e.target.checked)}
-              />
-            }
-            label="Print upon saving"
-            sx={{ color: "#1e2e46", fontWeight: 500 }}
-          />
-        </Box>
+          <label className="flex items-center gap-2 text-sm font-medium cursor-pointer">
+            <input
+              type="checkbox"
+              checked={printUponSaving}
+              onChange={(e) => setPrintUponSaving(e.target.checked)}
+              className="rounded border-input text-primary focus:ring-ring"
+            />
+            <span>Print upon saving</span>
+          </label>
+        </div>
 
-        <Box sx={{ display: "flex", gap: 1.5 }}>
+        <div className="flex gap-3 w-full sm:w-auto justify-end">
           <Button
-            variant="contained"
             onClick={handleSaveAll}
             disabled={loading}
-            sx={{
-              bgcolor: "#1470e5",
-              color: "#fff",
-              fontWeight: 700,
-              textTransform: "none",
-              borderRadius: "10px",
-              px: 4,
-              "&:hover": { bgcolor: "#105bbd" },
-            }}
+            className="font-bold min-w-[120px]"
           >
-            {loading ? "Saving..." : "Save (F5)"}
+            {loading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
+              </>
+            ) : (
+              "Save (F5)"
+            )}
           </Button>
           <Button
-            variant="outlined"
+            variant="outline"
             onClick={() => navigate(-1)}
-            sx={{
-              borderColor: "#aebfd5",
-              color: "#1e2e46",
-              bgcolor: "#fff",
-              fontWeight: 700,
-              textTransform: "none",
-              borderRadius: "10px",
-              px: 3,
-              "&:hover": { bgcolor: "#f5f5f5", borderColor: "#aebfd5" },
-            }}
+            className="font-bold border-border bg-background"
           >
             Close (ESC)
           </Button>
-        </Box>
-      </Box>
+        </div>
+      </div>
 
       {/* Account Generation Modal Component */}
       <AccountGenerationModal
@@ -391,6 +330,6 @@ export function OpeningBalancePage() {
         onSave={handleSaveModal}
         initialData={selectedCustomer}
       />
-    </Box>
+    </div>
   );
 }
