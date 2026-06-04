@@ -5,6 +5,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import com.brt.security.JwtPrincipal;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -20,10 +21,25 @@ public class AuthController {
     return authService.signup(req);
   }
 
+  @PostMapping("/users")
+  public List<AppUser> createUser(@AuthenticationPrincipal JwtPrincipal principal, @Valid @RequestBody AuthDtos.UserCreateRequest req) {
+    if (principal == null || !"ADMIN".equalsIgnoreCase(principal.roleCode())) {
+      throw new IllegalArgumentException("Access Denied: Only Admins can create users");
+    }
+    return authService.createUser(req);
+  }
+
+
   @PostMapping("/signin")
   public AuthDtos.AuthResponse signin(@Valid @RequestBody AuthDtos.SigninRequest req) {
     return authService.signin(req);
   }
+
+  @PostMapping("/select-firm")
+  public AuthDtos.AuthResponse selectFirm(@AuthenticationPrincipal JwtPrincipal principal, @Valid @RequestBody AuthDtos.SelectFirmRequest req) {
+    return authService.selectFirm(principal, req);
+  }
+
 
   @GetMapping("/me")
   public AuthDtos.AuthResponse me(@AuthenticationPrincipal JwtPrincipal principal) {

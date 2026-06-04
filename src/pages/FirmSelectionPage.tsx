@@ -12,9 +12,14 @@ export function FirmSelectionPage() {
   const [firms, setFirms] = useState<Firm[]>([]);
   const [selected, setSelected] = useState<Firm | null>(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const setFirm = useAuthStore((s) => s.setFirm);
+  const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+  const roleCode = useAuthStore((s) => s.roleCode);
   const navigate = useNavigate();
+
+  const isAdmin = roleCode?.toUpperCase() === "ADMIN";
 
   useEffect(() => {
     (async () => {
@@ -79,20 +84,42 @@ export function FirmSelectionPage() {
           </div>
 
           <div className="flex justify-end mt-6">
+            <div style={{ display: "flex", gap: 2 }}>
+              <Button
+                onClick={() => navigate("/create-firm")}
+              >
+                + Create Firm
+              </Button>
+              {isAdmin && (
+                <Button onClick={() => navigate("/create-user")}>
+                  + Create User
+                </Button>
+              )}
+            </div>
             <Button
-              disabled={!selected}
-              onClick={() => {
+              disabled={!selected || loading}
+              onClick={async () => {
                 if (!selected) return;
-                setFirm(selected);
-                navigate("/menu");
+                setLoading(true);
+                setError("");
+                try {
+                  const { data } = await api.post("/auth/select-firm", { firmCode: selected.code });
+                  setAuth(data);
+                  setFirm(selected);
+                  navigate("/menu");
+                } catch (e: any) {
+                  setError(e?.response?.data?.error ?? "Unable to select firm");
+                } finally {
+                  setLoading(false);
+                }
               }}
               className="px-6 h-11 text-base font-semibold"
             >
-              Continue
+              {loading ? "Loading..." : "Continue"}
             </Button>
           </div>
-        </Card>
-      </main>
-    </div>
+        </Card >
+      </main >
+    </div >
   );
 }

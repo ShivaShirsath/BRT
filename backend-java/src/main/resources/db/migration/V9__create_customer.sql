@@ -1,0 +1,42 @@
+CREATE SCHEMA IF NOT EXISTS mst;
+
+CREATE TABLE IF NOT EXISTS mst.customer (
+  id BIGSERIAL PRIMARY KEY,
+  firm_id VARCHAR(32) NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(10) DEFAULT 'B',
+  english_name VARCHAR(255),
+  short_name VARCHAR(100),
+  account_type VARCHAR(100),
+  opening_balance NUMERIC(12,2) DEFAULT 0,
+  opening_balance_type VARCHAR(5) DEFAULT 'D', -- 'C' for Credit, 'D' for Debit
+  firm_account_no VARCHAR(100),
+  group_name VARCHAR(255) DEFAULT 'Current Liabilities',
+  user_group VARCHAR(100),
+  location_type VARCHAR(50) DEFAULT 'LOCAL',
+  location_state VARCHAR(100) DEFAULT 'Maharashtra',
+  packing_charges NUMERIC(12,2) DEFAULT 0,
+  levy VARCHAR(100),
+  sawangadi_no VARCHAR(100),
+  
+  -- Personal details
+  address TEXT,
+  email VARCHAR(255),
+  city VARCHAR(100),
+  zone VARCHAR(100),
+  taluka VARCHAR(100),
+  dist VARCHAR(100),
+  pin VARCHAR(20),
+  phone VARCHAR(50),
+  state_name VARCHAR(100),
+  mobile_no VARCHAR(50),
+  mobile_2nd VARCHAR(50),
+  aadhar_no VARCHAR(50),
+  pan_no VARCHAR(50),
+  license_no VARCHAR(100),
+  tin_no VARCHAR(100),
+  discount_percentage NUMERIC(5,2) DEFAULT 0,
+
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

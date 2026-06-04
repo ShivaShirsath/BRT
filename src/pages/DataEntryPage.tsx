@@ -26,7 +26,7 @@ export function DataEntryPage() {
     "Opening Balance",
     "Parcel Expense Entry",
     "Bank Reconciliation",
-    "Accounts Group Master",
+    "Product Master",
     "Release Records (LAN)",
     "Contract Entry",
     "Grading",
@@ -47,6 +47,8 @@ export function DataEntryPage() {
   function routeFor(title: string) {
     if (title === "Purchase Bill") return "/purchase";
     if (title === "Sales Patti Entry") return "/sales";
+    if (title === "Opening Balance") return "/opening-balances";
+    if (title === "Product Master") return "/product-entry";
     if (title === "Exit") return "/menu";
     return null;
   }

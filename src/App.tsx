@@ -2,10 +2,14 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { ProtectedRoute } from "./app/ProtectedRoute";
 import { AuthPage } from "./pages/AuthPage";
 import { FirmSelectionPage } from "./pages/FirmSelectionPage";
+import { CreateFirmPage } from "./pages/CreateFirmPage";
+import { CreateUserPage } from "./pages/CreateUserPage";
 import { MenuPage } from "./pages/MenuPage";
 import { PurchasePage } from "./pages/PurchasePage";
 import { SalesPage } from "./pages/SalesPage";
 import { DataEntryPage } from "./pages/DataEntryPage";
+import { OpeningBalancePage } from "./pages/OpeningBalancePage";
+import { ProductEntryPage } from "./pages/ProductEntryPage";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import api from "./api/client";
@@ -39,6 +43,7 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
 }
 
 import { useThemeStore } from "./store/themeStore";
+import { CssBaseline } from "@mui/material";
 
 export default function App() {
   const themeId = useThemeStore((s) => s.themeId);
@@ -65,20 +70,28 @@ export default function App() {
   }, [themeId, darkMode]);
 
   return (
-    <SessionBootstrap>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/auth" element={<AuthPage />} />
-          <Route element={<ProtectedRoute />}>
-            <Route path="/firm-selection" element={<FirmSelectionPage />} />
-            <Route path="/menu" element={<MenuPage />} />
-            <Route path="/data-entry" element={<DataEntryPage />} />
-            <Route path="/purchase" element={<PurchasePage />} />
-            <Route path="/sales" element={<SalesPage />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/auth" replace />} />
-        </Routes>
-      </BrowserRouter>
-    </SessionBootstrap>
+    <>
+      <CssBaseline />
+      <SessionBootstrap>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/auth" element={<AuthPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/firm-selection" element={<FirmSelectionPage />} />
+              <Route path="/create-firm" element={<CreateFirmPage />} />
+              <Route path="/create-user" element={<CreateUserPage />} />
+              <Route path="/menu" element={<MenuPage />} />
+              <Route path="/data-entry" element={<DataEntryPage />} />
+              <Route path="/purchase" element={<PurchasePage />} />
+              <Route path="/sales" element={<SalesPage />} />
+              <Route path="/opening-balances" element={<OpeningBalancePage />} />
+              <Route path="/product-entry" element={<ProductEntryPage />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/auth" replace />} />
+          </Routes>
+        </BrowserRouter>
+      </SessionBootstrap>
+    </>
   );
 }
+
