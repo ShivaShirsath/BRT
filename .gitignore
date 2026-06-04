@@ -24,9 +24,8 @@ dist-ssr
 *.sw?
 
 # Java/Maven files
-*.class
-target/
-backend-java/target/
+**/*.class
+**/target/
 .project
 .classpath
 .factorypath
