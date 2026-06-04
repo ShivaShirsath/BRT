@@ -77,7 +77,7 @@ public class ProductController {
     @GetMapping("/expense-groups/{id}/products")
     public List<Product> getProductsForExpenseGroup(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable Long id) {
         if (principal == null) throw new IllegalArgumentException("Unauthorized");
-        return expenseGroupRepository.findProductsByExpenseGroupId(id);
+        return productRepository.findProductsByExpenseGroupId(id);
     }
 
     @PostMapping("/expense-groups/{id}/products/{productId}")

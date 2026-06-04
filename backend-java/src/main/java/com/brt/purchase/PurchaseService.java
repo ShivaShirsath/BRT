@@ -62,7 +62,9 @@ public class PurchaseService {
 
         String commCode = commodityName.trim().toUpperCase().replace(" ", "_");
         Product product = productRepository.findByCodeIgnoreCase(commCode)
+            .orElseGet(() -> productRepository.findByCodeIgnoreCase(commodityName.trim())
             .orElseGet(() -> productRepository.findByEnglishNameIgnoreCase(commodityName.trim())
+            .orElseGet(() -> productRepository.findByMarathiNameIgnoreCase(commodityName.trim())
             .orElseGet(() -> {
                 Product newProduct = new Product();
                 newProduct.setCode(commCode);
@@ -71,7 +73,7 @@ public class PurchaseService {
                 newProduct.setBhartiWeight(0.0);
                 newProduct.setDescription("Auto-created from purchase entry");
                 return productRepository.save(newProduct);
-            }));
+            }))));
 
         PurchaseBillItem item = new PurchaseBillItem();
         item.setPurchaseBill(p);

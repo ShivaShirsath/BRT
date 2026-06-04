@@ -16,10 +16,6 @@ public interface ExpenseGroupRepository extends JpaRepository<ExpenseGroup, Long
             "WHERE peg.product_id = :productId ORDER BY eg.valid_from DESC", nativeQuery = true)
     List<ExpenseGroup> findByProductId(@Param("productId") Long productId);
 
-    @Query(value = "SELECT p.* FROM mst.products p " +
-            "JOIN mst.product_expense_groups peg ON p.id = peg.product_id " +
-            "WHERE peg.expense_group_id = :expenseGroupId ORDER BY p.code ASC", nativeQuery = true)
-    List<Product> findProductsByExpenseGroupId(@Param("expenseGroupId") Long expenseGroupId);
 
     @Modifying
     @Transactional

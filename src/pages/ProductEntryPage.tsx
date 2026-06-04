@@ -201,7 +201,7 @@ export function ProductEntryPage() {
       setProductModalOpen(false);
       loadProducts();
     } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to save product");
+      alert(err.response?.data?.error || err.response?.data?.message || "Failed to save product");
     }
   };
 
