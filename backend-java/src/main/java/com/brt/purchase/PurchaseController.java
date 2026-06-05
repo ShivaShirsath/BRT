@@ -41,4 +41,15 @@ public class PurchaseController {
     Map<String, Object> details = purchaseService.getBillDetailsByNo(billNo);
     return details != null ? details : Map.of();
   }
+
+  @GetMapping("/all")
+  public Map<String, Object> getAll(@AuthenticationPrincipal JwtPrincipal principal) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return Map.of("rows", purchaseService.getAll().stream().map(p -> Map.of(
+      "id", p.getId(),
+      "billNo", p.getBillNo(),
+      "date", p.getDetail() != null ? p.getDetail().getBillDate().toString() : "",
+      "amount", p.getCharges() != null ? p.getCharges().getNetTotal() : null
+    )).toList());
+  }
 }

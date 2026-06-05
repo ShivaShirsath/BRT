@@ -231,4 +231,8 @@ public class PurchaseService {
     }
     return results;
   }
+
+  public List<PurchaseBill> getAll() {
+    return purchases.findAllByOrderByCreatedAtDesc();
+  }
 }

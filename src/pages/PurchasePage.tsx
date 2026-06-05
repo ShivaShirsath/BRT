@@ -19,6 +19,9 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
+import { List } from "lucide-react";
+import { db } from "../lib/db";
+import { AccountGenerationModal } from "../components/AccountGenerationModal";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -114,6 +117,79 @@ export function PurchasePage() {
   const [billReceived, setBillReceived] = useState("No");
   const [lockState, setLockState] = useState("No");
   const [charges, setCharges] = useState<Record<string, string>>(() => Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [allBills, setAllBills] = useState<any[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [loadingBills, setLoadingBills] = useState(false);
+
+  const handleOpenListModal = async () => {
+    setIsListModalOpen(true);
+    setLoadingBills(true);
+    try {
+      if (isOnline) {
+        const { data } = await api.get("/purchase/all");
+        if (data && data.rows) {
+          setAllBills(data.rows.map((r: any) => ({ ...r, synced: true })));
+        }
+      } else {
+        const offlinePurchases = await db.purchases.toArray();
+        setAllBills(offlinePurchases.map((p) => ({
+          id: p.id,
+          billNo: p.billNo,
+          date: p.billDate ? p.billDate : "",
+          amount: p.charges?.netTotal ?? 0,
+          synced: p.synced
+        })));
+      }
+    } catch (err) {
+      console.error("Failed to load purchase bills", err);
+    } finally {
+      setLoadingBills(false);
+    }
+  };
+
+  const filteredBills = useMemo(() => {
+    if (!searchQuery.trim()) return allBills;
+    const q = searchQuery.toLowerCase();
+    return allBills.filter(b => 
+      (b.billNo && b.billNo.toLowerCase().includes(q)) ||
+      (b.date && b.date.toLowerCase().includes(q))
+    );
+  }, [allBills, searchQuery]);
+
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+
+  const fetchCustomers = async () => {
+    try {
+      const { data } = await api.get("/customers");
+      setCustomers(data || []);
+    } catch (err) {
+      console.error("Failed to load customers", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isOnline) {
+      fetchCustomers();
+    }
+  }, [isOnline]);
+
+  useEffect(() => {
+    if (seller && customers.length > 0 && !selectedCustomerId) {
+      const idNum = Number(seller);
+      if (!isNaN(idNum)) {
+        const found = customers.find(c => c.id === idNum);
+        if (found) {
+          setSeller(found.name);
+          setSelectedCustomerId(found.id);
+        }
+      }
+    }
+  }, [seller, customers, selectedCustomerId]);
 
   const setDateDirty = (val: string) => {
     setDate(val);
@@ -262,7 +338,7 @@ export function PurchasePage() {
       amount: parseNumber(r.netWt) * parseNumber(r.rate),
     }));
 
-    const parsedSellerId = /^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null;
+    const parsedSellerId = selectedCustomerId ?? (/^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null);
 
     const chargesMap: Record<string, string> = {
       "Purchase amt.": "purchaseAmount",
@@ -325,7 +401,7 @@ export function PurchasePage() {
     }
   }
 
-  function resetForm() {
+  function resetForm(keepBillNo: string = "") {
     setPurchaseId(
       typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
@@ -335,12 +411,13 @@ export function PurchasePage() {
             return v.toString(16);
           })
     );
-    setBillNoInput("");
-    setBillNo("");
+    setBillNoInput(keepBillNo);
+    setBillNo(keepBillNo);
     setDate("08.11.2025");
     setEntryType("Select market");
     setCessCondition("Order");
     setSeller("");
+    setSelectedCustomerId(null);
     setVehicleNo("--");
     setPartyBillNo("--");
     setRows(Array.from({ length: 6 }, () => mkRow()));
@@ -350,6 +427,21 @@ export function PurchasePage() {
     setMessage("");
     setError("");
   }
+
+  const handleCreateCustomer = async (formData: any) => {
+    try {
+      const { data } = await api.post("/customers", formData);
+      setCustomers((prev) => [...prev, data]);
+      setSeller(data.name);
+      setSelectedCustomerId(data.id);
+      setIsDirty(true);
+      setIsCustomerModalOpen(false);
+      setMessage(`Account created successfully for ${data.name}`);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to create customer account");
+    }
+  };
 
   const handleBillNoChange = (newVal: string) => {
     if (isDirty) {
@@ -401,6 +493,7 @@ export function PurchasePage() {
         setEntryType(data.entryType || "Select market");
         setCessCondition(data.cessCondition || "Order");
         setSeller(data.sellerId ? String(data.sellerId) : "");
+        setSelectedCustomerId(data.sellerId || null);
         setVehicleNo(data.vehicleNo || "--");
         setPartyBillNo(data.partyBillNo || "--");
         setNote(data.note || "");
@@ -469,11 +562,11 @@ export function PurchasePage() {
         setError("");
         setIsDirty(false);
       } else {
-        resetForm();
+        resetForm(num);
       }
     } catch (e: any) {
       console.error("Failed to fetch existing bill details", e);
-      resetForm();
+      resetForm(num);
     }
   }
 
@@ -522,18 +615,30 @@ export function PurchasePage() {
           <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Bill no.</label>
-              <Input
-                value={billNoInput}
-                onChange={(e) => setBillNoInput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
+              <div className="flex items-center space-x-2">
+                <Input
+                  value={billNoInput}
+                  onChange={(e) => setBillNoInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      handleBillNoChange(billNoInput);
+                    }
+                  }}
+                  onBlur={() => {
                     handleBillNoChange(billNoInput);
-                  }
-                }}
-                onBlur={() => {
-                  handleBillNoChange(billNoInput);
-                }}
-              />
+                  }}
+                  className="flex-1"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={handleOpenListModal}
+                  className="flex items-center gap-1.5 h-10 px-3 shrink-0"
+                >
+                  <List className="h-4 w-4" />
+                  List
+                </Button>
+              </div>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Date</label>
@@ -553,9 +658,52 @@ export function PurchasePage() {
                 <option value="Direct">Direct</option>
               </Select>
             </div>
-            <div className="space-y-1 md:col-span-2">
+            <div className="space-y-1 md:col-span-2 relative">
               <label className="text-xs font-semibold text-slate-500">Seller</label>
-              <Input value={seller} onChange={(e) => setSellerDirty(e.target.value)} placeholder="Search Customer" />
+              <Input
+                value={seller}
+                onChange={(e) => {
+                  setSellerDirty(e.target.value);
+                  setSelectedCustomerId(null);
+                  setShowCustomerDropdown(true);
+                }}
+                onFocus={() => setShowCustomerDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowCustomerDropdown(false), 200);
+                }}
+                placeholder="Search Customer"
+              />
+              {showCustomerDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
+                  {customers
+                    .filter((c) =>
+                      c.name && c.name.toLowerCase().includes(seller.toLowerCase())
+                    )
+                    .map((c) => (
+                      <div
+                        key={c.id}
+                        onMouseDown={() => {
+                          setSeller(c.name);
+                          setSelectedCustomerId(c.id);
+                          setIsDirty(true);
+                          setShowCustomerDropdown(false);
+                        }}
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {c.name}
+                      </div>
+                    ))}
+                  <div
+                    onMouseDown={() => {
+                      setIsCustomerModalOpen(true);
+                      setShowCustomerDropdown(false);
+                    }}
+                    className="px-3 py-2 text-sm font-semibold text-primary cursor-pointer hover:bg-accent border-t"
+                  >
+                    + Add New Customer
+                  </div>
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
@@ -767,6 +915,83 @@ export function PurchasePage() {
         open={validationDialogOpen}
         onClose={() => setValidationDialogOpen(false)}
         errors={validationErrors}
+      />
+
+      <Dialog open={isListModalOpen} onOpenChange={setIsListModalOpen}>
+        <DialogContent className="sm:max-w-[600px] max-h-[80vh] flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-bold">Purchase Bills</DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground">
+              Select a bill from the database to load its details.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex-1 flex flex-col min-h-0 py-2 space-y-4">
+            <Input
+              placeholder="Search by Bill No. or Date..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full"
+            />
+            <div className="flex-1 overflow-y-auto border rounded-md min-h-[200px]">
+              {loadingBills ? (
+                <div className="flex items-center justify-center h-full py-8 text-sm text-muted-foreground">
+                  Loading bills...
+                </div>
+              ) : filteredBills.length === 0 ? (
+                <div className="flex items-center justify-center h-full py-8 text-sm text-muted-foreground">
+                  No bills found
+                </div>
+              ) : (
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Bill No.</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="text-right">Net Total</TableHead>
+                      <TableHead className="text-center w-24">Status</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredBills.map((b) => (
+                      <TableRow
+                        key={b.id}
+                        onClick={() => {
+                          handleBillNoChange(b.billNo);
+                          setIsListModalOpen(false);
+                        }}
+                        className="cursor-pointer hover:bg-muted/50"
+                      >
+                        <TableCell className="font-medium">{b.billNo}</TableCell>
+                        <TableCell>{b.date}</TableCell>
+                        <TableCell className="text-right font-mono">
+                          ₹ {b.amount !== null && b.amount !== undefined ? Number(b.amount).toFixed(2) : "0.00"}
+                        </TableCell>
+                        <TableCell className="text-center">
+                          <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${
+                            b.synced ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
+                          }`}>
+                            {b.synced ? "Synced" : "Offline"}
+                          </span>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              )}
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setIsListModalOpen(false)}>
+              Close
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+      <AccountGenerationModal
+        open={isCustomerModalOpen}
+        onClose={() => setIsCustomerModalOpen(false)}
+        onSave={handleCreateCustomer}
+        initialData={{ name: seller }}
       />
     </div>
   );
