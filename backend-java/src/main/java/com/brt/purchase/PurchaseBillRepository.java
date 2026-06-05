@@ -9,6 +9,6 @@ import java.util.Optional;
 public interface PurchaseBillRepository extends JpaRepository<PurchaseBill, java.util.UUID> {
   List<PurchaseBill> findTop20ByOrderByCreatedAtDesc();
   List<PurchaseBill> findAllByOrderByCreatedAtDesc();
-  Optional<PurchaseBill> findByBillNo(String billNo);
+  List<PurchaseBill> findByBillNo(String billNo);
 }
 

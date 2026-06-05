@@ -61,10 +61,10 @@ public class PurchaseService {
         }
 
         String commCode = commodityName.trim().toUpperCase().replace(" ", "_");
-        Product product = productRepository.findByCodeIgnoreCase(commCode)
-            .orElseGet(() -> productRepository.findByCodeIgnoreCase(commodityName.trim())
-            .orElseGet(() -> productRepository.findByEnglishNameIgnoreCase(commodityName.trim())
-            .orElseGet(() -> productRepository.findByMarathiNameIgnoreCase(commodityName.trim())
+        Product product = productRepository.findByCodeIgnoreCase(commCode).stream().findFirst()
+            .orElseGet(() -> productRepository.findByCodeIgnoreCase(commodityName.trim()).stream().findFirst()
+            .orElseGet(() -> productRepository.findByEnglishNameIgnoreCase(commodityName.trim()).stream().findFirst()
+            .orElseGet(() -> productRepository.findByMarathiNameIgnoreCase(commodityName.trim()).stream().findFirst()
             .orElseGet(() -> {
                 Product newProduct = new Product();
                 newProduct.setCode(commCode);
@@ -138,7 +138,7 @@ public class PurchaseService {
   }
 
   public java.util.Map<String, Object> getBillDetailsByNo(String billNo) {
-    return purchases.findByBillNo(billNo.trim())
+    return purchases.findByBillNo(billNo.trim()).stream().findFirst()
       .map(p -> {
         java.util.Map<String, Object> res = new java.util.HashMap<>();
         res.put("id", p.getId());

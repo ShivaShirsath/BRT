@@ -9,9 +9,9 @@ import java.util.Optional;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Optional<Product> findByCodeIgnoreCase(String code);
-    Optional<Product> findByEnglishNameIgnoreCase(String englishName);
-    Optional<Product> findByMarathiNameIgnoreCase(String marathiName);
+    List<Product> findByCodeIgnoreCase(String code);
+    List<Product> findByEnglishNameIgnoreCase(String englishName);
+    List<Product> findByMarathiNameIgnoreCase(String marathiName);
 
     @Query(value = "SELECT p.* FROM mst.products p " +
             "JOIN mst.product_expense_groups peg ON p.id = peg.product_id " +

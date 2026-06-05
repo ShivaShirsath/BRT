@@ -19,7 +19,6 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { List } from "lucide-react";
 import { db } from "../lib/db";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 
@@ -118,14 +117,10 @@ export function PurchasePage() {
   const [lockState, setLockState] = useState("No");
   const [charges, setCharges] = useState<Record<string, string>>(() => Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
 
-  const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [showBillNoDropdown, setShowBillNoDropdown] = useState(false);
   const [allBills, setAllBills] = useState<any[]>([]);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [loadingBills, setLoadingBills] = useState(false);
 
-  const handleOpenListModal = async () => {
-    setIsListModalOpen(true);
-    setLoadingBills(true);
+  const fetchAllBills = async () => {
     try {
       if (isOnline) {
         const { data } = await api.get("/purchase/all");
@@ -144,19 +139,21 @@ export function PurchasePage() {
       }
     } catch (err) {
       console.error("Failed to load purchase bills", err);
-    } finally {
-      setLoadingBills(false);
     }
   };
 
+  useEffect(() => {
+    fetchAllBills();
+  }, [isOnline]);
+
   const filteredBills = useMemo(() => {
-    if (!searchQuery.trim()) return allBills;
-    const q = searchQuery.toLowerCase();
-    return allBills.filter(b => 
+    if (!billNoInput.trim()) return allBills;
+    const q = billNoInput.toLowerCase();
+    return allBills.filter(b =>
       (b.billNo && b.billNo.toLowerCase().includes(q)) ||
       (b.date && b.date.toLowerCase().includes(q))
     );
-  }, [allBills, searchQuery]);
+  }, [allBills, billNoInput]);
 
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
@@ -394,6 +391,7 @@ export function PurchasePage() {
         setMessage(`Purchase saved successfully. ID: ${data.id}`);
       }
       setIsDirty(false);
+      fetchAllBills();
     } catch (e: any) {
       setError(e?.response?.data?.error ?? "Failed to save purchase");
     } finally {
@@ -406,10 +404,10 @@ export function PurchasePage() {
       typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-            const r = (Math.random() * 16) | 0;
-            const v = c === "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          })
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        })
     );
     setBillNoInput(keepBillNo);
     setBillNo(keepBillNo);
@@ -488,8 +486,8 @@ export function PurchasePage() {
       const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
       if (data && data.id) {
         setPurchaseId(data.id);
-        setBillNo(data.voucherNo || "");
-        setBillNoInput(data.voucherNo || "");
+        setBillNo(data.billNo || data.voucherNo || "");
+        setBillNoInput(data.billNo || data.voucherNo || "");
         setEntryType(data.entryType || "Select market");
         setCessCondition(data.cessCondition || "Order");
         setSeller(data.sellerId ? String(data.sellerId) : "");
@@ -558,7 +556,7 @@ export function PurchasePage() {
           setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
         }
 
-        setMessage(`Loaded details for Bill no. ${data.voucherNo}`);
+        setMessage(`Loaded details for Bill no. ${data.billNo || data.voucherNo}`);
         setError("");
         setIsDirty(false);
       } else {
@@ -575,6 +573,19 @@ export function PurchasePage() {
       checkExistingBill(billNo);
     }
   }, [billNo]);
+
+  const pickerValue = (() => {
+    const parts = date.split(".");
+    if (parts.length === 3) {
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      if (year.length === 4 && !isNaN(Number(day)) && !isNaN(Number(month)) && !isNaN(Number(year))) {
+        return `${year}-${month}-${day}`;
+      }
+    }
+    return "";
+  })();
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -613,36 +624,78 @@ export function PurchasePage() {
             <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Bill Details</CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Bill no.</label>
-              <div className="flex items-center space-x-2">
-                <Input
-                  value={billNoInput}
-                  onChange={(e) => setBillNoInput(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleBillNoChange(billNoInput);
-                    }
-                  }}
-                  onBlur={() => {
+              <Input
+                value={billNoInput}
+                onChange={(e) => {
+                  setBillNoInput(e.target.value);
+                  setShowBillNoDropdown(true);
+                }}
+                onFocus={() => setShowBillNoDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowBillNoDropdown(false), 200);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
                     handleBillNoChange(billNoInput);
-                  }}
-                  className="flex-1"
-                />
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={handleOpenListModal}
-                  className="flex items-center gap-1.5 h-10 px-3 shrink-0"
-                >
-                  <List className="h-4 w-4" />
-                  List
-                </Button>
-              </div>
+                    setShowBillNoDropdown(false);
+                  }
+                }}
+                className="w-full"
+              />
+              {showBillNoDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
+                  {filteredBills.map((b) => (
+                    <div
+                      key={b.id}
+                      onMouseDown={() => {
+                        handleBillNoChange(b.billNo);
+                        setShowBillNoDropdown(false);
+                      }}
+                      className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
+                    >
+                      <span className="font-semibold">{b.billNo}</span>
+                      <span className="text-xs text-muted-foreground">{b.date}</span>
+                    </div>
+                  ))}
+                  {filteredBills.length === 0 && (
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">
+                      No matching bills found
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Date</label>
-              <Input value={date} onChange={(e) => setDateDirty(e.target.value)} />
+              <div className="relative flex items-center">
+                <Input
+                  value={date}
+                  onChange={(e) => setDateDirty(e.target.value)}
+                  placeholder="DD.MM.YYYY"
+                  className="pr-10"
+                />
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
+                  <input
+                    type="date"
+                    value={pickerValue}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val) {
+                        const parts = val.split("-");
+                        if (parts.length === 3) {
+                          setDateDirty(`${parts[2]}.${parts[1]}.${parts[0]}`);
+                        }
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  />
+                </div>
+              </div>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Entry Type</label>
@@ -917,76 +970,6 @@ export function PurchasePage() {
         errors={validationErrors}
       />
 
-      <Dialog open={isListModalOpen} onOpenChange={setIsListModalOpen}>
-        <DialogContent className="sm:max-w-[600px] max-h-[80vh] flex flex-col">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">Purchase Bills</DialogTitle>
-            <DialogDescription className="text-sm text-muted-foreground">
-              Select a bill from the database to load its details.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex-1 flex flex-col min-h-0 py-2 space-y-4">
-            <Input
-              placeholder="Search by Bill No. or Date..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full"
-            />
-            <div className="flex-1 overflow-y-auto border rounded-md min-h-[200px]">
-              {loadingBills ? (
-                <div className="flex items-center justify-center h-full py-8 text-sm text-muted-foreground">
-                  Loading bills...
-                </div>
-              ) : filteredBills.length === 0 ? (
-                <div className="flex items-center justify-center h-full py-8 text-sm text-muted-foreground">
-                  No bills found
-                </div>
-              ) : (
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Bill No.</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead className="text-right">Net Total</TableHead>
-                      <TableHead className="text-center w-24">Status</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {filteredBills.map((b) => (
-                      <TableRow
-                        key={b.id}
-                        onClick={() => {
-                          handleBillNoChange(b.billNo);
-                          setIsListModalOpen(false);
-                        }}
-                        className="cursor-pointer hover:bg-muted/50"
-                      >
-                        <TableCell className="font-medium">{b.billNo}</TableCell>
-                        <TableCell>{b.date}</TableCell>
-                        <TableCell className="text-right font-mono">
-                          ₹ {b.amount !== null && b.amount !== undefined ? Number(b.amount).toFixed(2) : "0.00"}
-                        </TableCell>
-                        <TableCell className="text-center">
-                          <span className={`inline-block px-2 py-0.5 rounded-full text-[10px] font-semibold ${
-                            b.synced ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400" : "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400"
-                          }`}>
-                            {b.synced ? "Synced" : "Offline"}
-                          </span>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              )}
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsListModalOpen(false)}>
-              Close
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
       <AccountGenerationModal
         open={isCustomerModalOpen}
         onClose={() => setIsCustomerModalOpen(false)}
