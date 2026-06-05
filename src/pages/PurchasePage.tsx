@@ -19,6 +19,8 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
+import { db } from "../lib/db";
+import { AccountGenerationModal } from "../components/AccountGenerationModal";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -114,6 +116,77 @@ export function PurchasePage() {
   const [billReceived, setBillReceived] = useState("No");
   const [lockState, setLockState] = useState("No");
   const [charges, setCharges] = useState<Record<string, string>>(() => Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+
+  const [showBillNoDropdown, setShowBillNoDropdown] = useState(false);
+  const [allBills, setAllBills] = useState<any[]>([]);
+
+  const fetchAllBills = async () => {
+    try {
+      if (isOnline) {
+        const { data } = await api.get("/purchase/all");
+        if (data && data.rows) {
+          setAllBills(data.rows.map((r: any) => ({ ...r, synced: true })));
+        }
+      } else {
+        const offlinePurchases = await db.purchases.toArray();
+        setAllBills(offlinePurchases.map((p) => ({
+          id: p.id,
+          billNo: p.billNo,
+          date: p.billDate ? p.billDate : "",
+          amount: p.charges?.netTotal ?? 0,
+          synced: p.synced
+        })));
+      }
+    } catch (err) {
+      console.error("Failed to load purchase bills", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchAllBills();
+  }, [isOnline]);
+
+  const filteredBills = useMemo(() => {
+    if (!billNoInput.trim()) return allBills;
+    const q = billNoInput.toLowerCase();
+    return allBills.filter(b =>
+      (b.billNo && b.billNo.toLowerCase().includes(q)) ||
+      (b.date && b.date.toLowerCase().includes(q))
+    );
+  }, [allBills, billNoInput]);
+
+  const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
+  const [customers, setCustomers] = useState<any[]>([]);
+  const [showCustomerDropdown, setShowCustomerDropdown] = useState(false);
+  const [selectedCustomerId, setSelectedCustomerId] = useState<number | null>(null);
+
+  const fetchCustomers = async () => {
+    try {
+      const { data } = await api.get("/customers");
+      setCustomers(data || []);
+    } catch (err) {
+      console.error("Failed to load customers", err);
+    }
+  };
+
+  useEffect(() => {
+    if (isOnline) {
+      fetchCustomers();
+    }
+  }, [isOnline]);
+
+  useEffect(() => {
+    if (seller && customers.length > 0 && !selectedCustomerId) {
+      const idNum = Number(seller);
+      if (!isNaN(idNum)) {
+        const found = customers.find(c => c.id === idNum);
+        if (found) {
+          setSeller(found.name);
+          setSelectedCustomerId(found.id);
+        }
+      }
+    }
+  }, [seller, customers, selectedCustomerId]);
 
   const setDateDirty = (val: string) => {
     setDate(val);
@@ -262,7 +335,7 @@ export function PurchasePage() {
       amount: parseNumber(r.netWt) * parseNumber(r.rate),
     }));
 
-    const parsedSellerId = /^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null;
+    const parsedSellerId = selectedCustomerId ?? (/^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null);
 
     const chargesMap: Record<string, string> = {
       "Purchase amt.": "purchaseAmount",
@@ -318,6 +391,7 @@ export function PurchasePage() {
         setMessage(`Purchase saved successfully. ID: ${data.id}`);
       }
       setIsDirty(false);
+      fetchAllBills();
     } catch (e: any) {
       setError(e?.response?.data?.error ?? "Failed to save purchase");
     } finally {
@@ -325,22 +399,23 @@ export function PurchasePage() {
     }
   }
 
-  function resetForm() {
+  function resetForm(keepBillNo: string = "") {
     setPurchaseId(
       typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-            const r = (Math.random() * 16) | 0;
-            const v = c === "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          })
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        })
     );
-    setBillNoInput("");
-    setBillNo("");
+    setBillNoInput(keepBillNo);
+    setBillNo(keepBillNo);
     setDate("08.11.2025");
     setEntryType("Select market");
     setCessCondition("Order");
     setSeller("");
+    setSelectedCustomerId(null);
     setVehicleNo("--");
     setPartyBillNo("--");
     setRows(Array.from({ length: 6 }, () => mkRow()));
@@ -350,6 +425,21 @@ export function PurchasePage() {
     setMessage("");
     setError("");
   }
+
+  const handleCreateCustomer = async (formData: any) => {
+    try {
+      const { data } = await api.post("/customers", formData);
+      setCustomers((prev) => [...prev, data]);
+      setSeller(data.name);
+      setSelectedCustomerId(data.id);
+      setIsDirty(true);
+      setIsCustomerModalOpen(false);
+      setMessage(`Account created successfully for ${data.name}`);
+    } catch (err) {
+      console.error(err);
+      setError("Failed to create customer account");
+    }
+  };
 
   const handleBillNoChange = (newVal: string) => {
     if (isDirty) {
@@ -396,11 +486,12 @@ export function PurchasePage() {
       const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
       if (data && data.id) {
         setPurchaseId(data.id);
-        setBillNo(data.voucherNo || "");
-        setBillNoInput(data.voucherNo || "");
+        setBillNo(data.billNo || data.voucherNo || "");
+        setBillNoInput(data.billNo || data.voucherNo || "");
         setEntryType(data.entryType || "Select market");
         setCessCondition(data.cessCondition || "Order");
         setSeller(data.sellerId ? String(data.sellerId) : "");
+        setSelectedCustomerId(data.sellerId || null);
         setVehicleNo(data.vehicleNo || "--");
         setPartyBillNo(data.partyBillNo || "--");
         setNote(data.note || "");
@@ -465,15 +556,15 @@ export function PurchasePage() {
           setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
         }
 
-        setMessage(`Loaded details for Bill no. ${data.voucherNo}`);
+        setMessage(`Loaded details for Bill no. ${data.billNo || data.voucherNo}`);
         setError("");
         setIsDirty(false);
       } else {
-        resetForm();
+        resetForm(num);
       }
     } catch (e: any) {
       console.error("Failed to fetch existing bill details", e);
-      resetForm();
+      resetForm(num);
     }
   }
 
@@ -482,6 +573,19 @@ export function PurchasePage() {
       checkExistingBill(billNo);
     }
   }, [billNo]);
+
+  const pickerValue = (() => {
+    const parts = date.split(".");
+    if (parts.length === 3) {
+      const day = parts[0].padStart(2, '0');
+      const month = parts[1].padStart(2, '0');
+      const year = parts[2];
+      if (year.length === 4 && !isNaN(Number(day)) && !isNaN(Number(month)) && !isNaN(Number(year))) {
+        return `${year}-${month}-${day}`;
+      }
+    }
+    return "";
+  })();
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
@@ -520,24 +624,78 @@ export function PurchasePage() {
             <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Bill Details</CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Bill no.</label>
               <Input
                 value={billNoInput}
-                onChange={(e) => setBillNoInput(e.target.value)}
+                onChange={(e) => {
+                  setBillNoInput(e.target.value);
+                  setShowBillNoDropdown(true);
+                }}
+                onFocus={() => setShowBillNoDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowBillNoDropdown(false), 200);
+                }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
                     handleBillNoChange(billNoInput);
+                    setShowBillNoDropdown(false);
                   }
                 }}
-                onBlur={() => {
-                  handleBillNoChange(billNoInput);
-                }}
+                className="w-full"
               />
+              {showBillNoDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
+                  {filteredBills.map((b) => (
+                    <div
+                      key={b.id}
+                      onMouseDown={() => {
+                        handleBillNoChange(b.billNo);
+                        setShowBillNoDropdown(false);
+                      }}
+                      className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
+                    >
+                      <span className="font-semibold">{b.billNo}</span>
+                      <span className="text-xs text-muted-foreground">{b.date}</span>
+                    </div>
+                  ))}
+                  {filteredBills.length === 0 && (
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">
+                      No matching bills found
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Date</label>
-              <Input value={date} onChange={(e) => setDateDirty(e.target.value)} />
+              <div className="relative flex items-center">
+                <Input
+                  value={date}
+                  onChange={(e) => setDateDirty(e.target.value)}
+                  placeholder="DD.MM.YYYY"
+                  className="pr-10"
+                />
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
+                  <input
+                    type="date"
+                    value={pickerValue}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val) {
+                        const parts = val.split("-");
+                        if (parts.length === 3) {
+                          setDateDirty(`${parts[2]}.${parts[1]}.${parts[0]}`);
+                        }
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  />
+                </div>
+              </div>
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Entry Type</label>
@@ -553,9 +711,52 @@ export function PurchasePage() {
                 <option value="Direct">Direct</option>
               </Select>
             </div>
-            <div className="space-y-1 md:col-span-2">
+            <div className="space-y-1 md:col-span-2 relative">
               <label className="text-xs font-semibold text-slate-500">Seller</label>
-              <Input value={seller} onChange={(e) => setSellerDirty(e.target.value)} placeholder="Search Customer" />
+              <Input
+                value={seller}
+                onChange={(e) => {
+                  setSellerDirty(e.target.value);
+                  setSelectedCustomerId(null);
+                  setShowCustomerDropdown(true);
+                }}
+                onFocus={() => setShowCustomerDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowCustomerDropdown(false), 200);
+                }}
+                placeholder="Search Customer"
+              />
+              {showCustomerDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
+                  {customers
+                    .filter((c) =>
+                      c.name && c.name.toLowerCase().includes(seller.toLowerCase())
+                    )
+                    .map((c) => (
+                      <div
+                        key={c.id}
+                        onMouseDown={() => {
+                          setSeller(c.name);
+                          setSelectedCustomerId(c.id);
+                          setIsDirty(true);
+                          setShowCustomerDropdown(false);
+                        }}
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {c.name}
+                      </div>
+                    ))}
+                  <div
+                    onMouseDown={() => {
+                      setIsCustomerModalOpen(true);
+                      setShowCustomerDropdown(false);
+                    }}
+                    className="px-3 py-2 text-sm font-semibold text-primary cursor-pointer hover:bg-accent border-t"
+                  >
+                    + Add New Customer
+                  </div>
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
@@ -767,6 +968,13 @@ export function PurchasePage() {
         open={validationDialogOpen}
         onClose={() => setValidationDialogOpen(false)}
         errors={validationErrors}
+      />
+
+      <AccountGenerationModal
+        open={isCustomerModalOpen}
+        onClose={() => setIsCustomerModalOpen(false)}
+        onSave={handleCreateCustomer}
+        initialData={{ name: seller }}
       />
     </div>
   );

@@ -1,22 +1,12 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  FormControl,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-  Alert,
-  CircularProgress,
-  Checkbox,
-  ListItemText
-} from "@mui/material";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { useNavigate } from "react-router-dom";
 import api from "../api/client";
+import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
+import { Input } from "../components/ui/input";
+import { Select } from "../components/ui/select";
+import { Button } from "../components/ui/button";
+import { Alert, AlertDescription } from "../components/ui/alert";
+import { Loader2 } from "lucide-react";
 
 type Firm = { code: string; name: string };
 
@@ -93,274 +83,146 @@ export function CreateUserPage() {
   };
 
   return (
-    <Box
-      sx={{
-        minHeight: "100vh",
-        bgcolor: "#edf2fc",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        p: 3
-      }}
-    >
-      <Card
-        sx={{
-          width: "100%",
-          maxWidth: "480px",
-          bgcolor: "#ffffff",
-          borderRadius: "20px",
-          boxShadow: "0 18px 40px rgba(20, 51, 97, 0.08)",
-          border: "1px solid rgba(212, 227, 245, 0.8)",
-          overflow: "visible"
-        }}
-      >
-        <CardContent sx={{ p: 4, "&:last-child": { pb: 4 } }}>
-          <Typography
-            sx={{
-              color: "#1e2e4a",
-              fontSize: "20px",
-              fontWeight: 700,
-              mb: 4,
-              borderBottom: "1px solid #edf2fc",
-              pb: 2
-            }}
-          >
-            Create User
-          </Typography>
+    <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 flex items-center justify-center p-6 text-foreground">
+      <Card className="w-full max-w-[480px] shadow-lg border border-border">
+        <CardHeader className="border-b border-border pb-4 mb-4">
+          <CardTitle className="text-xl font-bold">Create User</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4 pt-2">
+          {error && (
+            <Alert variant="destructive">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {success && (
+            <Alert className="bg-emerald-50 text-emerald-900 border-emerald-200 dark:bg-emerald-950/20 dark:text-emerald-400 dark:border-emerald-900/50">
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
 
-          {error && <Alert severity="error" sx={{ mb: 3, borderRadius: "10px" }}>{error}</Alert>}
-          {success && <Alert severity="success" sx={{ mb: 3, borderRadius: "10px" }}>{success}</Alert>}
-
-          <Box component="form" onSubmit={handleSubmit} sx={{ display: "flex", flexDirection: "column", gap: 3.5 }}>
-            
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* Firm Select Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0 pt-1">
                 Select Firm(s)
-              </Typography>
-              <FormControl fullWidth size="small">
+              </label>
+              <div className="flex-1 w-full">
                 {fetchingFirms ? (
-                  <CircularProgress size={20} />
+                  <div className="flex items-center space-x-2 text-sm text-muted-foreground py-1">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <span>Loading firms...</span>
+                  </div>
                 ) : (
-                  <Select
-                    multiple
-                    value={selectedFirms}
-                    onChange={(e) => {
-                      const val = e.target.value;
-                      setSelectedFirms(typeof val === "string" ? val.split(",") : val);
-                    }}
-                    renderValue={(selected) => {
-                      return selected
-                        .map((code) => firms.find((f) => f.code === code)?.name || code)
-                        .join(", ");
-                    }}
-                    IconComponent={KeyboardArrowDownIcon}
-                    sx={{
-                      borderRadius: "10px",
-                      bgcolor: "#fff",
-                      "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d4e3f5" },
-                      "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#b5c7e5" },
-                      "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1470e5" }
-                    }}
-                  >
+                  <div className="border border-input bg-background rounded-md p-2 max-h-[120px] overflow-y-auto space-y-1">
                     {firms.map((f) => (
-                      <MenuItem key={f.code} value={f.code}>
-                        <Checkbox checked={selectedFirms.indexOf(f.code) > -1} />
-                        <ListItemText primary={f.name} />
-                      </MenuItem>
+                      <label
+                        key={f.code}
+                        className="flex items-center space-x-2 text-sm cursor-pointer p-1 rounded hover:bg-accent hover:text-accent-foreground"
+                      >
+                        <input
+                          type="checkbox"
+                          checked={selectedFirms.includes(f.code)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setSelectedFirms([...selectedFirms, f.code]);
+                            } else {
+                              setSelectedFirms(selectedFirms.filter((c) => c !== f.code));
+                            }
+                          }}
+                          className="rounded border-input text-primary focus:ring-ring"
+                        />
+                        <span>{f.name}</span>
+                      </label>
                     ))}
-                  </Select>
+                  </div>
                 )}
-              </FormControl>
-            </Box>
-
+              </div>
+            </div>
 
             {/* User Code Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 User Code
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
+              </label>
+              <Input
                 value={userCode}
                 onChange={(e) => setUserCode(e.target.value)}
                 placeholder="e.g. USER01"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& fieldset": { borderColor: "#d4e3f5" },
-                    "&:hover fieldset": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused fieldset": { borderColor: "#1470e5" }
-                  }
-                }}
+                className="flex-1"
               />
-            </Box>
+            </div>
 
             {/* Full Name Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Full Name
-              </Typography>
-              <TextField
-                fullWidth
-                size="small"
+              </label>
+              <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="e.g. John Doe"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& fieldset": { borderColor: "#d4e3f5" },
-                    "&:hover fieldset": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused fieldset": { borderColor: "#1470e5" }
-                  }
-                }}
+                className="flex-1"
               />
-            </Box>
+            </div>
 
             {/* Role Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Role
-              </Typography>
-              <FormControl fullWidth size="small">
-                <Select
-                  value={roleCode}
-                  onChange={(e) => setRoleCode(e.target.value)}
-                  IconComponent={KeyboardArrowDownIcon}
-                  sx={{
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& .MuiOutlinedInput-notchedOutline": { borderColor: "#d4e3f5" },
-                    "&:hover .MuiOutlinedInput-notchedOutline": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused .MuiOutlinedInput-notchedOutline": { borderColor: "#1470e5" }
-                  }}
-                >
-                  <MenuItem value="ADMIN">Admin</MenuItem>
-                  <MenuItem value="ACCOUNTANT">Accountant</MenuItem>
-                  <MenuItem value="OPERATOR">Operator</MenuItem>
-                </Select>
-              </FormControl>
-            </Box>
+              </label>
+              <Select
+                value={roleCode}
+                onChange={(e) => setRoleCode(e.target.value)}
+                className="flex-1"
+              >
+                <option value="ADMIN">Admin</option>
+                <option value="ACCOUNTANT">Accountant</option>
+                <option value="OPERATOR">Operator</option>
+              </Select>
+            </div>
 
             {/* Password Row */}
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Typography
-                sx={{
-                  color: "#6e7d91",
-                  fontSize: "14px",
-                  fontWeight: 600,
-                  width: "140px",
-                  flexShrink: 0
-                }}
-              >
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
                 Password
-              </Typography>
-              <TextField
-                fullWidth
+              </label>
+              <Input
                 type="password"
-                size="small"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="Min 6 characters"
-                sx={{
-                  "& .MuiOutlinedInput-root": {
-                    borderRadius: "10px",
-                    bgcolor: "#fff",
-                    "& fieldset": { borderColor: "#d4e3f5" },
-                    "&:hover fieldset": { borderColor: "#b5c7e5" },
-                    "&.Mui-focused fieldset": { borderColor: "#1470e5" }
-                  }
-                }}
+                className="flex-1"
               />
-            </Box>
+            </div>
 
             {/* Actions */}
-            <Box sx={{ display: "flex", justifyContent: "flex-end", gap: 2, mt: 3 }}>
+            <div className="flex justify-end gap-3 pt-4 border-t border-border mt-6">
               <Button
                 type="button"
-                variant="outlined"
+                variant="outline"
                 onClick={() => navigate("/firm-selection")}
                 disabled={loading}
-                sx={{
-                  borderRadius: "10px",
-                  borderColor: "#dee5f2",
-                  color: "#6e7d91",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  px: 3,
-                  py: 1,
-                  "&:hover": {
-                    borderColor: "#b5c7e5",
-                    bgcolor: "#f7faff"
-                  }
-                }}
               >
                 Return
               </Button>
               <Button
                 type="submit"
-                variant="contained"
                 disabled={loading}
-                sx={{
-                  borderRadius: "10px",
-                  bgcolor: "#1470e5",
-                  color: "#fff",
-                  textTransform: "none",
-                  fontWeight: 600,
-                  fontSize: "14px",
-                  px: 3,
-                  py: 1,
-                  boxShadow: "none",
-                  "&:hover": {
-                    bgcolor: "#1160c4",
-                    boxShadow: "none"
-                  }
-                }}
+                className="min-w-[110px]"
               >
-                {loading ? <CircularProgress size={20} color="inherit" /> : "Create User"}
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Creating...
+                  </>
+                ) : (
+                  "Create User"
+                )}
               </Button>
-            </Box>
-
-          </Box>
+            </div>
+          </form>
         </CardContent>
       </Card>
-    </Box>
+    </div>
   );
 }

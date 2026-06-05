@@ -32,8 +32,8 @@ public class ProductController {
         if (principal == null) throw new IllegalArgumentException("Unauthorized");
         // Check uniqueness for new code
         if (product.getId() == null) {
-            Optional<Product> existing = productRepository.findByCodeIgnoreCase(product.getCode());
-            if (existing.isPresent()) {
+            List<Product> existing = productRepository.findByCodeIgnoreCase(product.getCode());
+            if (!existing.isEmpty()) {
                 throw new IllegalArgumentException("Product code already exists: " + product.getCode());
             }
         }
@@ -77,7 +77,7 @@ public class ProductController {
     @GetMapping("/expense-groups/{id}/products")
     public List<Product> getProductsForExpenseGroup(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable Long id) {
         if (principal == null) throw new IllegalArgumentException("Unauthorized");
-        return expenseGroupRepository.findProductsByExpenseGroupId(id);
+        return productRepository.findProductsByExpenseGroupId(id);
     }
 
     @PostMapping("/expense-groups/{id}/products/{productId}")

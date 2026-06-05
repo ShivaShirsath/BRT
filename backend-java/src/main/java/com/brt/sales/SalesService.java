@@ -46,6 +46,13 @@ public class SalesService {
     detail.setDeliveryAddress(req.deliveredTo());
     detail.setVehicleNo(req.vehicleNo());
     detail.setPartyBillNo(req.partyBillNo());
+    if (req.customerAcno() != null && !req.customerAcno().trim().isEmpty()) {
+      try {
+        detail.setCustomerId(Long.parseLong(req.customerAcno().trim()));
+      } catch (NumberFormatException e) {
+        // Ignore or handle
+      }
+    }
     detail.setCreatedAt(LocalDateTime.now());
     patti.setDetail(detail);
 
@@ -103,6 +110,10 @@ public class SalesService {
     return salePattiRepository.findTop20ByOrderByCreatedAtDesc();
   }
 
+  public List<SalePatti> getAll() {
+    return salePattiRepository.findAll();
+  }
+
   public java.util.Map<String, Object> getSalePattiDetailsByNo(String pattiNo) {
     return salePattiRepository.findBySalePattiNo(pattiNo.trim())
       .map(p -> {
@@ -118,6 +129,7 @@ public class SalesService {
           res.put("deliveredTo", d.getDeliveryAddress());
           res.put("vehicleNo", d.getVehicleNo());
           res.put("partyBillNo", d.getPartyBillNo());
+          res.put("customerAcno", d.getCustomerId() != null ? String.valueOf(d.getCustomerId()) : "");
         }
 
         java.util.List<java.util.Map<String, Object>> itemsList = new java.util.ArrayList<>();

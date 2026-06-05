@@ -61,8 +61,10 @@ public class PurchaseService {
         }
 
         String commCode = commodityName.trim().toUpperCase().replace(" ", "_");
-        Product product = productRepository.findByCodeIgnoreCase(commCode)
-            .orElseGet(() -> productRepository.findByEnglishNameIgnoreCase(commodityName.trim())
+        Product product = productRepository.findByCodeIgnoreCase(commCode).stream().findFirst()
+            .orElseGet(() -> productRepository.findByCodeIgnoreCase(commodityName.trim()).stream().findFirst()
+            .orElseGet(() -> productRepository.findByEnglishNameIgnoreCase(commodityName.trim()).stream().findFirst()
+            .orElseGet(() -> productRepository.findByMarathiNameIgnoreCase(commodityName.trim()).stream().findFirst()
             .orElseGet(() -> {
                 Product newProduct = new Product();
                 newProduct.setCode(commCode);
@@ -71,7 +73,7 @@ public class PurchaseService {
                 newProduct.setBhartiWeight(0.0);
                 newProduct.setDescription("Auto-created from purchase entry");
                 return productRepository.save(newProduct);
-            }));
+            }))));
 
         PurchaseBillItem item = new PurchaseBillItem();
         item.setPurchaseBill(p);
@@ -136,7 +138,7 @@ public class PurchaseService {
   }
 
   public java.util.Map<String, Object> getBillDetailsByNo(String billNo) {
-    return purchases.findByBillNo(billNo.trim())
+    return purchases.findByBillNo(billNo.trim()).stream().findFirst()
       .map(p -> {
         java.util.Map<String, Object> res = new java.util.HashMap<>();
         res.put("id", p.getId());
@@ -228,5 +230,9 @@ public class PurchaseService {
       }
     }
     return results;
+  }
+
+  public List<PurchaseBill> getAll() {
+    return purchases.findAllByOrderByCreatedAtDesc();
   }
 }

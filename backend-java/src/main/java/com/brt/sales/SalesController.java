@@ -43,4 +43,15 @@ public class SalesController {
     Map<String, Object> details = salesService.getSalePattiDetailsByNo(pattiNo);
     return details != null ? details : Map.of();
   }
+
+  @GetMapping("/all")
+  public Map<String, Object> getAll(@AuthenticationPrincipal JwtPrincipal principal) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return Map.of("rows", salesService.getAll().stream().map(patti -> Map.of(
+      "id", patti.getId(),
+      "salePattiNo", patti.getSalePattiNo(),
+      "date", patti.getDetail() != null && patti.getDetail().getPattiDate() != null ? patti.getDetail().getPattiDate().toString() : "",
+      "amount", patti.getTotals() != null ? patti.getTotals().getPattiNetTotal() : null
+    )).toList());
+  }
 }
