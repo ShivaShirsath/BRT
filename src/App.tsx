@@ -10,6 +10,13 @@ import { SalesPage } from "./pages/SalesPage";
 import { DataEntryPage } from "./pages/DataEntryPage";
 import { OpeningBalancePage } from "./pages/OpeningBalancePage";
 import { ProductEntryPage } from "./pages/ProductEntryPage";
+import { DalalPaymentPage } from "./pages/DalalPaymentPage";
+import { DalalPayment1Page } from "./pages/DalalPayment1Page";
+import { CashDepositPage } from "./pages/CashDepositPage";
+import { CashWithdrawalPage } from "./pages/CashWithdrawalPage";
+import { CustomerReceiptPage } from "./pages/CustomerReceiptPage";
+import { MiscReceiptPage } from "./pages/MiscReceiptPage";
+import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import api from "./api/client";
@@ -84,6 +91,13 @@ export default function App() {
               <Route path="/sales" element={<SalesPage />} />
               <Route path="/opening-balances" element={<OpeningBalancePage />} />
               <Route path="/product-entry" element={<ProductEntryPage />} />
+              <Route path="/dalal-payment" element={<DalalPaymentPage />} />
+              <Route path="/dalal-payment-1" element={<DalalPayment1Page />} />
+              <Route path="/cash-deposit" element={<CashDepositPage />} />
+              <Route path="/cash-withdrawal" element={<CashWithdrawalPage />} />
+              <Route path="/customer-receipt" element={<CustomerReceiptPage />} />
+              <Route path="/misc-receipt" element={<MiscReceiptPage />} />
+              <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/auth" replace />} />
           </Routes>

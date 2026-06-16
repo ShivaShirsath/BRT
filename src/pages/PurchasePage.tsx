@@ -52,6 +52,14 @@ const chargeFields = [
   "Our expenses", "Exp. 2", "Exp. 3", "Exp. 4",
 ];
 
+function getTodayDateString(): string {
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
 function isValidDate(dateStr: string): boolean {
   const parts = dateStr.trim().split(".");
   if (parts.length !== 3) return false;
@@ -103,7 +111,7 @@ export function PurchasePage() {
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingBillNo, setPendingBillNo] = useState("");
 
-  const [date, setDate] = useState("08.11.2025");
+  const [date, setDate] = useState(getTodayDateString());
   const [entryType, setEntryType] = useState("Select market");
   const [cessCondition, setCessCondition] = useState("Order");
   const [seller, setSeller] = useState("");
@@ -411,7 +419,7 @@ export function PurchasePage() {
     );
     setBillNoInput(keepBillNo);
     setBillNo(keepBillNo);
-    setDate("08.11.2025");
+    setDate(getTodayDateString());
     setEntryType("Select market");
     setCessCondition("Order");
     setSeller("");
