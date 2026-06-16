@@ -4,6 +4,10 @@ import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
+import { useToastStore } from "../store/toastStore";
+import { useBeforeUnload } from "../hooks/useBeforeUnload";
+import { useViewport } from "../hooks/useViewport";
+import { NavigationGuard } from "../components/NavigationGuard";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
@@ -77,6 +81,14 @@ const salesSchema = z.object({
 export function SalesPage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const isOnline = useNetwork();
+  const addToast = useToastStore((s) => s.addToast);
+  const { viewportHeight } = useViewport();
+
+  const [isDirty, setIsDirty] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  useBeforeUnload(isDirty);
+
   const [salesId, setSalesId] = useState<string>(() => {
     if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
       return window.crypto.randomUUID();
@@ -110,9 +122,6 @@ export function SalesPage() {
   const [error, setError] = useState("");
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [validationDialogOpen, setValidationDialogOpen] = useState(false);
-
-  const [isDirty, setIsDirty] = useState(false);
-  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingVoucherNo, setPendingVoucherNo] = useState("");
 
   const [showVoucherDropdown, setShowVoucherDropdown] = useState(false);
@@ -440,13 +449,14 @@ export function SalesPage() {
             return `Row ${rowIndex}: Patti No. is required`;
           }
           if (fieldName === "net") {
-            return `Row ${rowIndex}: Net amount cannot be negative. Deductions (Freight + Commission + TDS) exceed the Gross Weight/Value.`;
+            return `Row ${rowIndex}: Net amount is invalid`;
           }
         }
         return err.message;
       });
       setValidationErrors(errMsgs);
       setValidationDialogOpen(true);
+      errMsgs.forEach(msg => addToast(msg, "error"));
       return;
     }
 
@@ -479,8 +489,10 @@ export function SalesPage() {
       };
       const { data } = await api.post("/sales", payload);
       if (data.offline) {
+        addToast(`Sale saved offline (pending sync). ID: ${data.id}`, "info");
         setMessage(`Sale saved offline (pending sync). ID: ${data.id}`);
       } else {
+        addToast(`Sale saved successfully. ID: ${data.id}`, "success");
         setMessage(`Sale saved successfully. ID: ${data.id}`);
       }
       setIsDirty(false);
@@ -494,7 +506,9 @@ export function SalesPage() {
 
       resetForm(nextVoucher);
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? "Failed to save sale");
+      const errMsg = e?.response?.data?.error ?? "Failed to save sale";
+      setError(errMsg);
+      addToast(errMsg, "error");
     } finally {
       setLoading(false);
     }
@@ -542,8 +556,9 @@ export function SalesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b bg-card text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
+    <div className="bg-background text-foreground flex flex-col transition-[height] duration-300 ease-out overflow-hidden" style={{ height: viewportHeight }}>
+      <NavigationGuard isDirty={isDirty} />
+      <header className="sticky top-0 z-40 shrink-0 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground">{title}</h1>
         <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
           <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
@@ -553,7 +568,7 @@ export function SalesPage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
         <div className="flex items-center space-x-2 text-sm text-muted-foreground font-semibold">
           <span>{selectedFirm?.name || "BRT Trading Co."}</span>
           <span>›</span>
@@ -597,6 +612,7 @@ export function SalesPage() {
                   }
                 }}
                 className="w-full"
+                placeholder="e.g., 001234"
               />
               {showVoucherDropdown && (
                 <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
@@ -785,6 +801,7 @@ export function SalesPage() {
                             value={r.pattiNo}
                             onChange={(e) => setCell(rowIndex, "pattiNo", e.target.value)}
                             className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                            placeholder="e.g., P-123"
                           />
                         </TableCell>
                         <TableCell className="p-1 min-w-[140px]">
@@ -865,7 +882,7 @@ export function SalesPage() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t pt-4 pb-12">
+        <div className="sticky bottom-0 z-40 shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t py-4 px-6 mb-0">
           <div className="flex items-center space-x-6">
             <Button
               variant={transport ? "default" : "outline"}

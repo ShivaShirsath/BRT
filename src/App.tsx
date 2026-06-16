@@ -43,10 +43,11 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
 }
 
 import { useThemeStore } from "./store/themeStore";
+import { Toaster } from "./components/ui/Toaster";
 
 export default function App() {
   const themeId = useThemeStore((s) => s.themeId);
-  const darkMode = useThemeStore((s) => s.darkMode);
+  const themeMode = useThemeStore((s) => s.themeMode);
 
   useEffect(() => {
     // 1. Swap theme stylesheet
@@ -61,12 +62,58 @@ export default function App() {
 
     // 2. Toggle dark mode class on document element
     const root = document.documentElement;
-    if (darkMode) {
-      root.classList.add("dark");
-    } else {
-      root.classList.remove("dark");
+    
+    const applyTheme = (isDark: boolean) => {
+      if (isDark) {
+        root.classList.add("dark");
+      } else {
+        root.classList.remove("dark");
+      }
+    };
+
+    const resolveAndApply = () => {
+      if (themeMode === "system") {
+        const nativeTheme = (window as any).__nativeColorScheme;
+        if (typeof nativeTheme === "string") {
+          applyTheme(nativeTheme === "dark");
+        } else {
+          applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+        }
+      } else {
+        applyTheme(themeMode === "dark");
+      }
+    };
+
+    resolveAndApply();
+
+    if (themeMode === "system") {
+      const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+      
+      const mqListener = (e: MediaQueryListEvent) => {
+        if (typeof (window as any).__nativeColorScheme !== "string") {
+          applyTheme(e.matches);
+        }
+      };
+
+      const nativeListener = (e: any) => {
+        applyTheme(e.detail === "dark");
+      };
+
+      (window as any).setNativeColorScheme = (color: string) => {
+        (window as any).__nativeColorScheme = color;
+        applyTheme(color === "dark");
+      };
+
+      mediaQuery.addEventListener("change", mqListener);
+      window.addEventListener("nativeColorScheme", nativeListener);
+
+      return () => {
+        mediaQuery.removeEventListener("change", mqListener);
+        window.removeEventListener("nativeColorScheme", nativeListener);
+        delete (window as any).setNativeColorScheme;
+      };
     }
-  }, [themeId, darkMode]);
+  }, [themeId, themeMode]);
 
   return (
     <>
@@ -89,6 +136,7 @@ export default function App() {
           </Routes>
         </BrowserRouter>
       </SessionBootstrap>
+      <Toaster />
     </>
   );
 }

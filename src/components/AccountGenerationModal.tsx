@@ -9,6 +9,7 @@ import {
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Select } from "./ui/select";
+import { useToastStore } from "../store/toastStore";
 
 interface AccountGenerationModalProps {
   open: boolean;
@@ -24,6 +25,7 @@ export function AccountGenerationModal({
   initialData,
 }: AccountGenerationModalProps) {
   const [tabValue, setTabValue] = useState(0);
+  const addToast = useToastStore((s) => s.addToast);
 
   // Form State
   const [formData, setFormData] = useState<any>({
@@ -163,11 +165,13 @@ export function AccountGenerationModal({
 
   const handleSubmit = () => {
     if (!formData.name.trim()) {
-      alert("Name is required");
+      addToast("Account Name is required", "error");
       return;
     }
     onSave(formData);
   };
+
+  const isInvalid = !formData.name.trim();
 
   const tabs = ["Personal Details", "Other Details", "RTGS Details", "Note"];
 
@@ -186,7 +190,7 @@ export function AccountGenerationModal({
             <div className="md:col-span-8 flex flex-col gap-1">
               <label className="text-xs font-semibold text-muted-foreground">Name</label>
               <Input
-                placeholder="Enter Account Name"
+                placeholder="e.g., John Doe Trading Co."
                 value={formData.name}
                 onChange={(e) => handleChange("name", e.target.value)}
                 required
@@ -207,6 +211,7 @@ export function AccountGenerationModal({
             <div className="md:col-span-12 flex flex-col gap-1">
               <label className="text-xs font-semibold text-muted-foreground">English Name</label>
               <Input
+                placeholder="e.g., John Doe"
                 value={formData.englishName}
                 onChange={(e) => handleChange("englishName", e.target.value)}
               />
@@ -215,6 +220,7 @@ export function AccountGenerationModal({
             <div className="md:col-span-8 flex flex-col gap-1">
               <label className="text-xs font-semibold text-muted-foreground">Short Name</label>
               <Input
+                placeholder="e.g., JDT"
                 value={formData.shortName}
                 onChange={(e) => handleChange("shortName", e.target.value)}
               />
@@ -728,6 +734,7 @@ export function AccountGenerationModal({
             </Button>
             <Button
               onClick={handleSubmit}
+              disabled={isInvalid}
               className="font-semibold px-6"
             >
               Generate
