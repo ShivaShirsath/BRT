@@ -23,6 +23,7 @@ console.log(`\x1b[36m[Auto-IP] Setting VITE_API_BASE to: ${apiBase}\x1b[0m`);
 // Spawn Vite dev server and inherit stdio
 const viteProcess = spawn('npx', ['vite', '--host'], {
   stdio: 'inherit',
+  shell: true,
   env: {
     ...process.env,
     VITE_API_BASE: apiBase

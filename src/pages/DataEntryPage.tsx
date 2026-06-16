@@ -1,10 +1,12 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
+import { useViewport } from "../hooks/useViewport";
 import { Button } from "../components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "../components/ui/card";
 
 export function DataEntryPage() {
   const navigate = useNavigate();
+  const { viewportHeight } = useViewport();
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
 
   const col1 = [
@@ -54,8 +56,8 @@ export function DataEntryPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center space-y-1">
+    <div className="bg-background text-foreground flex flex-col overflow-hidden" style={{ height: viewportHeight }}>
+      <header className="sticky top-0 z-40 shrink-0 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center space-y-1">
         <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
           {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
         </h1>
@@ -64,7 +66,7 @@ export function DataEntryPage() {
         </p>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+      <main className="flex-1 overflow-y-auto max-w-7xl w-full mx-auto p-6 space-y-6">
         <Card>
           <CardHeader className="flex flex-col items-center border-b pb-4">
             <CardTitle className="text-2xl font-bold tracking-tight">Data Entry Menu</CardTitle>

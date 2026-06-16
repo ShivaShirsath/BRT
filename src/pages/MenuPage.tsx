@@ -7,6 +7,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../lib/db";
 import { triggerSync } from "../api/syncEngine";
 import { Button } from "../components/ui/button";
+import { useViewport } from "../hooks/useViewport";
 import { Card } from "../components/ui/card";
 import { useThemeStore, THEMES } from "../store/themeStore";
 import {
@@ -30,6 +31,7 @@ type MenuItem = { code: string; label: string; route: string; sortOrder: number 
 
 export function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
+  const { viewportHeight } = useViewport();
   const setMenu = useAuthStore((s) => s.setMenu);
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const logout = useAuthStore((s) => s.logout);
@@ -122,8 +124,8 @@ export function MenuPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center relative">
+    <div className="bg-background text-foreground flex flex-col overflow-hidden" style={{ height: viewportHeight }}>
+      <header className="sticky top-0 z-40 shrink-0 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center relative">
         <div className="absolute top-4 left-4">
           <Button
             variant="outline"
@@ -152,7 +154,7 @@ export function MenuPage() {
         </p>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+      <main className="flex-1 overflow-y-auto max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <div className="flex flex-col space-y-2">
           {quickItems.map((item) => {
             const disabled = item === "Update Purchase";

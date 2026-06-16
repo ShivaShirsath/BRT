@@ -60,7 +60,7 @@ export default function HomeScreen() {
         allowFileAccess={true}
         allowUniversalAccessFromFileURLs={true}
         injectedJavaScript={injectedJavaScript}
-      />{" "}
+      />
     </SafeAreaView>
   );
 }

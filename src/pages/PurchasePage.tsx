@@ -5,6 +5,9 @@ import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
 import { useToastStore } from "../store/toastStore";
+import { useBeforeUnload } from "../hooks/useBeforeUnload";
+import { useViewport } from "../hooks/useViewport";
+import { NavigationGuard } from "../components/NavigationGuard";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
@@ -88,6 +91,15 @@ export function PurchasePage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const isOnline = useNetwork();
   const addToast = useToastStore((s) => s.addToast);
+  const { viewportHeight } = useViewport();
+
+  const [billNo, setBillNo] = useState("001186");
+  const [billNoInput, setBillNoInput] = useState("001186");
+  const [isDirty, setIsDirty] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+
+  useBeforeUnload(isDirty);
+
   const [purchaseId, setPurchaseId] = useState<string>(() => {
     if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
       return window.crypto.randomUUID();
@@ -98,11 +110,6 @@ export function PurchasePage() {
       return v.toString(16);
     });
   });
-
-  const [billNo, setBillNo] = useState("001186");
-  const [billNoInput, setBillNoInput] = useState("001186");
-  const [isDirty, setIsDirty] = useState(false);
-  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
   const [pendingBillNo, setPendingBillNo] = useState("");
 
   const [date, setDate] = useState("08.11.2025");
@@ -595,8 +602,9 @@ export function PurchasePage() {
   })();
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
+    <div className="bg-background text-foreground flex flex-col transition-[height] duration-300 ease-out overflow-hidden" style={{ height: viewportHeight }}>
+      <NavigationGuard isDirty={isDirty} />
+      <header className="sticky top-0 z-40 shrink-0 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Purchase Bill Entry</h1>
         <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
           <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
@@ -606,7 +614,7 @@ export function PurchasePage() {
         </div>
       </header>
 
-      <main className="flex-1 max-w-7xl w-full mx-auto p-6 space-y-6">
+      <main className="flex-1 overflow-y-auto p-4 md:p-6 space-y-6">
         <div className="flex items-center space-x-2 text-sm text-muted-foreground font-semibold">
           <span>{selectedFirm?.name || "BRT Trading Co."}</span>
           <span>›</span>
@@ -930,7 +938,7 @@ export function PurchasePage() {
           </CardContent>
         </Card>
 
-        <div className="sticky bottom-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t py-4 mb-4">
+        <div className="sticky bottom-0 z-40 shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t py-4 px-6 mb-0">
           <div className="flex items-center space-x-6">
             <label className="flex items-center space-x-2 text-sm font-semibold cursor-pointer">
               <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />
