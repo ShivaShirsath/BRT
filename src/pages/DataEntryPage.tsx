@@ -55,7 +55,7 @@ export function DataEntryPage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b bg-card text-card-foreground shadow-sm py-6 px-6 text-center space-y-1">
+      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center space-y-1">
         <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
           {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
         </h1>

@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/authStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
+import { useToastStore } from "../store/toastStore";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Checkbox } from "../components/ui/checkbox";
@@ -86,6 +87,7 @@ const purchaseSchema = z.object({
 export function PurchasePage() {
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const isOnline = useNetwork();
+  const addToast = useToastStore((s) => s.addToast);
   const [purchaseId, setPurchaseId] = useState<string>(() => {
     if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
       return window.crypto.randomUUID();
@@ -312,13 +314,14 @@ export function PurchasePage() {
           const rowIndex = dataToValidate.activeRows[err.path[1]].index;
           const fieldName = err.path[2];
           if (fieldName === "commodity") {
-            return `Row ${rowIndex}: Commodity is required for all entered item rows`;
+            return `Row ${rowIndex}: Commodity is required`;
           }
         }
         return err.message;
       });
       setValidationErrors(errMsgs);
       setValidationDialogOpen(true);
+      errMsgs.forEach(msg => addToast(msg, "error"));
       return;
     }
 
@@ -386,14 +389,18 @@ export function PurchasePage() {
       };
       const { data } = await api.post("/purchase", payload);
       if (data.offline) {
+        addToast(`Purchase saved offline (pending sync). ID: ${data.id}`, "info");
         setMessage(`Purchase saved offline (pending sync). ID: ${data.id}`);
       } else {
+        addToast(`Purchase saved successfully. ID: ${data.id}`, "success");
         setMessage(`Purchase saved successfully. ID: ${data.id}`);
       }
       setIsDirty(false);
       fetchAllBills();
     } catch (e: any) {
-      setError(e?.response?.data?.error ?? "Failed to save purchase");
+      const errMsg = e?.response?.data?.error ?? "Failed to save purchase";
+      setError(errMsg);
+      addToast(errMsg, "error");
     } finally {
       setLoading(false);
     }
@@ -589,7 +596,7 @@ export function PurchasePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="border-b bg-card text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
+      <header className="sticky top-0 z-40 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-4 px-6 flex justify-between items-center relative">
         <h1 className="text-2xl font-extrabold tracking-tight text-foreground">Purchase Bill Entry</h1>
         <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
           <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
@@ -643,6 +650,7 @@ export function PurchasePage() {
                   }
                 }}
                 className="w-full"
+                placeholder="e.g., 001234"
               />
               {showBillNoDropdown && (
                 <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
@@ -760,11 +768,19 @@ export function PurchasePage() {
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
-              <Input value={vehicleNo} onChange={(e) => setVehicleNoDirty(e.target.value)} />
+              <Input
+                value={vehicleNo}
+                onChange={(e) => setVehicleNoDirty(e.target.value)}
+                placeholder="e.g., MH-12-AB-1234"
+              />
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Party Bill No.</label>
-              <Input value={partyBillNo} onChange={(e) => setPartyBillNoDirty(e.target.value)} />
+              <Input
+                value={partyBillNo}
+                onChange={(e) => setPartyBillNoDirty(e.target.value)}
+                placeholder="e.g., PB/2025/001"
+              />
             </div>
           </CardContent>
         </Card>
@@ -811,6 +827,7 @@ export function PurchasePage() {
                             value={r.commodity}
                             onChange={(e) => setCell(rowIndex, "commodity", e.target.value)}
                             className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                            placeholder="e.g., Onion"
                           />
                         </TableCell>
                         <TableCell className="p-1">
@@ -818,6 +835,7 @@ export function PurchasePage() {
                             value={r.mark}
                             onChange={(e) => setCell(rowIndex, "mark", e.target.value)}
                             className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                            placeholder="e.g., A1"
                           />
                         </TableCell>
                         <TableCell className="p-1">
@@ -825,6 +843,7 @@ export function PurchasePage() {
                             value={r.brand}
                             onChange={(e) => setCell(rowIndex, "brand", e.target.value)}
                             className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                            placeholder="e.g., Best"
                           />
                         </TableCell>
                         <TableCell className="p-1">
@@ -911,7 +930,7 @@ export function PurchasePage() {
           </CardContent>
         </Card>
 
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t pt-4 pb-12">
+        <div className="sticky bottom-0 z-40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t py-4 mb-4">
           <div className="flex items-center space-x-6">
             <label className="flex items-center space-x-2 text-sm font-semibold cursor-pointer">
               <Checkbox checked={print} onChange={(e) => setPrint(e.target.checked)} />

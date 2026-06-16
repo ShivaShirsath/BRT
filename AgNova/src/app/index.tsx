@@ -1,9 +1,13 @@
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet, useColorScheme } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
+import { useRef, useEffect } from "react";
 
 export default function HomeScreen() {
+  const colorScheme = useColorScheme(); // "light" | "dark"
+  const webViewRef = useRef<WebView>(null);
+
   const DESKTOP_USER_AGENT =
     "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
 
@@ -12,9 +16,31 @@ export default function HomeScreen() {
   const devIp = hostUri ? hostUri.split(":")[0] : "localhost";
   const webViewUrl = `http://${devIp}:5173`;
 
+  // Inject system theme on startup
+  const injectedJavaScript = `
+    window.__nativeColorScheme = "${colorScheme || "light"}";
+    true;
+  `;
+
+  // Dynamically update the webview when system color scheme changes
+  useEffect(() => {
+    if (webViewRef.current) {
+      webViewRef.current.injectJavaScript(`
+        if (window.setNativeColorScheme) {
+          window.setNativeColorScheme("${colorScheme || "light"}");
+        } else {
+          window.__nativeColorScheme = "${colorScheme || "light"}";
+          window.dispatchEvent(new CustomEvent("nativeColorScheme", { detail: "${colorScheme || "light"}" }));
+        }
+        true;
+      `);
+    }
+  }, [colorScheme]);
+
   return (
     <SafeAreaView style={styles.safeArea}>
       <WebView
+        ref={webViewRef}
         source={{ uri: webViewUrl }}
         style={{ flex: 1 }}
         // 1. Spoof a desktop browser for both Android and iOS
@@ -23,6 +49,17 @@ export default function HomeScreen() {
         contentMode="desktop"
         // 3. Force Android to allow scaling down large layout sizes
         textZoom={100}
+        
+        // Full browser capabilities
+        javaScriptEnabled={true}
+        domStorageEnabled={true}
+        originWhitelist={["*"]}
+        allowsInlineMediaPlayback={true}
+        geolocationEnabled={true}
+        mixedContentMode="always"
+        allowFileAccess={true}
+        allowUniversalAccessFromFileURLs={true}
+        injectedJavaScript={injectedJavaScript}
       />{" "}
     </SafeAreaView>
   );

@@ -3,6 +3,8 @@ import { persist } from "zustand/middleware";
 
 export type ThemeId = "9b0ab864" | "e03d68e7" | "1bfe07e5" | "34f7e1f7" | "1bf014bc" | "418a8650" | "dffd2629" | "f73e0bf6" | "737b8680";
 
+export type ThemeMode = "light" | "dark" | "system";
+
 export type Theme = {
   id: ThemeId;
   name: string;
@@ -24,20 +26,18 @@ export const THEMES: Theme[] = [
 
 type ThemeState = {
   themeId: ThemeId;
-  darkMode: boolean;
+  themeMode: ThemeMode;
   setTheme: (id: ThemeId) => void;
-  toggleDarkMode: () => void;
-  setDarkMode: (dark: boolean) => void;
+  setThemeMode: (mode: ThemeMode) => void;
 };
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
       themeId: "9b0ab864",
-      darkMode: false,
+      themeMode: "system",
       setTheme: (themeId) => set({ themeId }),
-      toggleDarkMode: () => set((state) => ({ darkMode: !state.darkMode })),
-      setDarkMode: (darkMode) => set({ darkMode }),
+      setThemeMode: (themeMode) => set({ themeMode }),
     }),
     {
       name: "brt-theme-settings",
