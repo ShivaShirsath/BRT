@@ -1,4 +1,4 @@
-import { Platform, StyleSheet, useColorScheme, ScrollView, RefreshControl, View, Keyboard } from "react-native";
+import { Platform, StyleSheet, useColorScheme, ScrollView, View, Keyboard } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { WebView } from "react-native-webview";
 import Constants from "expo-constants";
@@ -7,7 +7,6 @@ import { useRef, useEffect, useState } from "react";
 export default function HomeScreen() {
   const colorScheme = useColorScheme(); // "light" | "dark"
   const webViewRef = useRef<WebView>(null);
-  const [refreshing, setRefreshing] = useState(false);
   const [keyboardHeight, setKeyboardHeight] = useState(0);
 
   const DESKTOP_USER_AGENT =
@@ -56,13 +55,6 @@ export default function HomeScreen() {
     };
   }, []);
 
-  const handleRefresh = () => {
-    setRefreshing(true);
-    if (webViewRef.current) {
-      webViewRef.current.reload();
-    }
-    setRefreshing(false);
-  };
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -70,9 +62,6 @@ export default function HomeScreen() {
         style={{ flex: 1 }}
         contentContainerStyle={{ flexGrow: 1 }}
         scrollEnabled={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={handleRefresh} />
-        }
       >
         <WebView
           ref={webViewRef}
