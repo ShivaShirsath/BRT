@@ -459,25 +459,25 @@ export function DalalPayment1Page() {
   }, [vouchers, voucherNoInput]);
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans select-none pb-8">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none pb-8">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm py-4 px-6 flex justify-between items-center relative">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">Dalal Payment 1 / 2</h1>
-        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-slate-50 text-xs font-semibold shadow-xs">
+      <header className="border-b bg-card shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Dalal Payment 1 / 2</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-muted text-xs font-semibold shadow-xs">
           <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
-          <span className="text-slate-500">Active Mode</span>
+          <span className="text-muted-foreground">Active Mode</span>
         </div>
       </header>
 
       {/* Main container */}
       <main className="flex-1 max-w-[1500px] w-full mx-auto p-6 space-y-4">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-xs text-slate-500 font-semibold uppercase tracking-wider">
+        <div className="flex items-center space-x-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
           <span>{selectedFirm?.name || "BRT Trading Co."}</span>
           <span>›</span>
           <span>Data Entry</span>
           <span>›</span>
-          <span className="text-slate-900 font-bold">Dalal payment voucher 1 / 2</span>
+          <span className="text-foreground font-bold">Dalal payment voucher 1 / 2</span>
         </div>
 
         {/* Alert Messages */}
@@ -493,11 +493,11 @@ export function DalalPayment1Page() {
         )}
 
         {/* Top Controls Card */}
-        <Card className="shadow-xs border-slate-200">
+        <Card className="shadow-xs border-border">
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             {/* Voucher No with navigation arrows */}
             <div className="md:col-span-3 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
               <div className="flex items-center">
                 <button
                   type="button"
@@ -508,7 +508,7 @@ export function DalalPayment1Page() {
                       setVoucherNoInput(nextVal);
                     }
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-l hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-l hover:bg-accent bg-background"
                 >
                   &lt;
                 </button>
@@ -522,7 +522,7 @@ export function DalalPayment1Page() {
                   onBlur={() => {
                     setTimeout(() => setShowVoucherList(false), 200);
                   }}
-                  className="w-20 text-center font-mono rounded-none border-x-0 bg-white text-blue-600 font-bold"
+                  className="w-20 text-center font-mono rounded-none border-x-0 bg-background text-primary font-bold"
                 />
                 <button
                   type="button"
@@ -531,7 +531,7 @@ export function DalalPayment1Page() {
                     const nextVal = String(parsed + 1).padStart(5, "0");
                     setVoucherNoInput(nextVal);
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-r hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-r hover:bg-accent bg-background"
                 >
                   &gt;
                 </button>
@@ -539,19 +539,19 @@ export function DalalPayment1Page() {
 
               {/* List Vouchers dropdown */}
               {showVoucherList && (
-                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                   {filteredVouchers.map((v) => (
                     <div
                       key={v.voucherNo}
                       onMouseDown={() => handleLoadVoucher(v)}
-                      className="px-3 py-2 text-xs cursor-pointer hover:bg-slate-50 flex justify-between font-mono border-b border-slate-100"
+                      className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
                     >
-                      <span className="font-semibold text-slate-800">{v.voucherNo}</span>
-                      <span className="text-slate-400">{v.date}</span>
+                      <span className="font-semibold text-foreground">{v.voucherNo}</span>
+                      <span className="text-muted-foreground">{v.date}</span>
                     </div>
                   ))}
                   {filteredVouchers.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-slate-400 text-center">No saved vouchers</div>
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">No saved vouchers</div>
                   )}
                 </div>
               )}
@@ -560,7 +560,7 @@ export function DalalPayment1Page() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowVoucherList(!showVoucherList)}
-                className="flex items-center gap-1 text-slate-600 bg-white border-slate-200 hover:bg-slate-50"
+                className="flex items-center gap-1 text-muted-foreground bg-background border-border hover:bg-accent"
               >
                 List
               </Button>
@@ -568,15 +568,15 @@ export function DalalPayment1Page() {
 
             {/* Date */}
             <div className="md:col-span-3 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Date</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
               <div className="relative flex-1 flex items-center">
                 <Input
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="pr-10 w-full text-xs font-mono tracking-wider bg-white"
+                  className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
                 />
                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-slate-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
                   <input
@@ -599,18 +599,18 @@ export function DalalPayment1Page() {
 
             {/* Token no & checkbox */}
             <div className="md:col-span-3 flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Token no.</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Token no.</span>
               <Input
                 value={tokenNo}
                 onChange={(e) => setTokenNo(e.target.value)}
-                className="w-20 font-mono text-xs bg-white"
+                className="w-20 font-mono text-xs bg-background"
               />
-              <label className="flex items-center gap-1.5 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+              <label className="flex items-center gap-1.5 text-xs font-semibold text-muted-foreground cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={rtgsAfter1PM}
                   onChange={(e) => setRtgsAfter1PM(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-border text-primary focus:ring-ring"
                 />
                 <span>RTGS after 1 PM</span>
               </label>
@@ -618,31 +618,31 @@ export function DalalPayment1Page() {
 
             {/* Created By */}
             <div className="md:col-span-3 flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Created by</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Created by</span>
               <Input
                 value={createdBy}
                 onChange={(e) => setCreatedBy(e.target.value)}
-                className="w-full text-xs font-mono bg-white"
+                className="w-full text-xs font-mono bg-background"
               />
             </div>
 
             {/* By hand field */}
-            <div className="md:col-span-12 flex flex-col md:flex-row items-center gap-3 border-t border-slate-100 pt-3">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">By hand</span>
+            <div className="md:col-span-12 flex flex-col md:flex-row items-center gap-3 border-t border-border pt-3">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">By hand</span>
               <Input
                 value={byHand}
                 onChange={(e) => setByHand(e.target.value)}
                 placeholder="Enter name..."
-                className="flex-1 bg-white text-sm"
+                className="flex-1 bg-background text-sm"
               />
               <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" className="font-semibold text-xs text-slate-700 bg-white border-slate-200">
+                <Button variant="outline" size="sm" className="font-semibold text-xs text-foreground bg-background border-border">
                   Paid memo
                 </Button>
-                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3">
+                <Button className="bg-primary hover:opacity-90 text-primary-foreground font-semibold text-xs px-3">
                   RTGS
                 </Button>
-                <Button className="bg-green-600 hover:bg-green-700 text-white font-semibold text-xs px-3">
+                <Button className="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold text-xs px-3">
                   ✓ Paid all
                 </Button>
               </div>
@@ -653,22 +653,22 @@ export function DalalPayment1Page() {
         {/* Split grid for Payment Details & Previews */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Left Panel: Payment details Table */}
-          <Card className="lg:col-span-8 bg-white border-slate-200 shadow-sm">
-            <CardHeader className="p-4 border-b border-slate-100 flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-bold tracking-wider text-slate-700 uppercase">
+          <Card className="lg:col-span-8 bg-card border-border shadow-sm">
+            <CardHeader className="p-4 border-b border-border flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-bold tracking-wider text-foreground uppercase">
                 PAYMENT DETAILS
               </CardTitle>
               <div className="flex items-center gap-2">
                 <Button
                   onClick={handleAddRow}
-                  className="bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs h-8 px-3 flex items-center gap-1"
+                  className="bg-primary hover:opacity-90 text-primary-foreground font-bold text-xs h-8 px-3 flex items-center gap-1"
                 >
                   + Add row
                 </Button>
                 <Button
                   onClick={handleRemoveRow}
                   variant="outline"
-                  className="border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs h-8 px-3 flex items-center gap-1"
+                  className="border-border text-foreground hover:bg-accent font-bold text-xs h-8 px-3 flex items-center gap-1"
                 >
                   Remove
                 </Button>
@@ -676,15 +676,15 @@ export function DalalPayment1Page() {
             </CardHeader>
             <CardContent className="p-0 overflow-x-auto relative">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="w-12 text-center text-xs font-bold text-slate-700 uppercase">#</TableHead>
-                    <TableHead className="w-48 text-xs font-bold text-slate-700 uppercase">Farmer</TableHead>
-                    <TableHead className="w-24 text-xs font-bold text-slate-700 uppercase">Patti no.</TableHead>
-                    <TableHead className="w-28 text-xs font-bold text-slate-700 uppercase">Amount</TableHead>
-                    <TableHead className="w-24 text-xs font-bold text-slate-700 uppercase">TDS Rs.</TableHead>
-                    <TableHead className="w-28 text-xs font-bold text-slate-700 uppercase">Cheque #</TableHead>
-                    <TableHead className="text-xs font-bold text-slate-700 uppercase">Narration</TableHead>
+                    <TableHead className="w-12 text-center text-xs font-bold text-foreground uppercase">#</TableHead>
+                    <TableHead className="w-48 text-xs font-bold text-foreground uppercase">Farmer</TableHead>
+                    <TableHead className="w-24 text-xs font-bold text-foreground uppercase">Patti no.</TableHead>
+                    <TableHead className="w-28 text-xs font-bold text-foreground uppercase">Amount</TableHead>
+                    <TableHead className="w-24 text-xs font-bold text-foreground uppercase">TDS Rs.</TableHead>
+                    <TableHead className="w-28 text-xs font-bold text-foreground uppercase">Cheque #</TableHead>
+                    <TableHead className="text-xs font-bold text-foreground uppercase">Narration</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -692,11 +692,11 @@ export function DalalPayment1Page() {
                     <TableRow
                       key={idx}
                       onClick={() => handleSelectRow(idx)}
-                      className={`hover:bg-slate-50/50 cursor-pointer ${
-                        selectedRowIdx === idx ? "bg-blue-50/60" : ""
+                      className={`hover:bg-accent/50 cursor-pointer ${
+                        selectedRowIdx === idx ? "bg-accent/30" : ""
                       }`}
                     >
-                      <TableCell className="text-center font-mono text-xs text-slate-400 p-2">
+                      <TableCell className="text-center font-mono text-xs text-muted-foreground p-2">
                         {idx + 1}
                       </TableCell>
                       {/* Farmer Cell with interactive dropdown search */}
@@ -710,17 +710,17 @@ export function DalalPayment1Page() {
                                 setShowCustomerDropdownRowIdx(idx);
                               }}
                               onFocus={() => setShowCustomerDropdownRowIdx(idx)}
-                              className="h-8 text-xs font-semibold"
+                              className="h-8 text-xs font-semibold bg-background"
                             />
                             {showCustomerDropdownRowIdx === idx && (
-                              <div className="absolute left-0 top-full z-[100] w-64 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                              <div className="absolute left-0 top-full z-[100] w-64 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                                 {customers
                                   .filter((c) => c.name.toLowerCase().includes(farmerSearchText.toLowerCase()))
                                   .map((c) => (
                                     <div
                                       key={c.id}
                                       onMouseDown={() => handleSelectFarmerInRow(idx, c)}
-                                      className="px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-50"
+                                      className="px-3 py-2 text-xs font-semibold text-foreground cursor-pointer hover:bg-accent"
                                     >
                                       {c.name}
                                     </div>
@@ -729,7 +729,7 @@ export function DalalPayment1Page() {
                             )}
                           </div>
                         ) : (
-                          <span className="text-xs font-bold text-slate-700">{row.farmer}</span>
+                          <span className="text-xs font-bold text-foreground">{row.farmer}</span>
                         )}
                       </TableCell>
                       {/* Patti No */}
@@ -742,7 +742,7 @@ export function DalalPayment1Page() {
                               prev.map((r, i) => (i === idx ? { ...r, pattiNo: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border bg-background"
                         />
                       </TableCell>
                       {/* Amount */}
@@ -755,7 +755,7 @@ export function DalalPayment1Page() {
                               prev.map((r, i) => (i === idx ? { ...r, amount: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200 font-bold text-slate-950 text-right"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border font-bold text-foreground text-right bg-background"
                         />
                       </TableCell>
                       {/* TDS Rs */}
@@ -768,7 +768,7 @@ export function DalalPayment1Page() {
                               prev.map((r, i) => (i === idx ? { ...r, tdsRs: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200 text-right"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border text-right bg-background"
                         />
                       </TableCell>
                       {/* Cheque # */}
@@ -781,7 +781,7 @@ export function DalalPayment1Page() {
                               prev.map((r, i) => (i === idx ? { ...r, chequeNo: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border bg-background"
                         />
                       </TableCell>
                       {/* Narration */}
@@ -794,7 +794,7 @@ export function DalalPayment1Page() {
                               prev.map((r, i) => (i === idx ? { ...r, narration: val } : r))
                             );
                           }}
-                          className="h-8 text-xs py-1 px-2 border-slate-200"
+                          className="h-8 text-xs py-1 px-2 border-border bg-background"
                         />
                       </TableCell>
                     </TableRow>
@@ -803,7 +803,7 @@ export function DalalPayment1Page() {
               </Table>
 
               {/* Table actions bar */}
-              <div className="p-3 border-t border-slate-100 flex flex-wrap items-center justify-between gap-4 bg-slate-50/50">
+              <div className="p-3 border-t border-border flex flex-wrap items-center justify-between gap-4 bg-muted/20">
                 <div className="flex items-center gap-2">
                   <Button
                     onClick={() => {
@@ -826,7 +826,7 @@ export function DalalPayment1Page() {
                     }}
                     variant="outline"
                     size="sm"
-                    className="bg-white border-slate-200 text-xs font-semibold text-slate-700"
+                    className="bg-background border-border text-xs font-semibold text-foreground hover:bg-accent"
                   >
                     Edit
                   </Button>
@@ -834,20 +834,20 @@ export function DalalPayment1Page() {
                     onClick={() => setIsAccountModalOpen(true)}
                     variant="outline"
                     size="sm"
-                    className="bg-white border-slate-200 text-xs font-semibold text-slate-700"
+                    className="bg-background border-border text-xs font-semibold text-foreground hover:bg-accent"
                   >
                     Ledger
                   </Button>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total</span>
-                  <span className="font-mono text-base font-extrabold text-red-600 bg-white border border-slate-200 rounded px-3 py-1 min-w-28 text-right">
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Total</span>
+                  <span className="font-mono text-base font-extrabold text-destructive bg-background border border-border rounded px-3 py-1 min-w-28 text-right">
                     {totalAmount}
                   </span>
                   <Button
                     variant="outline"
                     size="sm"
-                    className="bg-white border-slate-200 text-xs font-semibold text-slate-700"
+                    className="bg-background border-border text-xs font-semibold text-foreground hover:bg-accent"
                   >
                     Separate cheque for all
                   </Button>
@@ -859,29 +859,29 @@ export function DalalPayment1Page() {
           {/* Right Panel: Previews */}
           <div className="lg:col-span-4 space-y-6">
             {/* Preview Card */}
-            <Card className="bg-white border-slate-200 shadow-sm">
-              <CardHeader className="p-4 border-b border-slate-100">
-                <CardTitle className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader className="p-4 border-b border-border">
+                <CardTitle className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                   PREVIEW
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 space-y-4">
-                <div className="w-full aspect-video border-2 border-dashed border-slate-200 rounded-lg flex flex-col items-center justify-center bg-slate-50/50 text-slate-400">
+                <div className="w-full aspect-video border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center bg-muted/20 text-muted-foreground">
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-12 h-12 mb-1">
                     <path strokeLinecap="round" strokeLinejoin="round" d="m2.25 15.75 5.159-5.159a2.25 2.25 0 0 1 3.182 0l5.159 5.159m-1.5-1.5 1.409-1.409a2.25 2.25 0 0 1 3.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 0 0 1.5-1.5V6a1.5 1.5 0 0 0-1.5-1.5H3.75A1.5 1.5 0 0 0 2.25 6v12a1.5 1.5 0 0 0 1.5 1.5Zm10.5-11.25h.008v.008h-.008V8.25Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                   </svg>
                   <span className="text-xs font-semibold">Cheque / document preview</span>
                 </div>
-                <Button className="w-full bg-white border border-slate-200 hover:bg-slate-50 text-slate-700 font-bold text-xs">
+                <Button className="w-full bg-background border border-border hover:bg-accent text-foreground font-bold text-xs">
                   👁 Preview
                 </Button>
               </CardContent>
             </Card>
 
             {/* Address Card */}
-            <Card className="bg-white border-slate-200 shadow-sm">
-              <CardHeader className="p-4 border-b border-slate-100">
-                <CardTitle className="text-xs font-bold tracking-wider text-slate-500 uppercase">
+            <Card className="bg-card border-border shadow-sm">
+              <CardHeader className="p-4 border-b border-border">
+                <CardTitle className="text-xs font-bold tracking-wider text-muted-foreground uppercase">
                   ADDRESS
                 </CardTitle>
               </CardHeader>
@@ -891,7 +891,7 @@ export function DalalPayment1Page() {
                   onChange={(e) => setPartyAddress(e.target.value)}
                   placeholder="Party address..."
                   rows={3}
-                  className="w-full bg-slate-50/50 rounded-md border border-slate-200 p-2 text-xs focus:bg-white outline-none focus:ring-1 focus:ring-blue-400"
+                  className="w-full bg-muted/20 rounded-md border border-border p-2 text-xs focus:bg-background outline-none focus:ring-1 focus:ring-primary"
                 />
               </CardContent>
             </Card>
@@ -899,47 +899,47 @@ export function DalalPayment1Page() {
         </div>
 
         {/* Bottom Financial Properties Panel */}
-        <Card className="shadow-sm border-slate-200 bg-slate-50/60 p-4">
+        <Card className="shadow-sm border-border bg-muted/10 p-4">
           <CardContent className="p-0 space-y-4">
             {/* Figures Row */}
             <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Balance</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Balance</label>
                 <Input
                   value={balance}
                   onChange={(e) => setBalance(e.target.value)}
-                  className="bg-white text-right font-mono font-bold text-red-600"
+                  className="bg-background text-right font-mono font-bold text-destructive"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Crate amt.</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Crate amt.</label>
                 <Input
                   value={crateAmt}
                   onChange={(e) => setCrateAmt(e.target.value)}
-                  className="bg-white text-right font-mono"
+                  className="bg-background text-right font-mono"
                   placeholder="0.00"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">RTGS charges</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">RTGS charges</label>
                 <Input
                   value={rtgsCharges}
                   onChange={(e) => setRtgsCharges(e.target.value)}
-                  className="bg-white text-right font-mono"
+                  className="bg-background text-right font-mono"
                   placeholder="0.00"
                 />
               </div>
               <div className="space-y-1 flex flex-col justify-end">
-                <Button className="bg-sky-700 hover:bg-sky-800 text-white font-semibold text-xs h-9">
+                <Button className="bg-primary hover:opacity-90 text-primary-foreground font-semibold text-xs h-9">
                   Select party bank
                 </Button>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Party bank</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Party bank</label>
                 <Input
                   value={partyBank}
                   onChange={(e) => setPartyBank(e.target.value)}
-                  className="bg-white font-mono"
+                  className="bg-background font-mono"
                 />
               </div>
             </div>
@@ -947,8 +947,8 @@ export function DalalPayment1Page() {
             {/* Mode & Bank Details Row */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Mode</label>
-                <Select value={mode} onChange={(e) => setMode(e.target.value)}>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Mode</label>
+                <Select value={mode} onChange={(e) => setMode(e.target.value)} className="bg-background">
                   <option value="Cheque">Cheque</option>
                   <option value="Cash">Cash</option>
                   <option value="RTGS">RTGS</option>
@@ -956,70 +956,70 @@ export function DalalPayment1Page() {
                 </Select>
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Bank account...</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Bank account...</label>
                 <Input
                   value={bankAccount}
                   onChange={(e) => setBankAccount(e.target.value)}
                   placeholder="Select bank..."
-                  className="bg-white"
+                  className="bg-background"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Cheque / DD no.</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Cheque / DD no.</label>
                 <Input
                   value={chequeDdNo}
                   onChange={(e) => setChequeDdNo(e.target.value)}
-                  className="bg-white font-mono"
+                  className="bg-background font-mono"
                 />
               </div>
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">RTGS date</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">RTGS date</label>
                 <Input
                   value={rtgsDate}
                   onChange={(e) => setRtgsDate(e.target.value)}
-                  className="bg-white font-mono text-center"
+                  className="bg-background font-mono text-center"
                 />
               </div>
             </div>
 
             {/* Cash & Commissions row */}
             <div className="flex flex-wrap items-center gap-4 pt-2">
-              <Button variant="outline" size="sm" className="bg-white border-slate-200 text-xs text-slate-700 font-semibold flex items-center gap-1">
+              <Button variant="outline" size="sm" className="bg-background border-border text-xs text-foreground font-semibold flex items-center gap-1 hover:bg-accent">
                 💵 Cash details
               </Button>
               <Input
                 value={cashAmount}
                 onChange={(e) => setCashAmount(e.target.value)}
-                className="w-28 font-mono text-xs bg-white text-right h-8"
+                className="w-28 font-mono text-xs bg-background text-right h-8"
               />
 
               <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">DD commission</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">DD commission</span>
                 <Input
                   value={ddCommission}
                   onChange={(e) => setDdCommission(e.target.value)}
-                  className="w-28 font-mono text-xs bg-white text-right h-8"
+                  className="w-28 font-mono text-xs bg-background text-right h-8"
                 />
               </div>
 
               <div className="flex items-center gap-2 ml-auto">
-                <Button className="bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs h-8">
+                <Button className="bg-accent hover:opacity-90 text-accent-foreground font-bold text-xs h-8">
                   RTGS form
                 </Button>
-                <Button variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs h-8">
+                <Button variant="outline" className="border-border text-foreground hover:bg-accent font-bold text-xs h-8">
                   Cover letter
                 </Button>
-                <Button variant="outline" className="border-slate-200 text-slate-700 hover:bg-slate-50 font-bold text-xs h-8">
+                <Button variant="outline" className="border-border text-foreground hover:bg-accent font-bold text-xs h-8">
                   RTGS to transporter
                 </Button>
               </div>
             </div>
 
-            <hr className="border-slate-200" />
+            <hr className="border-border" />
 
             {/* Quick Banks */}
             <div className="flex items-center gap-3">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Banks:</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Quick Banks:</span>
               <div className="flex gap-2">
                 {["Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5"].map((bk) => (
                   <button
@@ -1028,8 +1028,8 @@ export function DalalPayment1Page() {
                     onClick={() => setSelectedQuickBank(bk)}
                     className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${
                       selectedQuickBank === bk
-                        ? "bg-blue-600 border-blue-600 text-white"
-                        : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                        ? "bg-primary border-primary text-primary-foreground"
+                        : "bg-background border-border text-foreground hover:bg-accent"
                     }`}
                   >
                     {bk}
@@ -1042,11 +1042,11 @@ export function DalalPayment1Page() {
       </main>
 
       {/* Footer controls bar */}
-      <footer className="border-t bg-slate-50 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+      <footer className="border-t bg-muted/20 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
         <div className="flex items-center gap-6">
           <Button
             variant="outline"
-            className="flex items-center gap-1 font-bold border-slate-200 text-slate-700 bg-white"
+            className="flex items-center gap-1 font-bold border-border text-foreground bg-background hover:bg-accent"
             onClick={() => window.print()}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -1061,7 +1061,7 @@ export function DalalPayment1Page() {
             variant="outline"
             disabled={!voucherExists}
             onClick={onDelete}
-            className="flex items-center gap-1 font-bold border-red-200 text-red-600 bg-white hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none"
+            className="flex items-center gap-1 font-bold border-destructive/20 text-destructive bg-background hover:bg-destructive/10 disabled:opacity-50 disabled:pointer-events-none"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -1071,20 +1071,20 @@ export function DalalPayment1Page() {
 
           <Button
             onClick={onSave}
-            className="bg-green-700 hover:bg-green-800 text-white font-bold px-6 flex items-center gap-1"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 flex items-center gap-1 shadow-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
-            Save F5
+            Save (F5)
           </Button>
 
           <Button
             variant="outline"
             onClick={() => navigate(-1)}
-            className="font-bold border-slate-200 text-slate-700 bg-white"
+            className="font-bold border-border text-foreground bg-background hover:bg-accent"
           >
-            Close ESC
+            Close (ESC)
           </Button>
         </div>
       </footer>

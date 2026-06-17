@@ -4,7 +4,7 @@ import api from "../api/client";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select } from "../components/ui/select";
-import { Card } from "../components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card";
 import { Alert, AlertDescription } from "../components/ui/alert";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../components/ui/table";
@@ -368,471 +368,376 @@ export function PaymentVoucherPage() {
     }
   };
 
+  const voucherExists = useMemo(() => {
+    return vouchers.some((v) => v.voucherNo === voucherNoInput.trim());
+  }, [vouchers, voucherNoInput]);
+
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans select-none items-center justify-center p-4">
-      {/* Outer Card mimicking window look */}
-      <Card className="w-full max-w-6xl shadow-2xl border border-slate-300 overflow-hidden rounded-lg">
-        {/* Header bar */}
-        <div className="bg-[#e2e8f0] border-b border-slate-300 text-slate-800 py-3 text-center text-2xl font-extrabold select-none tracking-wide relative">
-          Payment Voucher
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none pb-8">
+      {/* Header */}
+      <header className="border-b bg-card shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Payment Voucher</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-muted text-xs font-semibold shadow-xs">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          <span className="text-muted-foreground">Active Mode</span>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="flex-1 max-w-[1400px] w-full mx-auto p-6 space-y-4">
+        {/* Breadcrumb */}
+        <div className="flex items-center space-x-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
+          <span>BRT Trading Co.</span>
+          <span>›</span>
+          <span>Data Entry</span>
+          <span>›</span>
+          <span className="text-foreground font-bold">Payment Voucher</span>
         </div>
 
-        {/* Voucher No & Date Section */}
-        <div className="bg-[#f1f5f9] px-6 py-3 border-b border-slate-200 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <span className="text-sm font-bold text-slate-700">Voucher No.:</span>
-            <div className="flex items-center">
-              <Input
-                value={voucherNoInput}
-                onChange={(e) => {
-                  setVoucherNoInput(e.target.value);
-                  setShowVoucherList(true);
-                }}
-                onFocus={() => setShowVoucherList(true)}
-                onBlur={() => {
-                  setTimeout(() => setShowVoucherList(false), 200);
-                }}
-                className="w-20 text-center font-mono font-bold text-blue-700 bg-white border-slate-300 h-9"
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const parsed = parseInt(voucherNoInput) || 0;
-                  if (parsed > 1) {
-                    setVoucherNoInput(String(parsed - 1).padStart(5, "0"));
-                  }
-                }}
-                className="px-2 py-1 bg-white border border-l-0 border-slate-300 hover:bg-slate-50 h-9"
-              >
-                &lt;
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  const parsed = parseInt(voucherNoInput) || 0;
-                  setVoucherNoInput(String(parsed + 1).padStart(5, "0"));
-                }}
-                className="px-2 py-1 bg-white border border-l-0 border-slate-300 hover:bg-slate-50 h-9 rounded-r"
-              >
-                &gt;
-              </button>
-              <Button
-                variant="outline"
-                onClick={() => setShowVoucherList(!showVoucherList)}
-                className="ml-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 h-9 px-3"
-              >
-                List
-              </Button>
+        {/* Alert Messages */}
+        {message && (
+          <Alert className="bg-emerald-50 text-emerald-800 border-emerald-200">
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
+
+        {/* Card 1: Top Voucher Info */}
+        <Card className="shadow-xs border-border bg-card">
+          <CardContent className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-2 relative flex-1 max-w-md">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const parsed = parseInt(voucherNoInput) || 0;
+                    if (parsed > 1) {
+                      setVoucherNoInput(String(parsed - 1).padStart(5, "0"));
+                    }
+                  }}
+                  className="px-2 py-1.5 border border-border rounded-l hover:bg-accent bg-background"
+                >
+                  &lt;
+                </button>
+                <Input
+                  value={voucherNoInput}
+                  onChange={(e) => {
+                    setVoucherNoInput(e.target.value);
+                    setShowVoucherList(true);
+                  }}
+                  onFocus={() => setShowVoucherList(true)}
+                  onBlur={() => {
+                    setTimeout(() => setShowVoucherList(false), 200);
+                  }}
+                  className="w-20 text-center font-mono font-bold text-primary bg-background border-x-0 rounded-none h-9"
+                />
+                <button
+                  type="button"
+                  onClick={() => {
+                    const parsed = parseInt(voucherNoInput) || 0;
+                    setVoucherNoInput(String(parsed + 1).padStart(5, "0"));
+                  }}
+                  className="px-2 py-1.5 border border-border rounded-r hover:bg-accent bg-background"
+                >
+                  &gt;
+                </button>
+              </div>
               <Input
                 value={voucherSuffix}
                 onChange={(e) => setVoucherSuffix(e.target.value)}
-                className="w-16 ml-1 bg-white border-slate-300 text-center font-mono h-9"
+                className="w-16 ml-1 bg-background border-border text-center font-mono"
+                placeholder="Suff"
               />
-            </div>
 
-            {showVoucherList && (
-              <div className="absolute z-50 w-48 mt-10 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                {filteredVouchers.map((v) => (
-                  <div
-                    key={v.voucherNo}
-                    onMouseDown={() => handleLoadVoucher(v)}
-                    className="px-3 py-2 text-xs cursor-pointer hover:bg-slate-50 flex justify-between font-mono border-b border-slate-100"
-                  >
-                    <span className="font-semibold text-slate-800">{v.voucherNo}</span>
-                    <span className="text-slate-400">{v.date}</span>
-                  </div>
-                ))}
-                {filteredVouchers.length === 0 && (
-                  <div className="px-3 py-2 text-xs text-slate-400 text-center">No matching vouchers</div>
-                )}
-              </div>
-            )}
-          </div>
-
-          <div className="flex items-center space-x-2 relative">
-            <span className="text-sm font-bold text-slate-700">Date:</span>
-            <div className="relative w-36 flex items-center">
-              <Input
-                value={date}
-                onChange={(e) => setDate(e.target.value)}
-                className="bg-white border-slate-300 font-mono pr-8 text-center h-9 text-sm"
-              />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
-                <span className="text-xs text-slate-500">▼</span>
-                <input
-                  type="date"
-                  value={pickerValue}
-                  onChange={(e) => {
-                    const val = e.target.value;
-                    if (val) {
-                      const parts = val.split("-");
-                      setDate(`${parts[2]}.${parts[1]}.${parts[0]}`);
-                    }
-                  }}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Content body split: Form/Grid on left, Preview sidebar on right */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 bg-[#f8fafc] p-6 gap-6">
-          {message && (
-            <div className="col-span-12">
-              <Alert className="bg-emerald-50 text-emerald-800 border-emerald-200">
-                <AlertDescription>{message}</AlertDescription>
-              </Alert>
-            </div>
-          )}
-          {error && (
-            <div className="col-span-12">
-              <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            </div>
-          )}
-
-          {/* Left panel (Form + Grid) */}
-          <div className="lg:col-span-8 grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-            {/* Cost Center / Account Type / Ledger Account Row */}
-            <div className="col-span-12 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
-              <span className="col-span-3 text-sm font-bold text-slate-600">Cost Center / A/c Type:</span>
-              <div className="col-span-9 flex space-x-2">
-                <Select
-                  value={costCenter}
-                  onChange={(e) => setCostCenter(e.target.value)}
-                  className="bg-white border-slate-300 w-32 h-9"
-                >
-                  <option value="All">All</option>
-                  <option value="Center A">Center A</option>
-                  <option value="Center B">Center B</option>
-                </Select>
-                <Button
-                  onClick={() => setIsAccountModalOpen(true)}
-                  className="bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 h-9 text-xs whitespace-nowrap"
-                >
-                  F3 - New A/c
-                </Button>
-                <div className="relative flex-1">
-                  <Input
-                    value={ledgerAccountSearch}
-                    onChange={(e) => {
-                      setLedgerAccountSearch(e.target.value);
-                      setShowCustomerDropdown(true);
-                    }}
-                    onFocus={() => setShowCustomerDropdown(true)}
-                    onBlur={() => {
-                      setTimeout(() => setShowCustomerDropdown(false), 200);
-                    }}
-                    placeholder="Search Account..."
-                    className="bg-white border-slate-300 w-full h-9"
-                  />
-                  {showCustomerDropdown && (
-                    <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                      {customers
-                        .filter((c) => c.name.toLowerCase().includes(ledgerAccountSearch.toLowerCase()))
-                        .map((c) => (
-                          <div
-                            key={c.id}
-                            onMouseDown={() => handleSelectCustomer(c)}
-                            className="px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-50"
-                          >
-                            {c.name}
-                          </div>
-                        ))}
+              {showVoucherList && (
+                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
+                  {filteredVouchers.map((v) => (
+                    <div
+                      key={v.voucherNo}
+                      onMouseDown={() => handleLoadVoucher(v)}
+                      className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
+                    >
+                      <span className="font-semibold text-foreground">{v.voucherNo}</span>
+                      <span className="text-muted-foreground">{v.date}</span>
                     </div>
-                  )}
+                  ))}
                 </div>
-              </div>
-            </div>
-
-            {/* Split row for Balance Amount and Allocations Grid */}
-            <div className="col-span-12 grid grid-cols-1 md:grid-cols-12 gap-4">
-              {/* Left values (Balance, Amount, Charges, Discount, TDS) */}
-              <div className="md:col-span-6 space-y-3">
-                {/* Balance amount */}
-                <div className="flex items-center space-x-2">
-                  <span className="w-28 text-sm font-semibold text-slate-700">Balance:</span>
-                  <Input
-                    value={balanceAmount}
-                    onChange={(e) => setBalanceAmount(e.target.value)}
-                    className="w-32 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                  />
-                  <Button className="bg-[#e2e8f0] text-slate-700 hover:bg-[#cbd5e1] border border-slate-300 h-9 px-3 text-xs">
-                    Ledger
-                  </Button>
-                </div>
-
-                {/* Amount */}
-                <div className="flex items-center space-x-2">
-                  <span className="w-28 text-sm font-semibold text-slate-700">Amount:</span>
-                  <Input
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
-                    className="w-32 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                  />
-                  <Button className="bg-[#e2e8f0] text-slate-700 hover:bg-[#cbd5e1] border border-slate-300 h-9 px-3 text-xs whitespace-nowrap">
-                    Cash Details
-                  </Button>
-                  <span className="font-bold text-sm text-slate-800">{parseFloat(amount || "0").toFixed(2)}</span>
-                </div>
-
-                {/* Bank Charges */}
-                <div className="flex items-center space-x-2">
-                  <span className="w-28 text-sm font-semibold text-slate-700">Bank Chrages:</span>
-                  <Input
-                    value={bankCharges}
-                    onChange={(e) => setBankCharges(e.target.value)}
-                    className="w-32 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                  />
-                  <span className="text-xs font-semibold text-slate-600">Interest %: {interestPercent}</span>
-                </div>
-
-                {/* Discount */}
-                <div className="flex items-center space-x-2">
-                  <span className="w-28 text-sm font-semibold text-slate-700">Discount:</span>
-                  <Input
-                    value={discount}
-                    onChange={(e) => setDiscount(e.target.value)}
-                    className="w-32 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                  />
-                  <span className="text-xs font-bold text-slate-800">Total: {parseFloat(amount || "0").toFixed(2)}</span>
-                </div>
-
-                {/* TDS Amount */}
-                <div className="flex items-center space-x-2">
-                  <span className="w-28 text-sm font-semibold text-slate-700">T.D.S. Amount:</span>
-                  <Input
-                    value={tdsAmount}
-                    onChange={(e) => setTdsAmount(e.target.value)}
-                    className="w-32 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                  />
-                </div>
-              </div>
-
-              {/* Right Allocation Grid */}
-              <div className="md:col-span-6 bg-white border border-slate-200 rounded overflow-hidden">
-                <Table>
-                  <TableHeader className="bg-slate-50">
-                    <TableRow className="h-8">
-                      <TableHead className="text-xs font-bold text-slate-700 uppercase h-8 py-1">Date</TableHead>
-                      <TableHead className="text-xs font-bold text-slate-700 uppercase text-right h-8 py-1">Amount</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {allocations.map((row, idx) => (
-                      <TableRow key={idx} className="hover:bg-slate-50/50 h-8">
-                        <TableCell className="p-1">
-                          <input
-                            type="text"
-                            value={row.date}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setAllocations((prev) =>
-                                prev.map((r, i) => (i === idx ? { ...r, date: val } : r))
-                              );
-                            }}
-                            placeholder="dd.mm.yyyy"
-                            className="w-full bg-transparent border-0 outline-none px-2 text-xs font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            type="text"
-                            value={row.amount}
-                            onChange={(e) => {
-                              const val = e.target.value;
-                              setAllocations((prev) =>
-                                prev.map((r, i) => (i === idx ? { ...r, amount: val } : r))
-                              );
-                            }}
-                            className="w-full bg-transparent border-0 outline-none px-2 text-xs font-mono text-right"
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
-
-            {/* Paid from */}
-            <div className="col-span-12 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
-              <span className="col-span-3 text-sm font-bold text-slate-600">Paid from:</span>
-              <div className="col-span-9 flex items-center space-x-3">
-                <Input
-                  value={paidFrom}
-                  onChange={(e) => setPaidFrom(e.target.value)}
-                  placeholder="Account name..."
-                  className="bg-white border-slate-300 flex-1 h-9"
-                />
-                <span className="text-xs font-bold text-slate-700 whitespace-nowrap">Balance Rs. : 0.00</span>
-              </div>
-            </div>
-
-            {/* Cheque / Mode dropdown & Details */}
-            <div className="col-span-12 grid grid-cols-1 md:grid-cols-12 gap-2 items-center">
-              <div className="col-span-3">
-                <Select
-                  value={paymentMode}
-                  onChange={(e) => setPaymentMode(e.target.value)}
-                  className="bg-white border-slate-300 w-full h-9"
-                >
-                  <option value="Cheque">Cheque</option>
-                  <option value="Cash">Cash</option>
-                  <option value="RTGS">RTGS</option>
-                </Select>
-              </div>
-              <div className="col-span-9">
-                <Input
-                  value={paymentModeDetails}
-                  onChange={(e) => setPaymentModeDetails(e.target.value)}
-                  placeholder="Details..."
-                  className="bg-white border-slate-300 w-44 h-9"
-                />
-              </div>
-            </div>
-
-            {/* Narration */}
-            <div className="col-span-12 grid grid-cols-1 md:grid-cols-12 gap-2 items-start">
-              <span className="col-span-3 text-sm font-bold text-slate-600">Narration:</span>
-              <div className="col-span-9 relative">
-                <Input
-                  value={narration}
-                  onChange={(e) => setNarration(e.target.value)}
-                  placeholder="Enter narration..."
-                  className="bg-white border-slate-300 w-full h-9"
-                />
-                <span className="absolute right-2 top-2.5 text-xs text-slate-500">▼</span>
-              </div>
-            </div>
-
-            {/* Quick banks section */}
-            <div className="col-span-12 border-t border-slate-200 pt-4 mt-2 flex flex-wrap items-center gap-2">
-              <Button className="bg-[#e2e8f0] text-slate-800 hover:bg-[#cbd5e1] border border-slate-300 h-9 px-4 text-xs font-bold">
-                Party Bank
+              )}
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowVoucherList(!showVoucherList)}
+                className="ml-1 bg-background text-muted-foreground border-border hover:bg-accent"
+              >
+                List
               </Button>
-              <span className="text-xs font-bold text-slate-700">Party Bank :</span>
+            </div>
+
+            <div className="flex items-center gap-2 relative max-w-xs w-full">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
+              <div className="relative flex-1 flex items-center">
+                <Input
+                  value={date}
+                  onChange={(e) => setDate(e.target.value)}
+                  className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
+                />
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
+                  <input
+                    type="date"
+                    value={pickerValue}
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      if (val) {
+                        const parts = val.split("-");
+                        setDate(`${parts[2]}.${parts[1]}.${parts[0]}`);
+                      }
+                    }}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                  />
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Split Content Body */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+          {/* Left panel (Form + Grid) */}
+          <div className="lg:col-span-8 space-y-4">
+            <Card className="bg-card border-border shadow-sm">
+              <CardContent className="p-5 space-y-5">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
+                  <div className="md:col-span-4 space-y-1">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Cost Center</label>
+                    <Select value={costCenter} onChange={(e) => setCostCenter(e.target.value)} className="bg-background">
+                      <option value="All">All</option>
+                      <option value="Center A">Center A</option>
+                      <option value="Center B">Center B</option>
+                    </Select>
+                  </div>
+                  <div className="md:col-span-8 space-y-1 relative">
+                    <div className="flex justify-between items-center">
+                      <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Ledger Account</label>
+                      <Button variant="link" size="sm" onClick={() => setIsAccountModalOpen(true)} className="h-auto p-0 text-xs font-bold text-primary">
+                        + New Account (F3)
+                      </Button>
+                    </div>
+                    <div className="relative">
+                      <Input
+                        value={ledgerAccountSearch}
+                        onChange={(e) => {
+                          setLedgerAccountSearch(e.target.value);
+                          setShowCustomerDropdown(true);
+                        }}
+                        onFocus={() => setShowCustomerDropdown(true)}
+                        onBlur={() => {
+                          setTimeout(() => setShowCustomerDropdown(false), 200);
+                        }}
+                        placeholder="Search Account..."
+                        className="bg-background"
+                      />
+                      {showCustomerDropdown && (
+                        <div className="absolute z-[100] w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
+                          {customers
+                            .filter((c) => c.name.toLowerCase().includes(ledgerAccountSearch.toLowerCase()))
+                            .map((c) => (
+                              <div key={c.id} onMouseDown={() => handleSelectCustomer(c)} className="px-3 py-2 text-xs font-semibold text-foreground cursor-pointer hover:bg-accent">
+                                {c.name}
+                              </div>
+                            ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase w-20">Balance</label>
+                      <Input readOnly disabled value={balanceAmount} className="bg-muted/50 font-mono text-sm text-right flex-1 border-border" />
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase w-20">Amount</label>
+                      <Input value={amount} onChange={(e) => setAmount(e.target.value)} className="bg-background font-mono text-sm text-right flex-1" />
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase w-20">Bank Chrg.</label>
+                      <Input value={bankCharges} onChange={(e) => setBankCharges(e.target.value)} className="bg-background font-mono text-sm text-right flex-1" />
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase w-20">Discount</label>
+                      <Input value={discount} onChange={(e) => setDiscount(e.target.value)} className="bg-background font-mono text-sm text-right flex-1" />
+                    </div>
+                    <div className="flex items-center justify-between gap-2">
+                      <label className="text-xs font-bold text-muted-foreground uppercase w-20">TDS Amt.</label>
+                      <Input value={tdsAmount} onChange={(e) => setTdsAmount(e.target.value)} className="bg-background font-mono text-sm text-right flex-1" />
+                    </div>
+                  </div>
+
+                  <div className="border border-border rounded overflow-hidden">
+                    <Table>
+                      <TableHeader className="bg-muted/50">
+                        <TableRow className="h-8">
+                          <TableHead className="text-2xs font-bold uppercase py-1 text-foreground">Date</TableHead>
+                          <TableHead className="text-2xs font-bold uppercase text-right py-1 text-foreground">Amount</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {allocations.map((row, idx) => (
+                          <TableRow key={idx} className="h-8 border-border">
+                            <TableCell className="p-1">
+                              <input
+                                value={row.date}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setAllocations(prev => prev.map((r, i) => i === idx ? { ...r, date: val } : r));
+                                }}
+                                className="w-full bg-transparent border-0 text-xs font-mono px-2 text-foreground outline-none"
+                                placeholder="dd.mm.yyyy"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={row.amount}
+                                onChange={(e) => {
+                                  const val = e.target.value;
+                                  setAllocations(prev => prev.map((r, i) => i === idx ? { ...r, amount: val } : r));
+                                }}
+                                className="w-full bg-transparent border-0 text-xs font-mono text-right px-2 text-foreground outline-none"
+                              />
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                </div>
+
+                <hr className="border-border" />
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Paid From</label>
+                  <Input value={paidFrom} onChange={(e) => setPaidFrom(e.target.value)} placeholder="Enter account name..." className="bg-background" />
+                </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Payment Mode</label>
+                    <Select value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)} className="bg-background">
+                      <option value="Cheque">Cheque</option>
+                      <option value="Cash">Cash</option>
+                      <option value="RTGS">RTGS</option>
+                    </Select>
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Mode Details</label>
+                    <Input value={paymentModeDetails} onChange={(e) => setPaymentModeDetails(e.target.value)} placeholder="Ref no / Cheque no..." className="bg-background" />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Narration</label>
+                  <textarea
+                    value={narration}
+                    onChange={(e) => setNarration(e.target.value)}
+                    className="w-full border border-border rounded p-2 text-sm bg-background text-foreground outline-none focus:ring-1 focus:ring-primary"
+                    rows={2}
+                    placeholder="Enter narration notes..."
+                  />
+                </div>
+              </CardContent>
+            </Card>
+
+            <div className="flex flex-wrap items-center gap-2 p-2 bg-muted/10 border border-border rounded">
+              <span className="text-xs font-bold text-muted-foreground uppercase px-2">Party Banks:</span>
               {["Chq. Bank1", "Chq. Bank2", "Chq. Bank3", "Chq. Bank4", "Chq. Bank5"].map((bankName) => (
-                <Button
-                  key={bankName}
-                  onClick={() => setChqOfBank(bankName)}
-                  className="bg-[#e2e8f0] hover:bg-[#cbd5e1] text-slate-700 border border-slate-300 h-8 px-3 text-2xs"
-                >
+                <Button key={bankName} variant="outline" size="sm" onClick={() => setChqOfBank(bankName)} className="text-2xs h-7 px-2 bg-background hover:bg-accent border-border">
                   {bankName}
                 </Button>
               ))}
             </div>
           </div>
 
-          {/* Right panel (Image Upload/Preview) */}
-          <div className="lg:col-span-4 flex flex-col items-center justify-between border-l border-slate-200 pl-6 space-y-4">
-            <div className="w-full max-w-[280px] aspect-square bg-white border-2 border-dashed border-slate-300 rounded-lg flex flex-col items-center justify-center relative overflow-hidden group select-none">
-              {imageData ? (
-                <img src={imageData} alt="Voucher scan" className="w-full h-full object-cover" />
-              ) : (
-                <div className="text-center p-4">
-                  <span className="text-4xl text-slate-300 block mb-2">✕</span>
-                  <span className="text-xs font-semibold text-slate-400">Image Preview</span>
-                </div>
-              )}
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-              />
-            </div>
-
-            <div className="flex gap-2 w-full max-w-[280px]">
-              <Button
-                onClick={handlePreviewClick}
-                className="flex-1 bg-[#e2e8f0] text-slate-800 hover:bg-[#cbd5e1] border border-slate-300 h-9 text-xs font-bold"
-              >
-                Preview
-              </Button>
-              <div className="relative flex-1">
-                <Button className="w-full bg-[#cbd5e1] text-slate-800 hover:bg-[#b8c5d6] border border-slate-300 h-9 text-xs font-bold">
-                  Upload
-                </Button>
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                />
+          {/* Right Area: Image Upload */}
+          <div className="lg:col-span-4 space-y-4">
+            <Card className="bg-card border-border shadow-sm p-5 flex flex-col items-center">
+              <div className="w-full aspect-square bg-muted/20 border-2 border-dashed border-border rounded-lg flex flex-col items-center justify-center relative overflow-hidden mb-4">
+                {imageData ? (
+                  <img src={imageData} alt="Voucher scan" className="w-full h-full object-contain" />
+                ) : (
+                  <div className="text-center text-muted-foreground">
+                    <span className="text-4xl block mb-2">📷</span>
+                    <span className="text-xs font-semibold">Scan / Image Preview</span>
+                  </div>
+                )}
+                <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
               </div>
-            </div>
+              <div className="flex gap-2 w-full">
+                <Button variant="outline" className="flex-1 text-xs border-border hover:bg-accent" onClick={handlePreviewClick}>👁 Preview</Button>
+                <div className="relative flex-1">
+                  <Button variant="outline" className="w-full text-xs border-border hover:bg-accent">📁 Upload</Button>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="absolute inset-0 opacity-0 cursor-pointer" />
+                </div>
+              </div>
+            </Card>
           </div>
         </div>
+      </main>
 
-        {/* Footer */}
-        <div className="bg-[#cbd5e1] px-6 py-3.5 flex justify-between items-center border-t border-slate-300">
-          <div className="flex items-center space-x-6">
-            <Button className="bg-[#94a3b8] text-white hover:bg-[#64748b] px-4 h-9 font-semibold text-xs">
-              Print RTGS Form
-            </Button>
-            <span className="font-extrabold text-slate-700 tracking-wider text-sm italic">SUP</span>
-            <label className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={printCheckbox}
-                onChange={(e) => setPrintCheckbox(e.target.checked)}
-                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
-              />
-              <span>Print</span>
-            </label>
-          </div>
-
-          <div className="flex space-x-2">
-            <Button
-              onClick={onDelete}
-              className="bg-white text-rose-600 hover:bg-slate-50 border border-slate-300 shadow-sm px-5 h-9 font-semibold text-sm"
-            >
-              Delete
-            </Button>
-            <Button
-              onClick={onSave}
-              className="bg-white text-slate-800 hover:bg-slate-50 border border-slate-300 shadow-sm px-6 h-9 font-semibold text-sm"
-            >
-              Save
-            </Button>
-            <Button
-              onClick={() => navigate(-1)}
-              className="bg-white text-purple-600 hover:bg-slate-50 border border-purple-300 shadow-sm px-5 h-9 font-semibold text-sm"
-            >
-              Close
-            </Button>
-          </div>
+      {/* Footer controls bar */}
+      <footer className="border-t bg-muted/20 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+        <div className="flex items-center gap-6">
+          <Button variant="outline" className="text-xs font-bold border-border hover:bg-accent">Print RTGS Form</Button>
+          <label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground cursor-pointer">
+            <input type="checkbox" checked={printCheckbox} onChange={(e) => setPrintCheckbox(e.target.checked)} className="rounded border-border text-primary focus:ring-ring w-4 h-4" />
+            <span>Print</span>
+          </label>
         </div>
-      </Card>
 
-      {/* Account Generation Modal */}
-      <AccountGenerationModal
-        open={isAccountModalOpen}
-        onClose={() => setIsAccountModalOpen(false)}
-        onSave={handleCreateAccount}
-      />
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            disabled={!voucherExists}
+            onClick={onDelete}
+            className="text-destructive border-destructive/20 hover:bg-destructive/10 px-5"
+          >
+            Delete
+          </Button>
+          <Button
+            onClick={onSave}
+            className="bg-primary hover:opacity-90 text-primary-foreground font-bold px-8 shadow-sm"
+          >
+            Save (F5)
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="border-border hover:bg-accent"
+          >
+            Close (ESC)
+          </Button>
+        </div>
+      </footer>
 
-      {/* No Image Popup Dialog */}
+      <AccountGenerationModal open={isAccountModalOpen} onClose={() => setIsAccountModalOpen(false)} onSave={handleCreateAccount} />
+
       <Dialog open={showNoImagePopup} onOpenChange={setShowNoImagePopup}>
-        <DialogContent className="max-w-md bg-white border border-slate-300 text-slate-800 rounded-lg p-6 shadow-xl">
+        <DialogContent className="max-w-md bg-popover border border-border text-popover-foreground">
           <DialogHeader className="border-b pb-2">
-            <DialogTitle className="text-lg font-bold text-slate-900">
-              Preview
-            </DialogTitle>
+            <DialogTitle>No Image</DialogTitle>
           </DialogHeader>
-          <div className="py-4 text-sm font-semibold text-slate-700">
-            No image uploaded yet to preview.
-          </div>
-          <DialogFooter className="border-t pt-4 flex justify-end">
-            <Button
-              onClick={() => setShowNoImagePopup(false)}
-              className="bg-[#285482] hover:bg-[#1e3f62] text-white px-5 h-9 font-semibold text-sm"
-            >
-              OK
-            </Button>
+          <div className="py-4 text-sm font-semibold text-muted-foreground">No image uploaded yet to preview.</div>
+          <DialogFooter className="border-t pt-4">
+            <Button onClick={() => setShowNoImagePopup(false)} className="bg-primary text-primary-foreground hover:opacity-90">OK</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

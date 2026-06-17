@@ -397,24 +397,25 @@ export function CustomerReceiptPage() {
   }, [receipts, voucherNoInput]);
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans select-none pb-8">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none pb-8">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm py-4 px-6 flex justify-between items-center relative">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">Customer Receipt Voucher</h1>
-        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-slate-50 text-xs font-semibold shadow-xs">
-          <span className="text-slate-500">Active Mode</span>
+      <header className="border-b bg-card shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Customer Receipt Voucher</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-muted text-xs font-semibold shadow-xs">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          <span className="text-muted-foreground">Active Mode</span>
         </div>
       </header>
 
       {/* Main Container */}
       <main className="flex-1 max-w-[1400px] w-full mx-auto p-6 space-y-4">
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-xs text-slate-500 font-semibold uppercase tracking-wider">
+        <div className="flex items-center space-x-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
           <span>{selectedFirm?.name || "BRT Trading Co."}</span>
           <span>›</span>
           <span>Data Entry</span>
           <span>›</span>
-          <span className="text-slate-900 font-bold">Customer Receipt</span>
+          <span className="text-foreground font-bold">Customer Receipt</span>
         </div>
 
         {/* Alert Messages */}
@@ -430,11 +431,11 @@ export function CustomerReceiptPage() {
         )}
 
         {/* Top Details Card */}
-        <Card className="shadow-xs border-slate-200">
+        <Card className="shadow-xs border-border">
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             {/* Voucher No with arrows */}
             <div className="md:col-span-3 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
               <div className="flex items-center">
                 <button
                   type="button"
@@ -445,7 +446,7 @@ export function CustomerReceiptPage() {
                       setVoucherNoInput(nextVal);
                     }
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-l hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-l hover:bg-accent bg-background"
                 >
                   &lt;
                 </button>
@@ -459,7 +460,7 @@ export function CustomerReceiptPage() {
                   onBlur={() => {
                     setTimeout(() => setShowVoucherList(false), 200);
                   }}
-                  className="w-20 text-center font-mono rounded-none border-x-0 bg-white text-blue-600 font-bold"
+                  className="w-20 text-center font-mono rounded-none border-x-0 bg-background text-primary font-bold"
                 />
                 <button
                   type="button"
@@ -468,7 +469,7 @@ export function CustomerReceiptPage() {
                     const nextVal = String(parsed + 1).padStart(5, "0");
                     setVoucherNoInput(nextVal);
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-r hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-r hover:bg-accent bg-background"
                 >
                   &gt;
                 </button>
@@ -476,19 +477,19 @@ export function CustomerReceiptPage() {
 
               {/* List Vouchers dropdown */}
               {showVoucherList && (
-                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                   {filteredReceipts.map((r) => (
                     <div
                       key={r.voucherNo}
                       onMouseDown={() => handleLoadReceipt(r)}
-                      className="px-3 py-2 text-xs cursor-pointer hover:bg-slate-50 flex justify-between font-mono border-b border-slate-100"
+                      className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
                     >
-                      <span className="font-semibold text-slate-800">{r.voucherNo}</span>
-                      <span className="text-slate-400">{r.date}</span>
+                      <span className="font-semibold text-foreground">{r.voucherNo}</span>
+                      <span className="text-muted-foreground">{r.date}</span>
                     </div>
                   ))}
                   {filteredReceipts.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-slate-400 text-center">No saved vouchers</div>
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">No saved vouchers</div>
                   )}
                 </div>
               )}
@@ -497,7 +498,7 @@ export function CustomerReceiptPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowVoucherList(!showVoucherList)}
-                className="flex items-center gap-1 text-slate-600 bg-white border-slate-200 hover:bg-slate-50"
+                className="flex items-center gap-1 text-muted-foreground bg-background border-border hover:bg-accent"
               >
                 List
               </Button>
@@ -505,15 +506,15 @@ export function CustomerReceiptPage() {
 
             {/* Date */}
             <div className="md:col-span-3 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Date</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
               <div className="relative flex-1 flex items-center">
                 <Input
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="pr-10 w-full text-xs font-mono tracking-wider bg-white"
+                  className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
                 />
                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-slate-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
                   <input
@@ -536,21 +537,21 @@ export function CustomerReceiptPage() {
 
             {/* Received as deposit check */}
             <div className="md:col-span-3">
-              <label className="flex items-center gap-2 text-xs font-bold text-slate-600 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-xs font-bold text-muted-foreground cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={receivedAsDeposit}
                   onChange={(e) => setReceivedAsDeposit(e.target.checked)}
-                  className="rounded border-slate-300 text-blue-600 focus:ring-blue-500"
+                  className="rounded border-border text-primary focus:ring-ring"
                 />
                 <span>Received as deposit</span>
               </label>
             </div>
 
             {/* Customer input & Balance display */}
-            <div className="md:col-span-12 flex flex-col md:flex-row items-center gap-4 border-t border-slate-100 pt-3 mt-1">
+            <div className="md:col-span-12 flex flex-col md:flex-row items-center gap-4 border-t border-border pt-3 mt-1">
               <div className="flex-1 flex items-center gap-2 relative w-full">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Customer</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</span>
                 <div className="relative flex-1">
                   <Input
                     value={customerSearch}
@@ -563,17 +564,17 @@ export function CustomerReceiptPage() {
                       setTimeout(() => setShowCustomerDropdown(false), 200);
                     }}
                     placeholder="Search customer name..."
-                    className="bg-white text-sm"
+                    className="bg-background text-sm"
                   />
                   {showCustomerDropdown && (
-                    <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                    <div className="absolute z-[100] w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                       {customers
                         .filter((c) => c.name.toLowerCase().includes(customerSearch.toLowerCase()))
                         .map((c) => (
                           <div
                             key={c.id}
                             onMouseDown={() => handleSelectCustomer(c)}
-                            className="px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-50"
+                            className="px-3 py-2 text-xs font-semibold text-foreground cursor-pointer hover:bg-accent"
                           >
                             {c.name}
                           </div>
@@ -584,16 +585,16 @@ export function CustomerReceiptPage() {
               </div>
 
               <div className="flex items-center gap-2 w-full md:w-auto">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Balance</span>
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Balance</span>
                 <Input
                   readOnly
                   disabled
                   value={selectedCustomer ? `${selectedCustomer.openingBalance || 0} (${selectedCustomer.openingBalanceType || "D"})` : "0.00"}
-                  className="w-40 font-mono text-sm font-bold text-red-600 text-right bg-slate-100 border-slate-200"
+                  className="w-40 font-mono text-sm font-bold text-destructive text-right bg-muted/50 border-border"
                 />
                 <Button
                   onClick={() => setIsAccountModalOpen(true)}
-                  className="bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold border-slate-200 text-xs px-4"
+                  className="bg-background hover:bg-accent text-foreground font-semibold border-border text-xs px-4"
                 >
                   Ledger
                 </Button>
@@ -605,80 +606,80 @@ export function CustomerReceiptPage() {
         {/* Split grid for Receipt Details & Bill Allocation */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left Panel: RECEIPT DETAILS */}
-          <Card className="lg:col-span-5 bg-white border-slate-200 shadow-sm">
-            <CardHeader className="p-4 border-b border-slate-100">
-              <CardTitle className="text-sm font-bold tracking-wider text-slate-700 uppercase">
+          <Card className="lg:col-span-5 bg-card border-border shadow-sm">
+            <CardHeader className="p-4 border-b border-border">
+              <CardTitle className="text-sm font-bold tracking-wider text-foreground uppercase">
                 RECEIPT DETAILS
               </CardTitle>
             </CardHeader>
             <CardContent className="p-5 space-y-4">
               {/* Amount */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Amount</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Amount</label>
                 <Input
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
-                  className="font-mono text-sm text-right bg-white max-w-xs"
+                  className="font-mono text-sm text-right bg-background max-w-xs"
                 />
               </div>
 
               {/* Discount */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Discount</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Discount</label>
                 <Input
                   value={discount}
                   onChange={(e) => setDiscount(e.target.value)}
-                  className="font-mono text-sm text-right bg-white max-w-xs"
+                  className="font-mono text-sm text-right bg-background max-w-xs"
                 />
               </div>
 
               {/* Bill Difference */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Bill Difference</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Bill Difference</label>
                 <Input
                   value={billDifference}
                   onChange={(e) => setBillDifference(e.target.value)}
-                  className="font-mono text-sm text-right bg-white max-w-xs"
+                  className="font-mono text-sm text-right bg-background max-w-xs"
                 />
               </div>
 
-              <hr className="border-slate-100" />
+              <hr className="border-border" />
 
               {/* TDS Amount */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">TDS Amount</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">TDS Amount</label>
                 <Input
                   value={tdsAmount}
                   onChange={(e) => setTdsAmount(e.target.value)}
-                  className="font-mono text-sm text-right bg-white max-w-xs"
+                  className="font-mono text-sm text-right bg-background max-w-xs"
                 />
               </div>
 
               {/* TCS % and calculated total */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">TCS %</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">TCS %</label>
                 <div className="flex items-center gap-2 max-w-xs w-full">
                   <Input
                     value={tcsPercent}
                     onChange={(e) => setTcsPercent(e.target.value)}
-                    className="font-mono text-xs w-20 text-center bg-white"
+                    className="font-mono text-xs w-20 text-center bg-background"
                   />
                   <Input
                     readOnly
                     disabled
                     value={tcsTotal}
-                    className="font-mono text-xs text-right bg-slate-100 border-slate-200 flex-1"
+                    className="font-mono text-xs text-right bg-muted/50 border-border flex-1"
                   />
-                  <span className="text-2xs font-bold text-slate-400">TOTAL</span>
+                  <span className="text-2xs font-bold text-muted-foreground">TOTAL</span>
                 </div>
               </div>
 
-              <hr className="border-slate-100" />
+              <hr className="border-border" />
 
               {/* Deposited In */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Deposited In</label>
-                <Select value={depositedIn} onChange={(e) => setDepositedIn(e.target.value)} className="max-w-xs">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Deposited In</label>
+                <Select value={depositedIn} onChange={(e) => setDepositedIn(e.target.value)} className="max-w-xs bg-background">
                   <option value="Cash">Cash</option>
                   <option value="Bank 1">Bank 1</option>
                   <option value="Bank 2">Bank 2</option>
@@ -690,67 +691,67 @@ export function CustomerReceiptPage() {
 
               {/* Bank / Chq Details */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Bank / Chq Details</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Bank / Chq Details</label>
                 <Input
                   value={bankChqDetails}
                   onChange={(e) => setBankChqDetails(e.target.value)}
                   placeholder="Enter bank info..."
-                  className="text-xs bg-white max-w-xs"
+                  className="text-xs bg-background max-w-xs"
                 />
               </div>
 
               {/* Bank Charges */}
               <div className="flex items-center justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28">Bank Charges</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28">Bank Charges</label>
                 <Input
                   value={bankCharges}
                   onChange={(e) => setBankCharges(e.target.value)}
-                  className="font-mono text-sm text-right bg-white max-w-xs"
+                  className="font-mono text-sm text-right bg-background max-w-xs"
                 />
               </div>
 
               {/* Narration */}
               <div className="flex items-start justify-between gap-4">
-                <label className="text-xs font-bold text-slate-600 uppercase tracking-wider w-28 pt-1">Narration</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider w-28 pt-1">Narration</label>
                 <textarea
                   value={narration}
                   onChange={(e) => setNarration(e.target.value)}
                   placeholder="Enter notes..."
                   rows={2}
-                  className="w-full max-w-xs bg-white rounded border border-slate-200 p-2 text-xs outline-none focus:ring-1 focus:ring-blue-400"
+                  className="w-full max-w-xs bg-background rounded border border-border p-2 text-xs outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Right Panel: BILL ALLOCATION */}
-          <Card className="lg:col-span-7 bg-white border-slate-200 shadow-sm">
-            <CardHeader className="p-4 border-b border-slate-100 flex flex-row items-center justify-between">
-              <CardTitle className="text-sm font-bold tracking-wider text-slate-700 uppercase">
+          <Card className="lg:col-span-7 bg-card border-border shadow-sm">
+            <CardHeader className="p-4 border-b border-border flex flex-row items-center justify-between">
+              <CardTitle className="text-sm font-bold tracking-wider text-foreground uppercase">
                 BILL ALLOCATION
               </CardTitle>
               <Button
                 onClick={handleAutoAllocate}
-                className="bg-teal-700 hover:bg-teal-800 text-white font-bold text-xs h-8 px-4"
+                className="bg-primary hover:opacity-90 text-primary-foreground font-bold text-xs h-8 px-4 shadow-sm"
               >
                 Auto Allocate
               </Button>
             </CardHeader>
             <CardContent className="p-0">
               <Table>
-                <TableHeader className="bg-slate-50">
+                <TableHeader className="bg-muted/50">
                   <TableRow>
-                    <TableHead className="w-12 text-center text-xs font-bold text-slate-700 uppercase">#</TableHead>
-                    <TableHead className="w-1/4 text-xs font-bold text-slate-700 uppercase">Date</TableHead>
-                    <TableHead className="w-1/4 text-xs font-bold text-slate-700 uppercase">Bill No</TableHead>
-                    <TableHead className="w-1/4 text-xs font-bold text-slate-700 uppercase text-right">Amount</TableHead>
-                    <TableHead className="w-1/4 text-xs font-bold text-slate-700 uppercase text-right">Settled</TableHead>
+                    <TableHead className="w-12 text-center text-xs font-bold text-foreground uppercase">#</TableHead>
+                    <TableHead className="w-1/4 text-xs font-bold text-foreground uppercase">Date</TableHead>
+                    <TableHead className="w-1/4 text-xs font-bold text-foreground uppercase">Bill No</TableHead>
+                    <TableHead className="w-1/4 text-xs font-bold text-foreground uppercase text-right">Amount</TableHead>
+                    <TableHead className="w-1/4 text-xs font-bold text-foreground uppercase text-right">Settled</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {allocations.map((row, idx) => (
-                    <TableRow key={idx} className="hover:bg-slate-50/50">
-                      <TableCell className="text-center font-mono text-xs text-slate-400 p-2">
+                    <TableRow key={idx} className="hover:bg-accent/50">
+                      <TableCell className="text-center font-mono text-xs text-muted-foreground p-2">
                         {idx + 1}
                       </TableCell>
                       {/* Date */}
@@ -764,7 +765,7 @@ export function CustomerReceiptPage() {
                             );
                           }}
                           placeholder="dd.mm.yyyy"
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border bg-background"
                         />
                       </TableCell>
                       {/* Bill No */}
@@ -778,7 +779,7 @@ export function CustomerReceiptPage() {
                             );
                           }}
                           placeholder="--"
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border bg-background"
                         />
                       </TableCell>
                       {/* Amount */}
@@ -791,7 +792,7 @@ export function CustomerReceiptPage() {
                               prev.map((r, i) => (i === idx ? { ...r, amount: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200 text-right"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border text-right bg-background"
                         />
                       </TableCell>
                       {/* Settled */}
@@ -804,7 +805,7 @@ export function CustomerReceiptPage() {
                               prev.map((r, i) => (i === idx ? { ...r, settled: val } : r))
                             );
                           }}
-                          className="h-8 font-mono text-xs py-1 px-2 border-slate-200 text-right font-semibold text-slate-950"
+                          className="h-8 font-mono text-xs py-1 px-2 border-border text-right font-semibold text-foreground bg-background"
                         />
                       </TableCell>
                     </TableRow>
@@ -813,13 +814,13 @@ export function CustomerReceiptPage() {
               </Table>
 
               {/* Total allocated display bar */}
-              <div className="p-4 border-t border-slate-100 flex items-center justify-end gap-3 bg-slate-50/50">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">TOTAL ALLOCATED</span>
+              <div className="p-4 border-t border-border flex items-center justify-end gap-3 bg-muted/20">
+                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">TOTAL ALLOCATED</span>
                 <Input
                   readOnly
                   disabled
                   value={totalAllocated}
-                  className="w-32 font-mono text-sm font-extrabold text-teal-600 text-right bg-white border-slate-200"
+                  className="w-32 font-mono text-sm font-extrabold text-primary text-right bg-background border-border"
                 />
               </div>
             </CardContent>
@@ -828,11 +829,11 @@ export function CustomerReceiptPage() {
       </main>
 
       {/* Footer controls bar */}
-      <footer className="border-t bg-slate-50 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+      <footer className="border-t bg-muted/20 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
         <div>
           <Button
             variant="outline"
-            className="flex items-center gap-1 font-bold border-slate-200 text-slate-700 bg-white"
+            className="flex items-center gap-1 font-bold border-border text-foreground bg-background hover:bg-accent"
             onClick={() => window.print()}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -847,7 +848,7 @@ export function CustomerReceiptPage() {
             variant="outline"
             disabled={!receiptExists}
             onClick={onDelete}
-            className="flex items-center gap-1 font-bold border-red-200 text-red-600 bg-white hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none"
+            className="flex items-center gap-1 font-bold border-destructive/20 text-destructive bg-background hover:bg-destructive/10 disabled:opacity-50 disabled:pointer-events-none"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -862,15 +863,15 @@ export function CustomerReceiptPage() {
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
-            Save F5
+            Save (F5)
           </Button>
 
           <Button
             variant="outline"
             onClick={() => navigate(-1)}
-            className="font-bold border-slate-200 text-slate-700 bg-white"
+            className="font-bold border-border text-foreground bg-background hover:bg-accent"
           >
-            Close ESC
+            Close (ESC)
           </Button>
         </div>
       </footer>

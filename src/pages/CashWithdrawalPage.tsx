@@ -327,12 +327,13 @@ export function CashWithdrawalPage() {
   }, [withdrawals, voucherNoInput]);
 
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans select-none pb-8">
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none pb-8">
       {/* Header */}
-      <header className="border-b bg-white shadow-sm py-4 px-6 flex justify-between items-center relative">
-        <h1 className="text-xl font-bold tracking-tight text-slate-900">Cash Withdrawal From Bank</h1>
-        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-slate-50 text-xs font-semibold shadow-xs">
-          <span className="text-slate-500">FY 2025-26</span>
+      <header className="border-b bg-card shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Cash Withdrawal From Bank</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-muted text-xs font-semibold shadow-xs">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          <span className="text-muted-foreground">Active Mode</span>
         </div>
       </header>
 
@@ -340,22 +341,22 @@ export function CashWithdrawalPage() {
       <main className="flex-1 max-w-[1300px] w-full mx-auto p-6 space-y-4">
         {/* Title row with + New Voucher */}
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-bold text-slate-700 tracking-wide uppercase">CASH WITHDRAWL FROM BANK</h2>
+          <h2 className="text-lg font-bold text-muted-foreground tracking-wide uppercase">CASH WITHDRAWL FROM BANK</h2>
           <Button
             onClick={handleNewVoucher}
-            className="bg-teal-600 hover:bg-teal-700 text-white font-bold text-xs px-4 py-2 flex items-center gap-1.5"
+            className="bg-accent hover:opacity-90 text-accent-foreground font-bold text-xs px-4 py-2 flex items-center gap-1.5"
           >
             + New Voucher
           </Button>
         </div>
 
         {/* Breadcrumb */}
-        <div className="flex items-center space-x-2 text-xs text-slate-500 font-semibold uppercase tracking-wider">
+        <div className="flex items-center space-x-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
           <span>{selectedFirm?.name || "BRT Trading Co."}</span>
           <span>›</span>
           <span>Data Entry</span>
           <span>›</span>
-          <span className="text-slate-900 font-bold">Cash Withdrawl From Bank</span>
+          <span className="text-foreground font-bold">Cash Withdrawl From Bank</span>
         </div>
 
         {/* Alert Messages */}
@@ -371,11 +372,11 @@ export function CashWithdrawalPage() {
         )}
 
         {/* Card 1: Voucher Details */}
-        <Card className="shadow-xs border-slate-200">
+        <Card className="shadow-xs border-border">
           <CardContent className="p-4 grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
             {/* Voucher No. with navigation arrows */}
             <div className="md:col-span-4 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
               <div className="flex items-center">
                 <button
                   type="button"
@@ -386,7 +387,7 @@ export function CashWithdrawalPage() {
                       setVoucherNoInput(nextVal);
                     }
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-l hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-l hover:bg-accent bg-background"
                 >
                   &lt;
                 </button>
@@ -400,7 +401,7 @@ export function CashWithdrawalPage() {
                   onBlur={() => {
                     setTimeout(() => setShowVoucherList(false), 200);
                   }}
-                  className="w-24 text-center font-mono rounded-none border-x-0 bg-white text-emerald-600 font-bold"
+                  className="w-24 text-center font-mono rounded-none border-x-0 bg-background text-primary font-bold"
                 />
                 <button
                   type="button"
@@ -409,7 +410,7 @@ export function CashWithdrawalPage() {
                     const nextVal = String(parsed + 1).padStart(5, "0");
                     setVoucherNoInput(nextVal);
                   }}
-                  className="px-2 py-1.5 border border-slate-200 rounded-r hover:bg-slate-50 bg-white"
+                  className="px-2 py-1.5 border border-border rounded-r hover:bg-accent bg-background"
                 >
                   &gt;
                 </button>
@@ -417,19 +418,19 @@ export function CashWithdrawalPage() {
 
               {/* List Vouchers dropdown */}
               {showVoucherList && (
-                <div className="absolute top-full left-[95px] z-50 w-48 mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-[95px] z-50 w-48 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                   {filteredWithdrawals.map((w) => (
                     <div
                       key={w.voucherNo}
                       onMouseDown={() => handleLoadWithdrawal(w)}
-                      className="px-3 py-2 text-xs cursor-pointer hover:bg-slate-50 flex justify-between font-mono border-b border-slate-100"
+                      className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
                     >
-                      <span className="font-semibold text-slate-800">{w.voucherNo}</span>
-                      <span className="text-slate-400">{w.date}</span>
+                      <span className="font-semibold text-foreground">{w.voucherNo}</span>
+                      <span className="text-muted-foreground">{w.date}</span>
                     </div>
                   ))}
                   {filteredWithdrawals.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-slate-400 text-center">No saved vouchers</div>
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">No saved vouchers</div>
                   )}
                 </div>
               )}
@@ -438,7 +439,7 @@ export function CashWithdrawalPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setShowVoucherList(!showVoucherList)}
-                className="flex items-center gap-1 text-slate-600 bg-white border-slate-200 hover:bg-slate-50"
+                className="flex items-center gap-1 text-muted-foreground bg-background border-border hover:bg-accent"
               >
                 List
               </Button>
@@ -446,15 +447,15 @@ export function CashWithdrawalPage() {
 
             {/* Date */}
             <div className="md:col-span-4 flex items-center gap-2 relative">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Date</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
               <div className="relative flex-1 flex items-center">
                 <Input
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="pr-10 w-full text-xs font-mono tracking-wider bg-white"
+                  className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
                 />
                 <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-slate-400">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
                   </svg>
                   <input
@@ -477,11 +478,11 @@ export function CashWithdrawalPage() {
 
             {/* Created By */}
             <div className="md:col-span-4 flex items-center gap-2">
-              <span className="text-xs font-bold text-slate-500 uppercase tracking-wider whitespace-nowrap">Created by</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Created by</span>
               <Input
                 value={createdBy}
                 onChange={(e) => setCreatedBy(e.target.value)}
-                className="w-full text-xs font-mono bg-white text-slate-500"
+                className="w-full text-xs font-mono bg-background text-muted-foreground"
               />
             </div>
           </CardContent>
@@ -490,13 +491,13 @@ export function CashWithdrawalPage() {
         {/* Card 2: Main Details & Transaction Preview */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
           {/* Left details entry */}
-          <Card className="lg:col-span-8 bg-sky-50/20 border-slate-200 shadow-sm">
+          <Card className="lg:col-span-8 bg-muted/10 border-border shadow-sm">
             <CardContent className="p-5 space-y-4">
               {/* Bank Account dropdown and Current Balance row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Bank Account</label>
-                  <Select value={bankAccount} onChange={(e) => setBankAccount(e.target.value)}>
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Bank Account</label>
+                  <Select value={bankAccount} onChange={(e) => setBankAccount(e.target.value)} className="bg-background">
                     <option value="Select bank account...">Select bank account...</option>
                     <option value="Bank 1">Bank 1</option>
                     <option value="Bank 2">Bank 2</option>
@@ -506,12 +507,12 @@ export function CashWithdrawalPage() {
                   </Select>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Current Balance</label>
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Current Balance</label>
                   <Input
                     readOnly
                     disabled
                     value={currentBalance}
-                    className="bg-slate-100 font-mono text-sm font-bold text-slate-700 text-right"
+                    className="bg-muted/50 font-mono text-sm font-bold text-foreground text-right border-border"
                   />
                 </div>
               </div>
@@ -519,23 +520,23 @@ export function CashWithdrawalPage() {
               {/* Withdrawal Amount and Denomination row */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Withdrawal Amount</label>
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Withdrawal Amount</label>
                   <div className="relative">
                     <Input
                       value={amount}
                       onChange={(e) => setAmount(e.target.value)}
-                      className="bg-white font-mono text-sm text-right pr-8"
+                      className="bg-background font-mono text-sm text-right pr-8"
                       placeholder="0.00"
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 font-semibold text-xs">₹</span>
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground font-semibold text-xs">₹</span>
                   </div>
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Denomination Total</label>
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Denomination Total</label>
                   <div className="flex gap-2">
                     <Button
                       onClick={() => setIsCashDetailsOpen(true)}
-                      className="bg-slate-100 border border-slate-200 text-slate-700 hover:bg-slate-200 font-semibold text-xs h-9 px-3"
+                      className="bg-background border border-border text-foreground hover:bg-accent font-semibold text-xs h-9 px-3"
                     >
                       Cash Details
                     </Button>
@@ -543,7 +544,7 @@ export function CashWithdrawalPage() {
                       readOnly
                       disabled
                       value={calculatedTotal.toFixed(2)}
-                      className="bg-slate-100 font-mono text-sm font-bold text-red-600 text-right flex-1"
+                      className="bg-muted/50 font-mono text-sm font-bold text-destructive text-right flex-1 border-border"
                     />
                   </div>
                 </div>
@@ -551,66 +552,66 @@ export function CashWithdrawalPage() {
 
               {/* CHQ no / Ref no */}
               <div className="space-y-1 max-w-sm">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">CHQ No. / Ref No.</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">CHQ No. / Ref No.</label>
                 <Input
                   value={refNo}
                   onChange={(e) => setRefNo(e.target.value)}
                   placeholder="Enter reference..."
-                  className="bg-white text-sm"
+                  className="bg-background text-sm"
                 />
               </div>
 
               {/* Narration */}
               <div className="space-y-1">
-                <label className="text-xs font-bold text-slate-500 uppercase tracking-wider block">Narration</label>
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Narration</label>
                 <textarea
                   value={narration}
                   onChange={(e) => setNarration(e.target.value)}
                   placeholder="Enter transaction details..."
                   rows={4}
-                  className="w-full bg-white rounded-md border border-slate-200 p-3 text-sm outline-none focus:ring-1 focus:ring-blue-400"
+                  className="w-full bg-background rounded-md border border-border p-3 text-sm outline-none focus:ring-1 focus:ring-primary"
                 />
               </div>
             </CardContent>
           </Card>
 
           {/* Right Area: Transaction Preview */}
-          <Card className="lg:col-span-4 bg-white border-slate-200 shadow-sm border-dashed border-2 p-5 min-h-[300px] flex flex-col justify-center items-center">
+          <Card className="lg:col-span-4 bg-card border-border shadow-sm border-dashed border-2 p-5 min-h-[300px] flex flex-col justify-center items-center text-card-foreground">
             {hasDenominations ? (
               <div className="w-full space-y-4">
-                <h3 className="text-xs font-bold text-slate-500 uppercase tracking-wider border-b pb-2">
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b pb-2">
                   WITHDRAWAL DENOMINATIONS
                 </h3>
-                <div className="space-y-2 font-mono text-xs text-slate-600 max-h-48 overflow-y-auto">
+                <div className="space-y-2 font-mono text-xs text-muted-foreground max-h-48 overflow-y-auto">
                   {Object.entries(denominations)
                     .filter(([_, count]) => count > 0)
                     .map(([denom, count]) => (
-                      <div key={denom} className="flex justify-between border-b border-slate-50 pb-1">
+                      <div key={denom} className="flex justify-between border-b border-muted pb-1">
                         <span>{denom} Rs. × {count}</span>
-                        <span className="font-bold text-slate-900">{(parseInt(denom) * count).toFixed(2)}</span>
+                        <span className="font-bold text-foreground">{(parseInt(denom) * count).toFixed(2)}</span>
                       </div>
                     ))}
                 </div>
-                <div className="flex justify-between font-mono text-sm font-bold border-t pt-2 border-slate-200 text-red-600">
+                <div className="flex justify-between font-mono text-sm font-bold border-t pt-2 border-border text-destructive">
                   <span>TOTAL DENOMINATIONS</span>
                   <span>{calculatedTotal.toFixed(2)}</span>
                 </div>
               </div>
             ) : (
-              <div className="text-center text-slate-400 flex flex-col items-center">
+              <div className="text-center text-muted-foreground flex flex-col items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1} stroke="currentColor" className="w-12 h-12 mb-2">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818.879.879M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                 </svg>
-                <h3 className="text-sm font-bold text-slate-700 uppercase tracking-wide">TRANSACTION PREVIEW</h3>
-                <p className="text-xs text-slate-500 mt-1 text-center">Details will appear here as you fill the form.</p>
+                <h3 className="text-sm font-bold text-foreground uppercase tracking-wide">TRANSACTION PREVIEW</h3>
+                <p className="text-xs text-muted-foreground mt-1 text-center">Details will appear here as you fill the form.</p>
               </div>
             )}
           </Card>
         </div>
 
         {/* Quick Banks */}
-        <div className="flex items-center gap-3 bg-slate-50 p-3 rounded border border-slate-200">
-          <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">Quick Banks:</span>
+        <div className="flex items-center gap-3 bg-muted/10 p-3 rounded border border-border">
+          <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Quick Banks:</span>
           <div className="flex gap-2">
             {["Bank 1", "Bank 2", "Bank 3", "Bank 4", "Bank 5"].map((bk) => (
               <button
@@ -622,8 +623,8 @@ export function CashWithdrawalPage() {
                 }}
                 className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${
                   quickBank === bk
-                    ? "bg-blue-600 border-blue-600 text-white"
-                    : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                    ? "bg-primary border-primary text-primary-foreground"
+                    : "bg-background border-border text-foreground hover:bg-accent"
                 }`}
               >
                 {bk}
@@ -634,11 +635,11 @@ export function CashWithdrawalPage() {
       </main>
 
       {/* Footer controls bar */}
-      <footer className="border-t bg-slate-50 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+      <footer className="border-t bg-muted/20 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
         <div>
           <Button
             variant="outline"
-            className="flex items-center gap-1 font-bold border-slate-200 text-slate-700 bg-white"
+            className="flex items-center gap-1 font-bold border-border text-foreground bg-background hover:bg-accent"
             onClick={() => window.print()}
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
@@ -653,7 +654,7 @@ export function CashWithdrawalPage() {
             variant="outline"
             disabled={!withdrawalExists}
             onClick={onDelete}
-            className="flex items-center gap-1 font-bold border-red-200 text-red-600 bg-white hover:bg-red-50 disabled:opacity-50 disabled:pointer-events-none"
+            className="flex items-center gap-1 font-bold border-destructive/20 text-destructive bg-background hover:bg-destructive/10 disabled:opacity-50 disabled:pointer-events-none"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -663,29 +664,29 @@ export function CashWithdrawalPage() {
 
           <Button
             onClick={onSave}
-            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 flex items-center gap-1.5 shadow-sm"
+            className="bg-primary hover:opacity-90 text-primary-foreground font-bold px-6 flex items-center gap-1.5 shadow-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
             </svg>
-            Save F5
+            Save (F5)
           </Button>
 
           <Button
             variant="outline"
             onClick={() => navigate(-1)}
-            className="font-bold border-slate-200 text-slate-700 bg-white"
+            className="font-bold border-border text-foreground bg-background hover:bg-accent"
           >
-            Close ESC
+            Close (ESC)
           </Button>
         </div>
       </footer>
 
       {/* Cash Details Denominations Dialog */}
       <Dialog open={isCashDetailsOpen} onOpenChange={setIsCashDetailsOpen}>
-        <DialogContent className="max-w-md bg-white border border-slate-200">
-          <DialogHeader className="border-b pb-2 bg-slate-50 -mx-6 -mt-6 p-4 rounded-t-lg">
-            <DialogTitle className="text-base font-bold text-slate-800">
+        <DialogContent className="max-w-md bg-popover border border-border text-popover-foreground">
+          <DialogHeader className="border-b pb-2 bg-muted/50 -mx-6 -mt-6 p-4 rounded-t-lg">
+            <DialogTitle className="text-base font-bold text-foreground">
               Cash Denomination Calculator
             </DialogTitle>
           </DialogHeader>
@@ -698,19 +699,19 @@ export function CashWithdrawalPage() {
                 const rowTotal = parseInt(denom) * (Number(count) || 0);
                 return (
                   <div key={denom} className="flex items-center justify-between gap-4">
-                    <span className="font-mono text-sm text-slate-600 w-16 text-right">
+                    <span className="font-mono text-sm text-muted-foreground w-16 text-right">
                       {denom} Rs.
                     </span>
-                    <span className="text-slate-400">×</span>
+                    <span className="text-muted-foreground">×</span>
                     <Input
                       type="number"
                       value={count}
                       onChange={(e) => handleCountChange(denom as keyof Denominations, e.target.value)}
                       placeholder="0"
-                      className="w-24 text-center font-mono h-8"
+                      className="w-24 text-center font-mono h-8 bg-background"
                     />
-                    <span className="text-slate-400">=</span>
-                    <span className="font-mono text-sm font-bold text-slate-800 w-28 text-right pr-2">
+                    <span className="text-muted-foreground">=</span>
+                    <span className="font-mono text-sm font-bold text-foreground w-28 text-right pr-2">
                       {rowTotal.toFixed(2)}
                     </span>
                   </div>
@@ -718,8 +719,8 @@ export function CashWithdrawalPage() {
               })}
           </div>
 
-          <DialogFooter className="border-t pt-3 flex items-center justify-between bg-slate-50 -mx-6 -mb-6 p-4 rounded-b-lg">
-            <div className="text-sm font-mono font-bold text-red-600">
+          <DialogFooter className="border-t pt-3 flex items-center justify-between bg-muted/50 -mx-6 -mb-6 p-4 rounded-b-lg">
+            <div className="text-sm font-mono font-bold text-destructive">
               Total: {calculatedTotal.toFixed(2)}
             </div>
             <div className="flex gap-2">
@@ -727,14 +728,14 @@ export function CashWithdrawalPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsCashDetailsOpen(false)}
-                className="bg-white border-slate-200 text-xs font-bold"
+                className="bg-background border-border text-xs font-bold"
               >
                 Cancel
               </Button>
               <Button
                 size="sm"
                 onClick={handleApplyCashDetails}
-                className="bg-teal-700 hover:bg-teal-800 text-white text-xs font-bold px-4"
+                className="bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold px-4"
               >
                 Apply
               </Button>

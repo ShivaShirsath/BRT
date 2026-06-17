@@ -293,37 +293,62 @@ export function MiscReceiptPage() {
     }
   };
 
+  const receiptExists = useMemo(() => {
+    return receipts.some((r) => r.voucherNo === voucherNoInput.trim());
+  }, [receipts, voucherNoInput]);
+
   return (
-    <div className="min-h-screen bg-slate-100 text-slate-800 flex flex-col font-sans select-none items-center justify-center p-4">
-      {/* Modal/Window Frame resembling the screenshot */}
-      <Card className="w-full max-w-3xl shadow-2xl border border-slate-300 overflow-hidden rounded-lg">
-        {/* Header */}
-        <div className="bg-[#285482] text-white px-4 py-2.5 flex justify-between items-center select-none font-semibold">
-          <span>Miscellaneous Receipt</span>
-          <div className="flex items-center space-x-3 text-sm opacity-90">
-            <button className="hover:bg-slate-700/50 w-6 h-6 flex items-center justify-center rounded">—</button>
-            <button className="hover:bg-slate-700/50 w-6 h-6 flex items-center justify-center rounded">?</button>
-          </div>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans select-none pb-8">
+      {/* Header */}
+      <header className="border-b bg-card shadow-sm py-4 px-6 flex justify-between items-center relative">
+        <h1 className="text-xl font-bold tracking-tight text-foreground">Miscellaneous Receipt Voucher</h1>
+        <div className="flex items-center space-x-2 border rounded-full px-3 py-1 bg-muted text-xs font-semibold shadow-xs">
+          <span className="h-2.5 w-2.5 rounded-full bg-emerald-500" />
+          <span className="text-muted-foreground">Active Mode</span>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <main className="flex-1 max-w-[1200px] w-full mx-auto p-6 space-y-4">
+        {/* Breadcrumb */}
+        <div className="flex items-center space-x-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider">
+          <span>BRT Trading Co.</span>
+          <span>›</span>
+          <span>Data Entry</span>
+          <span>›</span>
+          <span className="text-foreground font-bold">Miscellaneous Receipt</span>
         </div>
 
-        {/* Form Body */}
-        <CardContent className="bg-[#f0f5fa] p-6 space-y-3.5">
-          {message && (
-            <Alert className="bg-emerald-50 text-emerald-800 border-emerald-200">
-              <AlertDescription>{message}</AlertDescription>
-            </Alert>
-          )}
-          {error && (
-            <Alert variant="destructive">
-              <AlertDescription>{error}</AlertDescription>
-            </Alert>
-          )}
+        {/* Alert Messages */}
+        {message && (
+          <Alert className="bg-emerald-50 text-emerald-800 border-emerald-200">
+            <AlertDescription>{message}</AlertDescription>
+          </Alert>
+        )}
+        {error && (
+          <Alert variant="destructive">
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
 
-          {/* Row 1: Voucher No & Date */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-6 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Voucher No.:</span>
-              <div className="flex items-center flex-1">
+        {/* Card 1: Voucher Details */}
+        <Card className="shadow-xs border-border">
+          <CardContent className="p-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center gap-2 relative flex-1 max-w-md">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider whitespace-nowrap">Voucher No.</span>
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  onClick={() => {
+                    const parsed = parseInt(voucherNoInput) || 0;
+                    if (parsed > 1) {
+                      setVoucherNoInput(String(parsed - 1).padStart(5, "0"));
+                    }
+                  }}
+                  className="px-2 py-1.5 border border-border rounded-l hover:bg-accent bg-background"
+                >
+                  &lt;
+                </button>
                 <Input
                   value={voucherNoInput}
                   onChange={(e) => {
@@ -334,73 +359,66 @@ export function MiscReceiptPage() {
                   onBlur={() => {
                     setTimeout(() => setShowVoucherList(false), 200);
                   }}
-                  className="w-24 text-center font-mono font-bold text-blue-700 bg-white border border-slate-300 h-9"
+                  className="w-20 text-center font-mono rounded-none border-x-0 bg-background text-primary font-bold"
                 />
-                <button
-                  type="button"
-                  onClick={() => {
-                    const parsed = parseInt(voucherNoInput) || 0;
-                    if (parsed > 1) {
-                      setVoucherNoInput(String(parsed - 1).padStart(5, "0"));
-                    }
-                  }}
-                  className="px-2 py-1 bg-white border border-l-0 border-slate-300 hover:bg-slate-50 h-9"
-                >
-                  &lt;
-                </button>
                 <button
                   type="button"
                   onClick={() => {
                     const parsed = parseInt(voucherNoInput) || 0;
                     setVoucherNoInput(String(parsed + 1).padStart(5, "0"));
                   }}
-                  className="px-2 py-1 bg-white border border-l-0 border-slate-300 hover:bg-slate-50 h-9 rounded-r"
+                  className="px-2 py-1.5 border border-border rounded-r hover:bg-accent bg-background"
                 >
                   &gt;
                 </button>
-                <Button
-                  variant="outline"
-                  onClick={() => setShowVoucherList(!showVoucherList)}
-                  className="ml-1 bg-white text-slate-700 border-slate-300 hover:bg-slate-50 h-9 px-3"
-                >
-                  List
-                </Button>
-                <Input
-                  value={voucherSuffix}
-                  onChange={(e) => setVoucherSuffix(e.target.value)}
-                  className="w-16 ml-1 bg-white border-slate-300 text-center font-mono h-9"
-                />
               </div>
+              <Input
+                value={voucherSuffix}
+                onChange={(e) => setVoucherSuffix(e.target.value)}
+                className="w-16 ml-1 bg-background border-border text-center font-mono"
+                placeholder="Suff"
+              />
 
               {showVoucherList && (
-                <div className="absolute z-50 w-48 mt-10 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
+                <div className="absolute top-full left-[90px] z-50 w-48 mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
                   {filteredReceipts.map((r) => (
                     <div
                       key={r.voucherNo}
                       onMouseDown={() => handleLoadReceipt(r)}
-                      className="px-3 py-2 text-xs cursor-pointer hover:bg-slate-50 flex justify-between font-mono border-b border-slate-100"
+                      className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
                     >
-                      <span className="font-semibold text-slate-800">{r.voucherNo}</span>
-                      <span className="text-slate-400">{r.date}</span>
+                      <span className="font-semibold text-foreground">{r.voucherNo}</span>
+                      <span className="text-muted-foreground">{r.date}</span>
                     </div>
                   ))}
                   {filteredReceipts.length === 0 && (
-                    <div className="px-3 py-2 text-xs text-slate-400 text-center">No matching vouchers</div>
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">No matching vouchers</div>
                   )}
                 </div>
               )}
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowVoucherList(!showVoucherList)}
+                className="flex items-center gap-1 text-muted-foreground bg-background border-border hover:bg-accent"
+              >
+                List
+              </Button>
             </div>
 
-            <div className="md:col-span-6 flex items-center space-x-2 justify-end relative">
-              <span className="text-sm font-semibold text-slate-700">Date:</span>
-              <div className="relative w-40 flex items-center">
+            <div className="flex items-center gap-2 relative max-w-xs w-full">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
+              <div className="relative flex-1 flex items-center">
                 <Input
                   value={date}
                   onChange={(e) => setDate(e.target.value)}
-                  className="bg-white border-slate-300 font-mono pr-8 text-center h-9"
+                  className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
                 />
-                <div className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
-                  <span className="text-xs text-slate-500">▼</span>
+                <div className="absolute right-2.5 top-1/2 -translate-y-1/2 cursor-pointer w-5 h-5 flex items-center justify-center">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-muted-foreground">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                  </svg>
                   <input
                     type="date"
                     value={pickerValue}
@@ -416,268 +434,257 @@ export function MiscReceiptPage() {
                 </div>
               </div>
             </div>
-          </div>
+          </CardContent>
+        </Card>
 
-          {/* Row 2: Account Type */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Account Type :</span>
-              <div className="flex items-center space-x-2 flex-1">
-                <Select
-                  value={accountType}
-                  onChange={(e) => setAccountType(e.target.value)}
-                  className="bg-white border-slate-300 w-48 h-9"
-                >
+        {/* Main Content Card */}
+        <Card className="shadow-xs border-border bg-card">
+          <CardContent className="p-6 space-y-5">
+            {/* Account Type & Ledger Account */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Account Type</label>
+                <Select value={accountType} onChange={(e) => setAccountType(e.target.value)} className="bg-background">
                   <option value="All">All</option>
                   <option value="Customer">Customer</option>
                   <option value="Supplier">Supplier</option>
                   <option value="Bank">Bank</option>
                   <option value="Cash">Cash</option>
                 </Select>
-                <Button
-                  onClick={() => setIsAccountModalOpen(true)}
-                  className="bg-white text-slate-700 border border-slate-300 hover:bg-slate-50 h-9 text-xs"
-                >
-                  F3 - New A/c
-                </Button>
               </div>
-            </div>
-          </div>
 
-          {/* Row 3: Ledger Account */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Ledger Account:</span>
-              <div className="relative flex-1">
-                <Input
-                  value={ledgerAccountSearch}
-                  onChange={(e) => {
-                    setLedgerAccountSearch(e.target.value);
-                    setShowCustomerDropdown(true);
-                  }}
-                  onFocus={() => setShowCustomerDropdown(true)}
-                  onBlur={() => {
-                    setTimeout(() => setShowCustomerDropdown(false), 200);
-                  }}
-                  placeholder="Search ledger account name..."
-                  className="bg-white border-slate-300 w-full h-9"
-                />
-                {showCustomerDropdown && (
-                  <div className="absolute z-[100] w-full mt-1 bg-white border border-slate-200 rounded-md shadow-lg max-h-48 overflow-y-auto">
-                    {customers
-                      .filter((c) => c.name.toLowerCase().includes(ledgerAccountSearch.toLowerCase()))
-                      .map((c) => (
-                        <div
-                          key={c.id}
-                          onMouseDown={() => handleSelectCustomer(c)}
-                          className="px-3 py-2 text-xs font-semibold text-slate-800 cursor-pointer hover:bg-slate-50"
-                        >
-                          {c.name}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-
-          {/* Row 4: Balance */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Balance:</span>
-              <div className="flex items-center space-x-2">
-                <Input
-                  readOnly
-                  disabled
-                  value={selectedCustomer ? `${selectedCustomer.openingBalance || "0.00"} (${selectedCustomer.openingBalanceType || "D"})` : "0.00"}
-                  className="w-40 font-mono text-sm font-semibold text-purple-700 text-right bg-[#e9eff5] border border-slate-300 h-9"
-                />
-                <Button className="bg-[#cbd5e1] hover:bg-[#b8c5d6] text-slate-700 border border-slate-300 h-9 px-4 text-xs font-semibold">
-                  Ledger
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* Row 5: Amount */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Amount:</span>
-              <div className="flex items-center space-x-2">
-                <Input
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
-                  className="w-40 font-mono text-sm text-right bg-white border-slate-300 h-9"
-                />
-                <Button className="bg-[#cbd5e1] hover:bg-[#b8c5d6] text-slate-700 border border-slate-300 h-9 px-4 text-xs font-semibold">
-                  Cash Details
-                </Button>
-                <div className="w-32 bg-white border border-slate-300 h-9 rounded flex items-center justify-end px-3 font-mono font-bold text-slate-900 text-sm">
-                  {parseFloat(amount || "0").toFixed(2)}
+              <div className="md:col-span-8 space-y-1 relative">
+                <div className="flex justify-between items-center">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Ledger Account</label>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => setIsAccountModalOpen(true)}
+                    className="h-auto p-0 text-xs font-bold text-primary"
+                  >
+                    + New Account (F3)
+                  </Button>
+                </div>
+                <div className="relative">
+                  <Input
+                    value={ledgerAccountSearch}
+                    onChange={(e) => {
+                      setLedgerAccountSearch(e.target.value);
+                      setShowCustomerDropdown(true);
+                    }}
+                    onFocus={() => setShowCustomerDropdown(true)}
+                    onBlur={() => {
+                      setTimeout(() => setShowCustomerDropdown(false), 200);
+                    }}
+                    placeholder="Search ledger account..."
+                    className="bg-background"
+                  />
+                  {showCustomerDropdown && (
+                    <div className="absolute z-[100] w-full mt-1 bg-popover border border-border rounded-md shadow-lg max-h-48 overflow-y-auto text-popover-foreground">
+                      {customers
+                        .filter((c) => c.name.toLowerCase().includes(ledgerAccountSearch.toLowerCase()))
+                        .map((c) => (
+                          <div
+                            key={c.id}
+                            onMouseDown={() => handleSelectCustomer(c)}
+                            className="px-3 py-2 text-xs font-semibold text-foreground cursor-pointer hover:bg-accent"
+                          >
+                            {c.name}
+                          </div>
+                        ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
-          </div>
 
-          {/* Row 6: Interest % */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Interest %:</span>
-              <Input
-                value={interestPercent}
-                onChange={(e) => setInterestPercent(e.target.value)}
-                className="w-40 font-mono text-sm text-right bg-white border-slate-300 h-9"
-              />
+            {/* Financial row 1: Balance, Amount, Interest */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Balance</label>
+                <div className="flex gap-2">
+                  <Input
+                    readOnly
+                    disabled
+                    value={selectedCustomer ? `${selectedCustomer.openingBalance || "0.00"} (${selectedCustomer.openingBalanceType || "D"})` : "0.00"}
+                    className="bg-muted/50 font-mono text-sm font-bold text-primary text-right flex-1 border-border"
+                  />
+                  <Button variant="outline" size="sm" className="bg-background border-border text-xs font-semibold hover:bg-accent">
+                    Ledger
+                  </Button>
+                </div>
+              </div>
+
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Amount</label>
+                <div className="flex gap-2">
+                  <Input
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                    className="bg-background font-mono text-sm text-right flex-1"
+                    placeholder="0.00"
+                  />
+                  <Button variant="outline" size="sm" className="bg-background border-border text-xs font-semibold hover:bg-accent">
+                    Cash Details
+                  </Button>
+                </div>
+              </div>
+
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Interest %</label>
+                <Input
+                  value={interestPercent}
+                  onChange={(e) => setInterestPercent(e.target.value)}
+                  className="bg-background font-mono text-sm text-right"
+                  placeholder="0.00"
+                />
+              </div>
             </div>
-          </div>
 
-          {/* Row 7: Discount */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Discount:</span>
-              <Input
-                value={discount}
-                onChange={(e) => setDiscount(e.target.value)}
-                className="w-40 font-mono text-sm text-right bg-white border-slate-300 h-9"
-              />
+            {/* Financial row 2: Discount, TDS, Deposited In */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Discount</label>
+                <Input
+                  value={discount}
+                  onChange={(e) => setDiscount(e.target.value)}
+                  className="bg-background font-mono text-sm text-right"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">TDS Amount</label>
+                <Input
+                  value={tdsAmount}
+                  onChange={(e) => setTdsAmount(e.target.value)}
+                  className="bg-background font-mono text-sm text-right"
+                  placeholder="0.00"
+                />
+              </div>
+
+              <div className="md:col-span-4 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Deposited In</label>
+                <Select value={depositedIn} onChange={(e) => setDepositedIn(e.target.value)} className="bg-background">
+                  <option value="Cash">Cash</option>
+                  <option value="Bank 1">Bank 1</option>
+                  <option value="Bank 2">Bank 2</option>
+                  <option value="Bank 3">Bank 3</option>
+                  <option value="Bank 4">Bank 4</option>
+                  <option value="Bank 5">Bank 5</option>
+                </Select>
+              </div>
             </div>
-          </div>
 
-          {/* Row 8: TDS Amount */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">T.D.S. Amount:</span>
-              <Input
-                value={tdsAmount}
-                onChange={(e) => setTdsAmount(e.target.value)}
-                className="w-40 font-mono text-sm text-right bg-white border-slate-300 h-9"
-              />
-            </div>
-          </div>
+            <hr className="border-border" />
 
-          {/* Row 9: Deposited In */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Deposited in:</span>
-              <Select
-                value={depositedIn}
-                onChange={(e) => setDepositedIn(e.target.value)}
-                className="bg-white border-slate-300 w-80 h-9"
-              >
-                <option value="Cash">Cash</option>
-                <option value="Bank 1">Bank 1</option>
-                <option value="Bank 2">Bank 2</option>
-                <option value="Bank 3">Bank 3</option>
-                <option value="Bank 4">Bank 4</option>
-                <option value="Bank 5">Bank 5</option>
-              </Select>
-            </div>
-          </div>
-
-          {/* Row 10: Mode & Details */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Payment Mode:</span>
-              <div className="flex space-x-2 flex-1">
-                <Select
-                  value={paymentMode}
-                  onChange={(e) => setPaymentMode(e.target.value)}
-                  className="bg-white border-slate-300 w-32 h-9"
-                >
+            {/* Payment row: Mode, Details, Bank */}
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+              <div className="md:col-span-3 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Payment Mode</label>
+                <Select value={paymentMode} onChange={(e) => setPaymentMode(e.target.value)} className="bg-background">
                   <option value="Cheque">Cheque</option>
                   <option value="Cash">Cash</option>
                   <option value="RTGS">RTGS</option>
                   <option value="NEFT">NEFT</option>
                 </Select>
+              </div>
+
+              <div className="md:col-span-3 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Mode Details</label>
                 <Input
                   value={paymentModeDetails}
                   onChange={(e) => setPaymentModeDetails(e.target.value)}
-                  placeholder="Details..."
-                  className="bg-white border-slate-300 w-44 h-9"
+                  placeholder="Ref no / Cheque no..."
+                  className="bg-background"
+                />
+              </div>
+
+              <div className="md:col-span-6 space-y-1">
+                <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Chq of Bank</label>
+                <Input
+                  value={chqOfBank}
+                  onChange={(e) => setChqOfBank(e.target.value)}
+                  placeholder="Bank name..."
+                  className="bg-background"
                 />
               </div>
             </div>
-          </div>
 
-          {/* Row 11: Chq of Bank */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Chq of Bank:</span>
-              <Input
-                value={chqOfBank}
-                onChange={(e) => setChqOfBank(e.target.value)}
-                className="bg-white border-slate-300 flex-1 h-9"
+            {/* Narration */}
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Narration</label>
+              <textarea
+                value={narration}
+                onChange={(e) => setNarration(e.target.value)}
+                placeholder="Enter transaction details..."
+                rows={3}
+                className="w-full bg-background rounded-md border border-border p-3 text-sm outline-none focus:ring-1 focus:ring-primary"
               />
             </div>
-          </div>
+          </CardContent>
+        </Card>
+      </main>
 
-          {/* Row 12: Narration */}
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-12 flex items-center space-x-2">
-              <span className="w-28 text-sm font-semibold text-slate-700">Narration:</span>
-              <div className="relative flex-1">
-                <Input
-                  value={narration}
-                  onChange={(e) => setNarration(e.target.value)}
-                  placeholder="Enter narration notes..."
-                  className="bg-white border-slate-300 w-full h-9"
-                />
-                <span className="absolute right-2 top-2 text-xs text-slate-500">▼</span>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-
-        {/* Footer */}
-        <div className="bg-[#86efac] dark:bg-emerald-950 px-6 py-3 flex justify-between items-center border-t border-slate-300">
-          <Button className="bg-white text-slate-800 hover:bg-slate-50 border border-slate-300 shadow-sm px-5 h-9 font-semibold">
+      {/* Footer controls bar */}
+      <footer className="border-t bg-muted/20 py-4 px-6 flex flex-col md:flex-row justify-between items-center gap-4 mt-auto">
+        <div className="flex items-center gap-6">
+          <Button
+            variant="outline"
+            className="flex items-center gap-1 font-bold border-border text-foreground bg-background hover:bg-accent"
+            onClick={() => window.print()}
+          >
             Print
           </Button>
 
-          <div className="flex items-center space-x-6">
-            <label className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+          <div className="flex items-center gap-4">
+            <label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground cursor-pointer">
               <input
                 type="checkbox"
                 checked={duplicateCheckbox}
                 onChange={(e) => setDuplicateCheckbox(e.target.checked)}
-                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                className="rounded border-border text-primary focus:ring-ring w-4 h-4"
               />
               <span>Duplicate</span>
             </label>
-
-            <label className="flex items-center space-x-1.5 text-xs font-semibold text-slate-700 cursor-pointer">
+            <label className="flex items-center gap-2 text-sm font-semibold text-muted-foreground cursor-pointer">
               <input
                 type="checkbox"
                 checked={printCheckbox}
                 onChange={(e) => setPrintCheckbox(e.target.checked)}
-                className="rounded border-slate-300 text-blue-600 focus:ring-blue-500 w-4 h-4"
+                className="rounded border-border text-primary focus:ring-ring w-4 h-4"
               />
               <span>Print</span>
             </label>
           </div>
-
-          <div className="flex space-x-2">
-            <Button
-              onClick={onDelete}
-              className="bg-white text-rose-600 hover:bg-slate-50 border border-slate-300 shadow-sm px-5 h-9 font-semibold"
-            >
-              Delete
-            </Button>
-            <Button
-              onClick={onSave}
-              className="bg-[#22c55e] text-white hover:bg-[#16a34a] border border-[#15803d] shadow-sm px-6 h-9 font-semibold"
-            >
-              Save
-            </Button>
-            <Button
-              onClick={() => navigate(-1)}
-              className="bg-[#c084fc] hover:bg-[#a855f7] text-slate-900 border border-[#a855f7] shadow-sm px-5 h-9 font-semibold"
-            >
-              Close
-            </Button>
-          </div>
         </div>
-      </Card>
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant="outline"
+            disabled={!receiptExists}
+            onClick={onDelete}
+            className="flex items-center gap-1 font-bold border-destructive/20 text-destructive bg-background hover:bg-destructive/10 disabled:opacity-50 disabled:pointer-events-none"
+          >
+            Delete
+          </Button>
+
+          <Button
+            onClick={onSave}
+            className="bg-emerald-600 hover:bg-emerald-700 text-white font-bold px-6 flex items-center gap-1.5 shadow-sm"
+          >
+            Save (F5)
+          </Button>
+
+          <Button
+            variant="outline"
+            onClick={() => navigate(-1)}
+            className="font-bold border-border text-foreground bg-background hover:bg-accent"
+          >
+            Close (ESC)
+          </Button>
+        </div>
+      </footer>
 
       {/* Account Generation Modal */}
       <AccountGenerationModal
