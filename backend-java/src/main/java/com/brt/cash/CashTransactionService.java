@@ -3,6 +3,7 @@ package com.brt.cash;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -22,6 +23,17 @@ public class CashTransactionService {
         this.objectMapper = objectMapper;
     }
 
+    public BigDecimal getBankAccountBalance(String bankAccount, UUID excludeWithdrawalId) {
+        if (bankAccount == null || bankAccount.trim().isEmpty() || "Select bank account...".equalsIgnoreCase(bankAccount) || "Select bank...".equalsIgnoreCase(bankAccount)) {
+            return BigDecimal.ZERO;
+        }
+        BigDecimal deposits = depositRepository.sumAmountByBankAccount(bankAccount.trim());
+        BigDecimal withdrawals = excludeWithdrawalId != null
+            ? withdrawalRepository.sumAmountByBankAccountExcludingId(bankAccount.trim(), excludeWithdrawalId)
+            : withdrawalRepository.sumAmountByBankAccount(bankAccount.trim());
+        return deposits.subtract(withdrawals);
+    }
+
     // Cash Deposit CRUD
     public CashDeposit createDeposit(CashDepositRequest req) {
         UUID id = req.id();
@@ -38,7 +50,7 @@ public class CashTransactionService {
         CashDeposit d = new CashDeposit();
         d.setId(id);
         d.setVoucherNo(req.voucherNo().trim());
-        d.setBusinessDate(req.date());
+        d.setBusinessDate(req.businessDate());
         d.setCreatedBy(req.createdBy());
         d.setBankAccount(req.bankAccount());
         d.setAmount(req.amount());
@@ -78,13 +90,18 @@ public class CashTransactionService {
             }
         }
 
+        BigDecimal availableBalance = getBankAccountBalance(req.bankAccount(), id);
+        if (req.amount().compareTo(availableBalance) > 0) {
+            throw new IllegalArgumentException("Withdrawal amount of " + req.amount() + " exceeds the available balance of " + availableBalance);
+        }
+
         CashWithdrawal w = new CashWithdrawal();
         w.setId(id);
         w.setVoucherNo(req.voucherNo().trim());
-        w.setBusinessDate(req.date());
+        w.setBusinessDate(req.businessDate());
         w.setCreatedBy(req.createdBy());
         w.setBankAccount(req.bankAccount());
-        w.setCurrentBalance(req.currentBalance());
+        w.setCurrentBalance(availableBalance.subtract(req.amount()));
         w.setAmount(req.amount());
         w.setRefNo(req.refNo());
         w.setNarration(req.narration());

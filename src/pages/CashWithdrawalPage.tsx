@@ -71,7 +71,7 @@ export function CashWithdrawalPage() {
 
   // Main details states
   const [bankAccount, setBankAccount] = useState("Select bank account...");
-  const [currentBalance, setCurrentBalance] = useState("0.00");
+  const [bankBalance, setBankBalance] = useState(0);
   const [amount, setAmount] = useState("0.00");
   const [refNo, setRefNo] = useState("");
   const [narration, setNarration] = useState("");
@@ -84,6 +84,18 @@ export function CashWithdrawalPage() {
   // Alerts
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+  // Track currently selected withdrawal ID
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+
+  // Compute current balance after withdrawal amount
+  const currentBalance = useMemo(() => {
+    const amt = parseFloat(amount) || 0;
+    return (bankBalance - amt).toFixed(2);
+  }, [bankBalance, amount]);
+
+  // Track error state inside Cash Details dialog
+  const [dialogError, setDialogError] = useState("");
 
   function toIsoDate(ddmmyyyy: string) {
     const p = ddmmyyyy.split(".");
@@ -137,6 +149,36 @@ export function CashWithdrawalPage() {
     loadWithdrawals();
   }, []);
 
+  // Fetch balance for the selected bank account
+  const fetchBalance = async (accName: string, excludeId?: string | null) => {
+    if (!accName || accName === "Select bank account..." || accName === "Select bank...") {
+      setBankBalance(0);
+      return;
+    }
+    try {
+      const { data } = await api.get("/bank-accounts/balance", {
+        params: {
+          bankAccount: accName,
+          excludeWithdrawalId: excludeId || undefined
+        }
+      });
+      if (data && typeof data.balance === "number") {
+        setBankBalance(data.balance);
+      } else if (data && data.balance !== undefined) {
+        setBankBalance(parseFloat(data.balance) || 0);
+      } else {
+        setBankBalance(0);
+      }
+    } catch (err) {
+      console.error("Failed to fetch bank balance", err);
+      setBankBalance(0);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance(bankAccount, selectedId);
+  }, [bankAccount, selectedId]);
+
   // Picker value calculation
   const pickerValue = (() => {
     const parts = date.split(".");
@@ -176,13 +218,13 @@ export function CashWithdrawalPage() {
     setDate(w.date);
     setCreatedBy(w.createdBy);
     setBankAccount(w.bankAccount);
-    setCurrentBalance(w.currentBalance);
     setAmount(w.amount);
     setRefNo(w.refNo || "");
     setNarration(w.narration);
     setDenominations(w.denominations || defaultDenominations());
     setQuickBank(w.quickBank || "Bank 1");
     setShowVoucherList(false);
+    setSelectedId(w.id ? String(w.id) : null);
   };
 
   // Auto load if exact matches
@@ -210,32 +252,45 @@ export function CashWithdrawalPage() {
       return;
     }
 
+    const parsedAmount = parseFloat(amount) || 0;
+
+    if (parsedAmount > bankBalance) {
+      setError(`Withdrawal amount cannot exceed the available current balance of ₹${bankBalance.toFixed(2)}.`);
+      return;
+    }
+
+    const match = withdrawals.find((w) => w.voucherNo === voucherNoInput.trim());
+    const idToUse = selectedId || (match?.id ? String(match.id) : null);
+
     const payload = {
+      id: idToUse || undefined,
       voucherNo: voucherNoInput.trim(),
       businessDate: toIsoDate(date),
       createdBy,
       bankAccount,
       currentBalance: parseFloat(currentBalance) || 0,
-      amount: parseFloat(amount) || 0,
+      amount: parsedAmount,
       refNo,
       narration,
-      denominationsJson: JSON.stringify(denominations),
+      denominations: denominations,
       quickBank,
     };
 
     try {
-      const match = withdrawals.find((w) => w.voucherNo === payload.voucherNo);
-      if (match && match.id) {
-        await api.put(`/cash-withdrawal/${match.id}`, payload);
+      if (idToUse) {
+        await api.put(`/cash-withdrawal/${idToUse}`, payload);
         setMessage(`Voucher ${payload.voucherNo} updated successfully.`);
       } else {
-        await api.post("/cash-withdrawal", payload);
+        const { data } = await api.post("/cash-withdrawal", payload);
+        if (data && data.id) {
+          setSelectedId(data.id);
+        }
         setMessage(`Voucher ${payload.voucherNo} saved successfully.`);
       }
       loadWithdrawals();
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || "Failed to save withdrawal.");
+      setError(err.response?.data?.message || err.response?.data?.error || "Failed to save withdrawal.");
     }
   };
 
@@ -262,12 +317,13 @@ export function CashWithdrawalPage() {
       setDate(getTodayDateString());
       setCreatedBy("System Admin");
       setBankAccount("Select bank account...");
-      setCurrentBalance("0.00");
+      setBankBalance(0);
       setAmount("0.00");
       setRefNo("");
       setNarration("");
       setDenominations(defaultDenominations());
       setQuickBank("Bank 1");
+      setSelectedId(null);
     } catch (err: any) {
       console.error(err);
       setError(err.response?.data?.message || "Failed to delete withdrawal.");
@@ -287,7 +343,7 @@ export function CashWithdrawalPage() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [voucherNoInput, date, createdBy, bankAccount, currentBalance, amount, refNo, narration, denominations, quickBank, withdrawals]);
+  }, [voucherNoInput, date, createdBy, bankAccount, currentBalance, amount, refNo, narration, denominations, quickBank, withdrawals, selectedId]);
 
   // Handle count change
   const handleCountChange = (denom: keyof Denominations, val: string) => {
@@ -300,25 +356,32 @@ export function CashWithdrawalPage() {
 
   // Apply denomination totals to denomination field
   const handleApplyCashDetails = () => {
+    const withdrawalAmt = parseFloat(amount) || 0;
+    if (calculatedTotal > withdrawalAmt) {
+      setDialogError(`Denomination total (₹${calculatedTotal.toFixed(2)}) cannot exceed the withdrawal amount (₹${withdrawalAmt.toFixed(2)}).`);
+      return;
+    }
+    setDialogError("");
     setIsCashDetailsOpen(false);
   };
 
   // Reset/New Voucher helper
   const handleNewVoucher = () => {
-    const nextNo = withdrawals.length > 0 
+    const nextNo = withdrawals.length > 0
       ? String(Math.max(...withdrawals.map(w => parseInt(w.voucherNo) || 0)) + 1).padStart(5, "0")
       : "00025";
-    
+
     setVoucherNoInput(nextNo);
     setDate(getTodayDateString());
     setCreatedBy("System Admin");
     setBankAccount("Select bank account...");
-    setCurrentBalance("0.00");
+    setBankBalance(0);
     setAmount("0.00");
     setRefNo("");
     setNarration("");
     setDenominations(defaultDenominations());
     setQuickBank("Bank 1");
+    setSelectedId(null);
     setMessage("New voucher initialized.");
   };
 
@@ -535,7 +598,10 @@ export function CashWithdrawalPage() {
                   <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">Denomination Total</label>
                   <div className="flex gap-2">
                     <Button
-                      onClick={() => setIsCashDetailsOpen(true)}
+                      onClick={() => {
+                        setDialogError("");
+                        setIsCashDetailsOpen(true);
+                      }}
                       className="bg-background border border-border text-foreground hover:bg-accent font-semibold text-xs h-9 px-3"
                     >
                       Cash Details
@@ -621,11 +687,10 @@ export function CashWithdrawalPage() {
                   setQuickBank(bk);
                   setBankAccount(bk);
                 }}
-                className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${
-                  quickBank === bk
+                className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${quickBank === bk
                     ? "bg-primary border-primary text-primary-foreground"
                     : "bg-background border-border text-foreground hover:bg-accent"
-                }`}
+                  }`}
               >
                 {bk}
               </button>
@@ -690,6 +755,12 @@ export function CashWithdrawalPage() {
               Cash Denomination Calculator
             </DialogTitle>
           </DialogHeader>
+
+          {dialogError && (
+            <Alert variant="destructive" className="mt-3 py-2 px-3 text-xs">
+              <AlertDescription className="text-xs leading-normal">{dialogError}</AlertDescription>
+            </Alert>
+          )}
 
           <div className="py-4 space-y-3 max-h-[60vh] overflow-y-auto">
             {Object.keys(denominations)

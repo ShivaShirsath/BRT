@@ -8,7 +8,7 @@ import java.util.Map;
 public record CashDepositRequest(
     UUID id,
     String voucherNo,
-    LocalDate date,
+    LocalDate businessDate,
     String createdBy,
     String bankAccount,
     BigDecimal amount,

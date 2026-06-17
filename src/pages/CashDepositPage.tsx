@@ -26,7 +26,7 @@ interface Denominations {
 interface CashDeposit {
   id?: number;
   voucherNo: string;
-  date: string;
+  businessDate: string;
   createdBy: string;
   bankAccount: string;
   amount: string;
@@ -61,7 +61,7 @@ export function CashDepositPage() {
 
   // Top header states
   const [voucherNoInput, setVoucherNoInput] = useState("00001");
-  const [date, setDate] = useState(getTodayDateString());
+  const [businessDate, setDate] = useState(getTodayDateString());
   const [createdBy, setCreatedBy] = useState("--");
   const [showVoucherList, setShowVoucherList] = useState(false);
   const [deposits, setDeposits] = useState<CashDeposit[]>([]);
@@ -109,7 +109,7 @@ export function CashDepositPage() {
           return {
             id: d.id,
             voucherNo: d.voucherNo,
-            date: fromIsoDate(d.businessDate),
+            businessDate: fromIsoDate(d.businessDate),
             createdBy: d.createdBy,
             bankAccount: d.bankAccount,
             amount: String(d.amount || "0.00"),
@@ -130,7 +130,7 @@ export function CashDepositPage() {
 
   // Picker value calculation
   const pickerValue = (() => {
-    const parts = date.split(".");
+    const parts = businessDate.split(".");
     if (parts.length === 3) {
       const day = parts[0].padStart(2, "0");
       const month = parts[1].padStart(2, "0");
@@ -164,7 +164,7 @@ export function CashDepositPage() {
   // Mode select picker
   const handleLoadDeposit = (d: CashDeposit) => {
     setVoucherNoInput(d.voucherNo);
-    setDate(d.date);
+    setDate(d.businessDate);
     setCreatedBy(d.createdBy);
     setBankAccount(d.bankAccount);
     setAmount(d.amount);
@@ -200,12 +200,12 @@ export function CashDepositPage() {
 
     const payload = {
       voucherNo: voucherNoInput.trim(),
-      businessDate: toIsoDate(date),
+      businessDate: toIsoDate(businessDate),
       createdBy,
       bankAccount,
       amount: parseFloat(amount) || 0,
       narration,
-      denominationsJson: JSON.stringify(denominations),
+      denominations: denominations,
     };
 
     try {
@@ -269,7 +269,7 @@ export function CashDepositPage() {
     };
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [voucherNoInput, date, createdBy, bankAccount, amount, narration, denominations, deposits]);
+  }, [voucherNoInput, businessDate, createdBy, bankAccount, amount, narration, denominations, deposits]);
 
   // Handle updates to denomination counts
   const handleCountChange = (denom: keyof Denominations, val: string) => {
@@ -379,7 +379,7 @@ export function CashDepositPage() {
                       className="px-3 py-2 text-xs cursor-pointer hover:bg-accent flex justify-between font-mono border-b border-border"
                     >
                       <span className="font-semibold text-foreground">{d.voucherNo}</span>
-                      <span className="text-muted-foreground">{d.date}</span>
+                      <span className="text-muted-foreground">{d.businessDate}</span>
                     </div>
                   ))}
                   {filteredDeposits.length === 0 && (
@@ -403,7 +403,7 @@ export function CashDepositPage() {
               <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Date</span>
               <div className="relative flex-1 flex items-center">
                 <Input
-                  value={date}
+                  value={businessDate}
                   onChange={(e) => setDate(e.target.value)}
                   className="pr-10 w-full text-xs font-mono tracking-wider bg-background"
                 />
