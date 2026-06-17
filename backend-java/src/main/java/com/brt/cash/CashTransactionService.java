@@ -95,6 +95,23 @@ public class CashTransactionService {
             throw new IllegalArgumentException("Withdrawal amount of " + req.amount() + " exceeds the available balance of " + availableBalance);
         }
 
+        // Validate denominations total does not exceed the amount
+        if (req.denominations() != null) {
+            BigDecimal denomTotal = BigDecimal.ZERO;
+            for (java.util.Map.Entry<String, Integer> entry : req.denominations().entrySet()) {
+                try {
+                    BigDecimal denomVal = new BigDecimal(entry.getKey());
+                    BigDecimal count = new BigDecimal(entry.getValue());
+                    denomTotal = denomTotal.add(denomVal.multiply(count));
+                } catch (Exception e) {
+                    // Ignore parsing errors
+                }
+            }
+            if (denomTotal.compareTo(req.amount()) > 0) {
+                throw new IllegalArgumentException("Denominations total (" + denomTotal + ") cannot exceed withdrawal amount (" + req.amount() + ")");
+            }
+        }
+
         CashWithdrawal w = new CashWithdrawal();
         w.setId(id);
         w.setVoucherNo(req.voucherNo().trim());

@@ -91,8 +91,21 @@ export function CashWithdrawalPage() {
   // Compute current balance after withdrawal amount
   const currentBalance = useMemo(() => {
     const amt = parseFloat(amount) || 0;
+    if (amt > bankBalance) {
+      return bankBalance.toFixed(2);
+    }
     return (bankBalance - amt).toFixed(2);
   }, [bankBalance, amount]);
+
+  // Real-time validation for withdrawal amount exceeding bank balance
+  useEffect(() => {
+    const amt = parseFloat(amount) || 0;
+    if (amt > bankBalance) {
+      setError(`Withdrawal amount cannot exceed the available current balance of ₹${bankBalance.toFixed(2)}.`);
+    } else {
+      setError("");
+    }
+  }, [amount, bankBalance]);
 
   // Track error state inside Cash Details dialog
   const [dialogError, setDialogError] = useState("");
@@ -256,6 +269,11 @@ export function CashWithdrawalPage() {
 
     if (parsedAmount > bankBalance) {
       setError(`Withdrawal amount cannot exceed the available current balance of ₹${bankBalance.toFixed(2)}.`);
+      return;
+    }
+
+    if (calculatedTotal > parsedAmount) {
+      setError(`Denomination total (₹${calculatedTotal.toFixed(2)}) cannot exceed the withdrawal amount (₹${parsedAmount.toFixed(2)}).`);
       return;
     }
 
@@ -806,7 +824,8 @@ export function CashWithdrawalPage() {
               <Button
                 size="sm"
                 onClick={handleApplyCashDetails}
-                className="bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold px-4"
+                disabled={calculatedTotal > (parseFloat(amount) || 0)}
+                className="bg-primary hover:opacity-90 text-primary-foreground text-xs font-bold px-4 disabled:opacity-50"
               >
                 Apply
               </Button>
