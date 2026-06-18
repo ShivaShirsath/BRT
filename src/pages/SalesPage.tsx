@@ -48,6 +48,14 @@ const mkRow = (): SalesRow => ({
   tdsPercent: "",
 });
 
+function getTodayDateString(): string {
+  const d = new Date();
+  const day = String(d.getDate()).padStart(2, "0");
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const year = d.getFullYear();
+  return `${day}.${month}.${year}`;
+}
+
 function isValidDate(dateStr: string): boolean {
   const parts = dateStr.trim().split(".");
   if (parts.length !== 3) return false;
@@ -105,7 +113,7 @@ export function SalesPage() {
   const [deliveredTo, setDeliveredTo] = useState("Delivery address");
   const [vehicleNo, setVehicleNo] = useState("--");
   const [partyBillNo, setPartyBillNo] = useState("--");
-  const [date, setDate] = useState("08.11.2025");
+  const [date, setDate] = useState(getTodayDateString());
   const [voucherNo, setVoucherNo] = useState("001186");
   const [voucherNoInput, setVoucherNoInput] = useState("001186");
 
@@ -303,7 +311,7 @@ export function SalesPage() {
     setDeliveredTo("Delivery address");
     setVehicleNo("--");
     setPartyBillNo("--");
-    setDate("08.11.2025");
+    setDate(getTodayDateString());
     setRows(Array.from({ length: 6 }, () => mkRow()));
     setSalesComplete("Yes");
     setRemark(false);

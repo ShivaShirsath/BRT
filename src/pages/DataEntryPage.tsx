@@ -51,6 +51,13 @@ export function DataEntryPage() {
     if (title === "Sales Patti Entry") return "/sales";
     if (title === "Opening Balance") return "/opening-balances";
     if (title === "Product Master") return "/product-entry";
+    if (title === "Dalal Payment") return "/dalal-payment";
+    if (title === "Dalal Payment 1") return "/dalal-payment-1";
+    if (title === "Cash Deposit") return "/cash-deposit";
+    if (title === "Cash Withdrawal") return "/cash-withdrawal";
+    if (title === "Customer Receipt") return "/customer-receipt";
+    if (title === "Miscellaneous Receipt") return "/misc-receipt";
+    if (title === "Payment Voucher") return "/payment-voucher";
     if (title === "Exit") return "/menu";
     return null;
   }
