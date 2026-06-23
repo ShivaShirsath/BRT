@@ -720,10 +720,7 @@ export function AccountGenerationModal({
           )}
         </div>
 
-        <DialogFooter className="flex justify-between items-center border-t border-border pt-4 mt-2">
-          <span className="text-xs font-bold text-red-600 tracking-wider">
-            UserId
-          </span>
+        <DialogFooter className="flex justify-end items-center border-t border-border pt-4 mt-2">
           <div className="flex gap-2">
             <Button
               variant="outline"

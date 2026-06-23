@@ -36,7 +36,11 @@ public class FirmController {
         "name", f.getName(),
         "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
         "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
-        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
+        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : "",
+        "displayName", f.getDisplayName() != null ? f.getDisplayName() : "",
+        "address", f.getAddress() != null ? f.getAddress() : "",
+        "phone", f.getPhone() != null ? f.getPhone() : "",
+        "logo", f.getLogo() != null ? f.getLogo() : ""
       )).toList());
     }
 
@@ -50,7 +54,11 @@ public class FirmController {
         "name", f.getName(),
         "bookStartDate", f.getBookStartDate() != null ? f.getBookStartDate().toString() : "",
         "businessType", f.getBusinessType() != null ? f.getBusinessType() : "",
-        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : ""
+        "financialYear", f.getFinancialYear() != null ? f.getFinancialYear() : "",
+        "displayName", f.getDisplayName() != null ? f.getDisplayName() : "",
+        "address", f.getAddress() != null ? f.getAddress() : "",
+        "phone", f.getPhone() != null ? f.getPhone() : "",
+        "logo", f.getLogo() != null ? f.getLogo() : ""
       )).toList());
   }
 
@@ -79,6 +87,10 @@ public class FirmController {
     f.setBookStartDate(req.bookStartDate());
     f.setBusinessType(req.businessType());
     f.setFinancialYear(req.financialYear());
+    f.setDisplayName(req.displayName() != null ? req.displayName().trim() : null);
+    f.setAddress(req.address() != null ? req.address().trim() : null);
+    f.setPhone(req.phone() != null ? req.phone().trim() : null);
+    f.setLogo(req.logo());
     f.setActive(true);
 
     return firms.save(f);
@@ -88,7 +100,11 @@ public class FirmController {
     String name,
     LocalDate bookStartDate,
     String businessType,
-    String financialYear
+    String financialYear,
+    String displayName,
+    String address,
+    String phone,
+    String logo
   ) {}
 }
 

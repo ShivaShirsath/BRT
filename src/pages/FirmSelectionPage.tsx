@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Card } from "../components/ui/card";
 import { Alert, AlertDescription } from "../components/ui/alert";
+import { cn } from "../lib/utils";
 
 type Firm = { code: string; name: string };
 
@@ -27,7 +28,7 @@ export function FirmSelectionPage() {
         const { data } = await api.get("/firms");
         const list = (data.firms ?? []) as Firm[];
         setFirms(list);
-        setSelected(list[0] ?? null);
+        setSelected(null); // Match image 1: nothing selected by default
       } catch (e: any) {
         setError(e?.response?.data?.error ?? "Unable to load firms");
       }
@@ -35,63 +36,78 @@ export function FirmSelectionPage() {
   }, []);
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col">
-      <header className="h-[74px] border-b bg-background flex items-center justify-between px-6 md:px-12">
-        <span className="text-2xl font-bold tracking-tight text-foreground">BRT Trading Platform</span>
-        <span className="text-lg font-medium text-muted-foreground">Select Firm</span>
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans transition-colors duration-200">
+      <header className="h-[74px] border-b bg-white dark:bg-card flex items-center justify-between px-6 md:px-12 transition-colors duration-200">
+        <span className="text-[22px] font-bold tracking-tight text-[#1a2b5c] dark:text-foreground">
+          BRT Trading Platform
+        </span>
+        <button
+          onClick={() => {
+            logout();
+            navigate("/auth");
+          }}
+          className="flex items-center gap-3 hover:opacity-80 transition-opacity focus:outline-none"
+          title="Click to logout"
+        >
+          <span className="text-[15px] font-medium text-gray-600 dark:text-gray-300">
+            User Profile
+          </span>
+          <div className="w-10 h-10 rounded-full bg-[#d9d9d9] dark:bg-muted-foreground/30 flex items-center justify-center text-xs text-muted-foreground font-bold" />
+        </button>
       </header>
 
       <main className="flex-1 flex items-center justify-center p-6">
-        <Card className="w-full max-w-2xl relative p-8">
-          <Button
-            variant="outline"
-            onClick={() => {
-              logout();
-              navigate("/auth");
-            }}
-            className="absolute top-4 right-4 h-10 w-10 p-0 rounded-md"
-          >
-            ✕
-          </Button>
-
-          <div className="space-y-2 mb-6">
-            <h1 className="text-3xl font-extrabold tracking-tight text-foreground">Choose Your Firm</h1>
-            <p className="text-base text-muted-foreground">
+        <Card className="w-full max-w-2xl p-10 shadow-[0_8px_30px_rgb(0,0,0,0.06)] dark:shadow-[0_8px_30px_rgb(0,0,0,0.3)] border border-border/50 rounded-3xl bg-white dark:bg-card">
+          <div className="space-y-2 mb-8">
+            <h1 className="text-[28px] font-extrabold tracking-tight text-foreground/90">
+              Choose Your Firm
+            </h1>
+            <p className="text-[15px] text-muted-foreground/90 leading-relaxed">
               Same workflow as legacy app: user must select one firm before entering dashboard.
             </p>
           </div>
 
           {error && (
-            <Alert variant="destructive" className="mb-4">
+            <Alert variant="destructive" className="mb-6 rounded-xl">
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
 
-          <div className="border rounded-lg bg-muted/30 p-4 max-h-[340px] overflow-y-auto space-y-2">
+          <div className="max-h-[360px] overflow-y-auto space-y-3 pr-1 mb-8">
             {firms.map((firm) => {
               const active = selected?.code === firm.code;
               return (
-                <Button
+                <button
                   key={firm.code}
-                  variant={active ? "default" : "outline"}
                   onClick={() => setSelected(firm)}
-                  className="w-full justify-start h-12 text-lg font-medium px-4"
+                  className={cn(
+                    "w-full flex items-center justify-start h-14 text-[16px] font-normal px-5 rounded-[12px] border transition-all duration-150 text-left outline-none",
+                    active
+                      ? "border-[var(--firm-border-active)] bg-[var(--firm-bg-active)] text-[var(--firm-text-active)] font-semibold shadow-[0_2px_8px_rgba(24,119,242,0.08)]"
+                      : "border-[var(--firm-border-inactive)] bg-[var(--firm-bg-inactive)] text-foreground/95 hover:bg-[var(--firm-bg-hover)]"
+                  )}
                 >
                   {firm.name}
-                </Button>
+                </button>
               );
             })}
           </div>
 
-          <div className="flex justify-end mt-6">
-            <div style={{ display: "flex", gap: 2 }}>
+          <div className="flex justify-between items-center gap-4 mt-8 pt-4 border-t border-border/30">
+            <div className="flex gap-2">
               <Button
+                variant="outline"
                 onClick={() => navigate("/create-firm")}
+                className="h-11 px-4 rounded-xl border border-primary/20 text-primary hover:bg-primary/5 dark:text-blue-400 font-medium"
               >
                 + Create Firm
               </Button>
               {isAdmin && (
-                <Button onClick={() => navigate("/create-user")}>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate("/create-user")}
+                  className="h-11 px-4 rounded-xl border border-primary/20 text-primary hover:bg-primary/5 dark:text-blue-400 font-medium"
+                >
                   + Create User
                 </Button>
               )}
@@ -113,13 +129,13 @@ export function FirmSelectionPage() {
                   setLoading(false);
                 }
               }}
-              className="px-6 h-11 text-base font-semibold"
+              className="px-8 h-11 text-base font-semibold rounded-xl bg-primary hover:bg-primary/95 text-primary-foreground transition-all duration-150 shadow-sm disabled:bg-primary/40 disabled:text-white/85 disabled:opacity-100 disabled:pointer-events-none"
             >
               {loading ? "Loading..." : "Continue"}
             </Button>
           </div>
-        </Card >
-      </main >
-    </div >
+        </Card>
+      </main>
+    </div>
   );
 }

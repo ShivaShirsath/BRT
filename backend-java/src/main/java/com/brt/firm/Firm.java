@@ -28,6 +28,18 @@ public class Firm {
   @Column(name = "financial_year", length = 32)
   private String financialYear;
 
+  @Column(name = "display_name", length = 256)
+  private String displayName;
+
+  @Column(name = "address", columnDefinition = "TEXT")
+  private String address;
+
+  @Column(name = "phone", length = 32)
+  private String phone;
+
+  @Column(name = "logo", columnDefinition = "TEXT")
+  private String logo;
+
   public Long getId() { return id; }
   public void setId(Long id) { this.id = id; }
 
@@ -48,4 +60,16 @@ public class Firm {
 
   public String getFinancialYear() { return financialYear; }
   public void setFinancialYear(String financialYear) { this.financialYear = financialYear; }
+
+  public String getDisplayName() { return displayName; }
+  public void setDisplayName(String displayName) { this.displayName = displayName; }
+
+  public String getAddress() { return address; }
+  public void setAddress(String address) { this.address = address; }
+
+  public String getPhone() { return phone; }
+  public void setPhone(String phone) { this.phone = phone; }
+
+  public String getLogo() { return logo; }
+  public void setLogo(String logo) { this.logo = logo; }
 }

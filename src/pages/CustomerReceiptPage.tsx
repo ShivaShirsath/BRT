@@ -371,6 +371,9 @@ export function CustomerReceiptPage() {
       } else if (e.key === "Escape") {
         e.preventDefault();
         navigate(-1);
+      } else if (e.key === "F3") {
+        e.preventDefault();
+        setIsAccountModalOpen(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -550,8 +553,18 @@ export function CustomerReceiptPage() {
 
             {/* Customer input & Balance display */}
             <div className="md:col-span-12 flex flex-col md:flex-row items-center gap-4 border-t border-border pt-3 mt-1">
-              <div className="flex-1 flex items-center gap-2 relative w-full">
-                <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</span>
+              <div className="flex-1 flex flex-col gap-1.5 relative w-full">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Customer</span>
+                  <Button
+                    variant="link"
+                    size="sm"
+                    onClick={() => setIsAccountModalOpen(true)}
+                    className="h-auto p-0 text-xs font-bold text-primary"
+                  >
+                    + New Account (F3)
+                  </Button>
+                </div>
                 <div className="relative flex-1">
                   <Input
                     value={customerSearch}
@@ -579,6 +592,15 @@ export function CustomerReceiptPage() {
                             {c.name}
                           </div>
                         ))}
+                      <div
+                        onMouseDown={() => {
+                          setIsAccountModalOpen(true);
+                          setShowCustomerDropdown(false);
+                        }}
+                        className="px-3 py-2 text-xs font-bold text-primary cursor-pointer hover:bg-accent border-t text-left"
+                      >
+                        + Add New Account
+                      </div>
                     </div>
                   )}
                 </div>

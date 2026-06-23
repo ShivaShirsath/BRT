@@ -11,12 +11,27 @@ import { Loader2 } from "lucide-react";
 export function CreateFirmPage() {
   const navigate = useNavigate();
   const [name, setName] = useState("");
+  const [displayName, setDisplayName] = useState("");
+  const [address, setAddress] = useState("");
+  const [phone, setPhone] = useState("");
+  const [logo, setLogo] = useState("");
   const [bookStartDate, setBookStartDate] = useState("01.04.2026");
   const [businessType, setBusinessType] = useState("Trader");
   const [financialYear, setFinancialYear] = useState("2026-27");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const handleLogoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogo(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Helper to convert dd.MM.yyyy to yyyy-MM-dd ISO format
   function toIsoDate(ddmmyyyy: string) {
@@ -46,7 +61,11 @@ export function CreateFirmPage() {
         name: name.trim(),
         bookStartDate: isoDate,
         businessType,
-        financialYear
+        financialYear,
+        displayName: displayName.trim(),
+        address: address.trim(),
+        phone: phone.trim(),
+        logo
       });
       setSuccess("Firm created successfully!");
       setTimeout(() => {
@@ -89,6 +108,73 @@ export function CreateFirmPage() {
                 placeholder="Enter firm name"
                 className="flex-1"
               />
+            </div>
+
+            {/* Display Name Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
+                Display Name
+              </label>
+              <Input
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                placeholder="Enter display name / business name"
+                className="flex-1"
+              />
+            </div>
+
+            {/* Address Row */}
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0 pt-2">
+                Address
+              </label>
+              <textarea
+                value={address}
+                onChange={(e) => setAddress(e.target.value)}
+                placeholder="Enter business address"
+                rows={2}
+                className="flex-1 flex w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              />
+            </div>
+
+            {/* Phone Number Row */}
+            <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0">
+                Phone Number
+              </label>
+              <Input
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="Enter phone number"
+                className="flex-1"
+              />
+            </div>
+
+            {/* Logo Row */}
+            <div className="flex flex-col sm:flex-row sm:items-start gap-2">
+              <label className="text-sm font-semibold text-muted-foreground w-full sm:w-[140px] shrink-0 pt-1">
+                Firm Logo
+              </label>
+              <div className="flex-1 space-y-2">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleLogoChange}
+                  className="w-full text-xs text-slate-500 file:mr-4 file:py-1.5 file:px-3 file:rounded-md file:border file:border-input file:text-xs file:font-semibold file:bg-background file:text-foreground hover:file:bg-accent cursor-pointer"
+                />
+                {logo && (
+                  <div className="relative w-16 h-16 border rounded bg-white flex items-center justify-center p-1">
+                    <img src={logo} alt="Logo Preview" className="max-w-full max-h-full object-contain" />
+                    <button
+                      type="button"
+                      onClick={() => setLogo("")}
+                      className="absolute -top-1.5 -right-1.5 bg-destructive text-destructive-foreground text-[10px] w-4 h-4 rounded-full flex items-center justify-center font-bold shadow-sm"
+                    >
+                      ×
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Book Start Date Row */}

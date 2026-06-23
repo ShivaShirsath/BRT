@@ -199,6 +199,9 @@ export function DalalPaymentPage() {
       } else if (e.key === "Escape") {
         e.preventDefault();
         navigate(-1);
+      } else if (e.key === "F3") {
+        e.preventDefault();
+        setIsAccountModalOpen(true);
       }
     };
     window.addEventListener("keydown", handleKeyDown);
@@ -565,9 +568,15 @@ export function DalalPaymentPage() {
                               {c.name}
                             </div>
                           ))}
-                        {customers.filter((c) => c.name.toLowerCase().includes(ledgerSearch.toLowerCase())).length === 0 && (
-                          <div className="px-3 py-2 text-xs text-muted-foreground text-center">No customer matches found</div>
-                        )}
+                        <div
+                          onMouseDown={() => {
+                            setIsAccountModalOpen(true);
+                            setShowCustomerDropdown(false);
+                          }}
+                          className="px-3 py-2 text-xs font-bold text-primary cursor-pointer hover:bg-accent border-t text-left"
+                        >
+                          + Add New Account
+                        </div>
                       </div>
                     )}
                   </div>

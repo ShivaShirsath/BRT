@@ -26,8 +26,74 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
+import {
+  Users,
+  Bell,
+  ArrowRightLeft,
+  MessageSquare,
+  Smartphone,
+  Server,
+  FileDown,
+  Calculator,
+  Barcode,
+  RefreshCw,
+  FileSpreadsheet,
+  Database,
+  Printer,
+  Settings,
+  Grid,
+  User,
+  LogOut,
+  Truck,
+  FileText,
+  FileCheck,
+  Receipt,
+  TrendingUp,
+  ArrowUpRight,
+  ArrowDownLeft,
+  PieChart,
+  BookOpen,
+  Plus,
+  Minus
+} from "lucide-react";
 
 type MenuItem = { code: string; label: string; route: string; sortOrder: number };
+
+const itemIcons: Record<string, React.ComponentType<any>> = {
+  // Primary / Center items
+  "Data Entry": Database,
+  "Sync": RefreshCw,
+  "Printing": Printer,
+  "Setup": Settings,
+  "Miscellaneous": Grid,
+  "Personal": User,
+  "Exit": LogOut,
+
+  // Secondary / Quick items
+  "Staff Attendance": Users,
+  "Reminder Entry": Bell,
+  "RTGS": ArrowRightLeft,
+  "SMS Menu": MessageSquare,
+  "Mobile Menu": Smartphone,
+  "Server Menu (CCS)": Server,
+  "Import Bills": FileDown,
+  "Billing Machine": Calculator,
+  "Barcode Stickers": Barcode,
+  "Barcode stickers": Barcode,
+  "Update Purchase": RefreshCw,
+  "Tally Export": FileSpreadsheet,
+
+  // Tertiary / Right items
+  "Delivery Challan Entry": Truck,
+  "Purchase Bill Entry": FileText,
+  "Challan Print": FileCheck,
+  "Sale Bill Print": Receipt,
+  "VATAV Report": TrendingUp,
+  "Javak Report": ArrowUpRight,
+  "Akak Report": ArrowDownLeft,
+  "Profit/Loss Report": PieChart,
+  "Cash Book": BookOpen,
+};
 
 export function MenuPage() {
   const [items, setItems] = useState<MenuItem[]>([]);
@@ -52,6 +118,8 @@ export function MenuPage() {
   const outboxItems = useLiveQuery(() => db.syncOutbox.toArray()) ?? [];
   const cachedPurchases = useLiveQuery(() => db.purchases.toArray()) ?? [];
   const cachedSales = useLiveQuery(() => db.sales.toArray()) ?? [];
+
+  const [expandedSection, setExpandedSection] = useState<"Primary" | "Secondary" | "Tertiary">("Secondary");
 
   async function handleManualSync() {
     setSyncingManual(true);
@@ -88,6 +156,7 @@ export function MenuPage() {
   ];
 
   const centerItems = ["Data Entry", "Sync", "Printing", "Setup", "Miscellaneous", "Personal", "Exit"];
+  
   const rightItems = [
     "Delivery Challan Entry",
     "Purchase Bill Entry",
@@ -100,7 +169,7 @@ export function MenuPage() {
     "Cash Book",
   ];
 
-  function onMainAction(label: string) {
+  function handleItemAction(label: string) {
     if (label === "Exit") {
       logout();
       navigate("/auth");
@@ -120,18 +189,91 @@ export function MenuPage() {
       if (hasPurchase || hasSales) {
         navigate("/data-entry");
       }
+      return;
+    }
+    if (label === "Purchase Bill Entry" || label === "Purchase Bill") {
+      navigate("/purchase");
+      return;
+    }
+    if (label === "Sale Bill Print" || label === "Sales Patti Entry") {
+      navigate("/sales");
+      return;
+    }
+    if (label === "Opening Balance") {
+      navigate("/opening-balances");
+      return;
+    }
+    if (label === "Product Master") {
+      navigate("/product-entry");
+      return;
+    }
+    if (label === "Dalal Payment") {
+      navigate("/dalal-payment");
+      return;
+    }
+    if (label === "Dalal Payment 1") {
+      navigate("/dalal-payment-1");
+      return;
+    }
+    if (label === "Cash Deposit") {
+      navigate("/cash-deposit");
+      return;
+    }
+    if (label === "Cash Withdrawal") {
+      navigate("/cash-withdrawal");
+      return;
+    }
+    if (label === "Customer Receipt") {
+      navigate("/customer-receipt");
+      return;
+    }
+    if (label === "Miscellaneous Receipt") {
+      navigate("/misc-receipt");
+      return;
+    }
+    if (label === "Payment Voucher") {
+      navigate("/payment-voucher");
+      return;
     }
   }
 
+  const sections = [
+    { id: "Primary", label: "Primary", items: centerItems },
+    { id: "Secondary", label: "Secondary", items: quickItems },
+    { id: "Tertiary", label: "Tertiary", items: rightItems },
+  ] as const;
+
+  const currentSectionItems = sections.find((s) => s.id === expandedSection)?.items ?? [];
+
   return (
-    <div className="bg-background text-foreground flex flex-col overflow-hidden" style={{ height: viewportHeight }}>
-      <header className="sticky top-0 z-40 shrink-0 border-b bg-card/95 backdrop-blur supports-[backdrop-filter]:bg-card/60 text-card-foreground shadow-sm py-6 px-6 text-center relative">
-        <div className="absolute top-4 left-4">
+    <div className="bg-[#f8fafc] text-[#0f172a] flex flex-col overflow-hidden" style={{ height: viewportHeight }}>
+      {/* Premium Header */}
+      <header className="h-16 shrink-0 border-b border-slate-200 bg-white shadow-sm flex items-center justify-between px-8 z-30">
+        <div className="flex items-center space-x-3">
+          <h1 className="text-xl font-extrabold tracking-tight text-[#1e3a8a]">
+            {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
+          </h1>
+        </div>
+
+        <div className="text-sm font-semibold text-slate-500">
+          Financial Year: 01.04.2025 to 31.03.2026
+        </div>
+
+        <div className="flex items-center space-x-6">
+          {/* Sync status */}
+          <div className="flex items-center space-x-2 border border-slate-200 rounded-full px-3 py-1 bg-slate-50 text-xs font-semibold shadow-sm">
+            <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
+            <span className="text-slate-600">
+              {isOnline ? "Online" : "Offline"} {pendingCount > 0 ? `(${pendingCount})` : ""}
+            </span>
+          </div>
+
+          {/* Theme display button */}
           <Button
             variant="outline"
             size="sm"
             onClick={() => setSetupDialogOpen(true)}
-            className="font-bold border flex items-center space-x-1.5 h-8 text-xs bg-background shadow-sm"
+            className="font-bold border flex items-center space-x-1.5 h-8 text-xs bg-white shadow-sm"
           >
             <span 
               className="h-3.5 w-3.5 rounded-full border border-black/15 shrink-0" 
@@ -139,67 +281,109 @@ export function MenuPage() {
             />
             <span>Theme / Display</span>
           </Button>
+
+          {/* User profile */}
+          <div className="flex items-center space-x-2.5">
+            <span className="text-xs font-semibold text-slate-600">User Profile</span>
+            <div className="h-9 w-9 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600 border border-slate-300 select-none cursor-pointer">
+              U
+            </div>
+          </div>
         </div>
-        <div className="absolute top-4 right-4 flex items-center space-x-2 border rounded-full px-3 py-1 bg-background text-xs font-semibold shadow-sm">
-          <span className={`h-2.5 w-2.5 rounded-full ${isOnline ? "bg-emerald-500" : "bg-destructive animate-pulse"}`} />
-          <span className="text-muted-foreground">
-            {isOnline ? "Online" : "Offline"} {pendingCount > 0 ? `(${pendingCount} pending)` : ""}
-          </span>
-        </div>
-        <h1 className="text-3xl font-extrabold tracking-tight text-foreground">
-          {selectedFirm?.name?.toUpperCase() || "BRT TRADING CO."}
-        </h1>
-        <p className="text-sm font-semibold text-muted-foreground mt-1">
-          Financial Year: 01.04.2025 to 31.03.2026
-        </p>
       </header>
 
-      <main className="flex-1 overflow-y-auto max-w-7xl w-full mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
-        <div className="flex flex-col space-y-2">
-          {quickItems.map((item) => {
-            const disabled = item === "Update Purchase";
+      {/* Main Grid: Sidebar + Child Page */}
+      <div className="flex-1 flex overflow-hidden">
+        {/* Sidebar */}
+        <aside className="w-72 bg-white border-r border-slate-200 flex flex-col p-4 space-y-2 overflow-y-auto shrink-0 select-none">
+          {sections.map((section) => {
+            const isExpanded = expandedSection === section.id;
             return (
-              <Button
-                key={item}
-                variant="outline"
-                disabled={disabled}
-                className="w-full justify-start h-12 text-sm font-medium px-4 border"
-              >
-                {item}
-              </Button>
+              <div key={section.id} className="flex flex-col">
+                <div
+                  onClick={() => setExpandedSection(isExpanded ? "Secondary" : section.id)}
+                  className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-bold cursor-pointer transition-colors ${
+                    isExpanded 
+                      ? "bg-slate-100 text-[#1e293b] border border-slate-200" 
+                      : "text-slate-600 hover:bg-slate-50"
+                  }`}
+                >
+                  <div className="flex items-center">
+                    <div className="w-4 h-4 border-2 border-dashed border-slate-400 rounded-sm mr-3 flex-shrink-0" />
+                    <span>{section.label}</span>
+                  </div>
+                  {isExpanded ? (
+                    <Minus className="w-4 h-4 text-slate-500" />
+                  ) : (
+                    <Plus className="w-4 h-4 text-slate-400" />
+                  )}
+                </div>
+
+                {isExpanded && (
+                  <div className="pl-9 pr-2 py-1.5 flex flex-col space-y-1">
+                    {section.items.map((item) => {
+                      const disabled = item === "Update Purchase";
+                      return (
+                        <div
+                          key={item}
+                          onClick={() => !disabled && handleItemAction(item)}
+                          className={`text-xs py-1.5 px-2 rounded cursor-pointer font-medium transition-colors ${
+                            disabled 
+                              ? "text-slate-300 cursor-not-allowed" 
+                              : "text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50"
+                          }`}
+                        >
+                          {item}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
             );
           })}
-        </div>
+        </aside>
 
-        <div className="flex flex-col space-y-2">
-          {centerItems.map((item, idx) => {
-            const active = idx === 0;
-            return (
-              <Button
-                key={item}
-                variant={active ? "default" : "outline"}
-                onClick={() => onMainAction(item)}
-                className="w-full h-14 text-lg font-bold border"
-              >
-                {item}
-              </Button>
-            );
-          })}
-        </div>
+        {/* Child Page Area */}
+        <main className="flex-1 bg-slate-50 p-8 overflow-y-auto">
+          <div className="max-w-7xl mx-auto flex flex-col space-y-6">
+            <div className="flex flex-col">
+              <h2 className="text-xl font-extrabold tracking-tight text-slate-800">
+                {expandedSection} Menu
+              </h2>
+              <p className="text-xs text-slate-500 mt-1">
+                Select an action from the grid below or expand sections in the sidebar
+              </p>
+            </div>
 
-        <Card className="bg-slate-900 text-slate-50 border-0 p-6 flex flex-col space-y-4 shadow-lg">
-          <div className="bg-primary-foreground/20 text-white font-extrabold px-4 py-2 rounded-md shadow-sm self-start">
-            Contract Expired
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+              {currentSectionItems.map((item) => {
+                const IconComponent = itemIcons[item] || Grid;
+                const disabled = item === "Update Purchase";
+
+                return (
+                  <div
+                    key={item}
+                    onClick={() => !disabled && handleItemAction(item)}
+                    className={`bg-white border border-slate-100 rounded-2xl p-6 flex flex-col items-center justify-center text-center shadow-sm select-none transition-all duration-300 ${
+                      disabled
+                        ? "opacity-50 cursor-not-allowed"
+                        : "cursor-pointer hover:-translate-y-1 hover:shadow-md hover:border-slate-200"
+                    }`}
+                  >
+                    <div className="w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-100 mb-4 text-[#475569]">
+                      <IconComponent className="w-6 h-6" />
+                    </div>
+                    <span className="text-sm font-bold text-slate-700 leading-tight">
+                      {item}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
-          <div className="flex flex-col space-y-3 pt-2">
-            {rightItems.map((item) => (
-              <span key={item} className="text-base font-semibold tracking-wide text-slate-200">
-                {item}
-              </span>
-            ))}
-          </div>
-        </Card>
-      </main>
+        </main>
+      </div>
 
       <Dialog open={syncDialogOpen} onOpenChange={setSyncDialogOpen}>
         <DialogContent className="sm:max-w-[700px] max-h-[85vh] overflow-y-auto">
