@@ -9,4 +9,20 @@
   body {
     @apply bg-background text-foreground;
   }
+  :root {
+    --firm-bg-inactive: oklch(0.97 0.005 250);
+    --firm-border-inactive: oklch(0.9 0.01 250);
+    --firm-bg-hover: oklch(0.93 0.01 250);
+    --firm-bg-active: var(--primary);
+    --firm-border-active: var(--primary);
+    --firm-text-active: var(--primary-foreground);
+  }
+  .dark {
+    --firm-bg-inactive: oklch(0.2 0.01 250);
+    --firm-border-inactive: oklch(0.28 0.01 250);
+    --firm-bg-hover: oklch(0.24 0.01 250);
+    --firm-bg-active: var(--primary);
+    --firm-border-active: var(--primary);
+    --firm-text-active: var(--primary-foreground);
+  }
 }

@@ -25,6 +25,7 @@ import {
 } from "../components/ui/table";
 import { db } from "../lib/db";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
+import { useNavigate } from "react-router-dom";
 
 type SalesRow = {
   bookDate: string;
@@ -87,6 +88,7 @@ const salesSchema = z.object({
 });
 
 export function SalesPage() {
+  const navigate = useNavigate();
   const selectedFirm = useAuthStore((s) => s.selectedFirm);
   const isOnline = useNetwork();
   const addToast = useToastStore((s) => s.addToast);
@@ -922,7 +924,7 @@ export function SalesPage() {
             <Button onClick={handleSave} disabled={loading} className="flex-1 sm:flex-none">
               {loading ? "Saving..." : "Save"}
             </Button>
-            <Button variant="outline" onClick={() => history.back()} className="flex-1 sm:flex-none">Close</Button>
+            <Button variant="outline" onClick={() => navigate("/data-entry")} className="flex-1 sm:flex-none">Close</Button>
           </div>
         </div>
       </main>
