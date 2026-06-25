@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuthStore } from "../store/authStore";
 import { useViewport } from "../hooks/useViewport";
@@ -29,7 +29,6 @@ import {
   CheckSquare,
   Layers,
   ArrowUpCircle,
-  Users,
   Train,
   FileLock2,
   AppWindow,
@@ -56,6 +55,76 @@ export function DataEntryPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [isAccountModalOpen, setIsAccountModalOpen] = useState(false);
 
+  const [overallStats, setOverallStats] = useState<any | null>(null);
+  const [loadingOverall, setLoadingOverall] = useState(false);
+
+  const [timeRange, setTimeRange] = useState<"today" | "week" | "month" | "year" | "custom">("month");
+  const [customStartDate, setCustomStartDate] = useState("");
+  const [customEndDate, setCustomEndDate] = useState("");
+
+  const dates = useMemo(() => {
+    const now = new Date();
+    let start = "";
+    let end = "";
+
+    const formatDate = (d: Date) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    };
+
+    if (timeRange === "today") {
+      const todayStr = formatDate(now);
+      start = todayStr;
+      end = todayStr;
+    } else if (timeRange === "week") {
+      const day = now.getDay();
+      const diff = now.getDate() - day + (day === 0 ? -6 : 1);
+      const monday = new Date(now.setDate(diff));
+      start = formatDate(monday);
+      end = formatDate(new Date());
+    } else if (timeRange === "month") {
+      const firstDay = new Date(now.getFullYear(), now.getMonth(), 1);
+      start = formatDate(firstDay);
+      end = formatDate(new Date());
+    } else if (timeRange === "year") {
+      const firstDay = new Date(now.getFullYear(), 0, 1);
+      start = formatDate(firstDay);
+      end = formatDate(new Date());
+    } else if (timeRange === "custom") {
+      start = customStartDate;
+      end = customEndDate;
+    }
+
+    return { start, end };
+  }, [timeRange, customStartDate, customEndDate]);
+
+  useEffect(() => {
+    async function fetchOverall() {
+      setLoadingOverall(true);
+      try {
+        let url = "/purchase/analytics/overall";
+        const params = new URLSearchParams();
+        if (dates.start) params.append("startDate", dates.start);
+        if (dates.end) params.append("endDate", dates.end);
+        
+        const queryString = params.toString();
+        if (queryString) {
+          url += `?${queryString}`;
+        }
+        
+        const { data } = await api.get(url);
+        setOverallStats(data || null);
+      } catch (err) {
+        console.error("Failed to load overall analytics data", err);
+      } finally {
+        setLoadingOverall(false);
+      }
+    }
+    fetchOverall();
+  }, [dates]);
+
   const handleSaveAccount = async (formData: any) => {
     try {
       const { data } = await api.post("/customers", formData);
@@ -77,6 +146,7 @@ export function DataEntryPage() {
     "Import Bills",
     "Billing Machine",
     "Barcode Stickers",
+    "Product Master",
     "Update Purchase",
     "Tally Export",
   ];
@@ -122,6 +192,7 @@ export function DataEntryPage() {
     { label: "Opening Stock Entry", icon: Layers, color: "text-yellow-600 bg-yellow-50 border-yellow-100" },
     { label: "Cash withdrawal", icon: ArrowUpCircle, color: "text-rose-600 bg-rose-50 border-rose-100" },
     { label: "Accounts Master", icon: UserPlus, color: "text-indigo-600 bg-indigo-50 border-indigo-100" },
+    { label: "Product Master", icon: Package, color: "text-blue-600 bg-blue-50 border-blue-100" },
     { label: "Railway Freight Entry", icon: Train, color: "text-amber-600 bg-amber-50 border-amber-100" },
     { label: "Customer Receipt", icon: Banknote, color: "text-teal-600 bg-teal-50 border-teal-100" },
     { label: "Release Records (LAN)", icon: FileLock2, color: "text-purple-600 bg-purple-50 border-purple-100" },
@@ -144,6 +215,7 @@ export function DataEntryPage() {
     if (title === "Customer Receipt") return "/customer-receipt";
     if (title === "Miscellaneous Receipt") return "/misc-receipt";
     if (title === "Payment Voucher") return "/payment-voucher";
+    if (title === "Product Master") return "/product-entry";
     if (title === "Exit") return "/menu";
     return null;
   }
@@ -232,8 +304,8 @@ export function DataEntryPage() {
                 <div
                   onClick={() => setExpandedSection(isExpanded ? "Primary" : section.id)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-bold cursor-pointer transition-colors ${isExpanded
-                      ? "bg-slate-100 text-[#1e293b] border border-slate-200"
-                      : "text-slate-600 hover:bg-slate-50"
+                    ? "bg-slate-100 text-[#1e293b] border border-slate-200"
+                    : "text-slate-600 hover:bg-slate-50"
                     }`}
                 >
                   <div className="flex items-center">
@@ -256,8 +328,8 @@ export function DataEntryPage() {
                           key={item}
                           onClick={() => handleItemAction(item)}
                           className={`text-xs py-1.5 px-3 rounded cursor-pointer font-medium transition-colors ${isSelected
-                              ? "bg-slate-200/60 text-[#1e3a8a] font-bold"
-                              : "text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50"
+                            ? "bg-slate-200/60 text-[#1e3a8a] font-bold"
+                            : "text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50"
                             }`}
                         >
                           {item}
@@ -299,6 +371,193 @@ export function DataEntryPage() {
                   className="w-full pl-9 pr-4 py-2 text-sm bg-white border border-slate-200 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all placeholder-slate-400"
                 />
               </div>
+            </div>
+
+            {/* Quick Stats Dashboard */}
+            <div className="bg-white rounded-xl p-6 border border-slate-200/60 shadow-sm space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-4 border-b pb-3">
+                <div className="flex items-center space-x-2">
+                  <span className="w-2 h-5 bg-[#1e3a8a] rounded-full" />
+                  <h3 className="text-sm font-extrabold text-slate-800 uppercase tracking-wider">
+                    Quick Stats
+                  </h3>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-3">
+                  {/* Dropdown Selector */}
+                  <select
+                    value={timeRange}
+                    onChange={(e) => setTimeRange(e.target.value as any)}
+                    className="text-xs font-bold bg-slate-50 border border-slate-200 rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-[#1e3a8a]/25 text-slate-700 cursor-pointer shadow-sm"
+                  >
+                    <option value="custom">Custom Range</option>
+                    <option value="today">Today</option>
+                    <option value="week">This Week</option>
+                    <option value="month">This Month</option>
+                    <option value="year">This Year</option>
+                  </select>
+
+                  {/* Custom Date Pickers */}
+                  {timeRange === "custom" && (
+                    <div className="flex items-center gap-2">
+                      <div className="relative flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 w-32 h-[30px] cursor-pointer">
+                        <span className="text-[11px] font-semibold text-slate-700 pointer-events-none select-none">
+                          {customStartDate ? new Date(customStartDate).toLocaleDateString() : "From Date"}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 text-slate-400 pointer-events-none select-none shrink-0 ml-1">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        <input
+                          type="date"
+                          value={customStartDate}
+                          onChange={(e) => setCustomStartDate(e.target.value)}
+                          className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                        />
+                      </div>
+
+                      <span className="text-xs text-slate-400 font-bold">to</span>
+
+                      <div className="relative flex items-center justify-between bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 w-32 h-[30px] cursor-pointer">
+                        <span className="text-[11px] font-semibold text-slate-700 pointer-events-none select-none">
+                          {customEndDate ? new Date(customEndDate).toLocaleDateString() : "To Date"}
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-3.5 h-3.5 text-slate-400 pointer-events-none select-none shrink-0 ml-1">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 0 1 2.25-2.25h13.5A2.25 2.25 0 0 1 21 7.5v11.25m-18 0A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75m-18 0v-7.5A2.25 2.25 0 0 1 5.25 9h13.5A2.25 2.25 0 0 1 21 11.25v7.5" />
+                        </svg>
+                        <input
+                          type="date"
+                          value={customEndDate}
+                          onChange={(e) => setCustomEndDate(e.target.value)}
+                          className="absolute inset-0 opacity-0 cursor-pointer w-full h-full z-10"
+                        />
+                      </div>
+
+                      {(customStartDate || customEndDate) && (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setCustomStartDate("");
+                            setCustomEndDate("");
+                          }}
+                          className="text-[10px] font-bold text-rose-600 hover:text-rose-700 bg-rose-50 hover:bg-rose-100/50 px-2 py-1 rounded-lg transition-colors h-[30px]"
+                        >
+                          Clear
+                        </button>
+                      )}
+                    </div>
+                  )}
+
+                  <span className="text-[10px] bg-[#1e3a8a]/10 text-[#1e3a8a] px-2.5 py-0.5 rounded-full font-bold">Firm Summary</span>
+                </div>
+              </div>
+
+              {loadingOverall ? (
+                <div className="flex items-center justify-center py-8">
+                  <span className="h-6 w-6 rounded-full border-2 border-[#1e3a8a] border-t-transparent animate-spin" />
+                </div>
+              ) : overallStats ? (
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
+                  {/* Total Purchases Card */}
+                  <div className="bg-gradient-to-br from-blue-50/60 to-white border border-blue-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Purchases</span>
+                      <span className="text-lg font-extrabold text-blue-700 block">
+                        ₹ {(overallStats.totalPurchasesValue || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        {overallStats.totalPurchasesCount || 0} Bills
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-blue-100/50 flex items-center justify-center text-blue-600 shrink-0">
+                      <ShoppingCart className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Total Sales Card */}
+                  <div className="bg-gradient-to-br from-emerald-50/60 to-white border border-emerald-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Sales</span>
+                      <span className="text-lg font-extrabold text-emerald-700 block">
+                        ₹ {(overallStats.totalSalesValue || 0).toLocaleString("en-IN", { maximumFractionDigits: 0 })}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        {overallStats.totalSalesCount || 0} Patti Entries
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-emerald-100/50 flex items-center justify-center text-emerald-600 shrink-0">
+                      <Receipt className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Total Farmers Card */}
+                  <div className="bg-gradient-to-br from-teal-50/60 to-white border border-teal-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Farmers</span>
+                      <span className="text-lg font-extrabold text-teal-700 block">
+                        {(overallStats.totalFarmersCount || 0).toLocaleString("en-IN")}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        Registered customers
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-teal-100/50 flex items-center justify-center text-teal-600 shrink-0">
+                      <UserPlus className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Total Vehicles Card */}
+                  <div className="bg-gradient-to-br from-sky-50/60 to-white border border-sky-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Vehicles</span>
+                      <span className="text-lg font-extrabold text-sky-700 block">
+                        {(overallStats.totalVehiclesCount || 0).toLocaleString("en-IN")}
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        Active transport
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-sky-100/50 flex items-center justify-center text-sky-600 shrink-0">
+                      <Truck className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Combined Volume Card */}
+                  <div className="bg-gradient-to-br from-indigo-50/60 to-white border border-indigo-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Volume</span>
+                      <span className="text-lg font-extrabold text-indigo-700 block">
+                        {(overallStats.totalBags || 0).toLocaleString("en-IN")} Bags
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        Combined volume
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-indigo-100/50 flex items-center justify-center text-indigo-600 shrink-0">
+                      <Package className="w-4 h-4" />
+                    </div>
+                  </div>
+
+                  {/* Combined Weight Card */}
+                  <div className="bg-gradient-to-br from-amber-50/60 to-white border border-amber-100 rounded-xl p-4 flex items-start justify-between">
+                    <div className="space-y-1">
+                      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider block">Total Weight</span>
+                      <span className="text-lg font-extrabold text-amber-700 block">
+                        {(overallStats.totalWeight || 0).toFixed(1)} Q
+                      </span>
+                      <span className="text-[10px] text-slate-500 font-medium block">
+                        Total net weight
+                      </span>
+                    </div>
+                    <div className="w-8 h-8 rounded-full bg-amber-100/50 flex items-center justify-center text-amber-600 shrink-0">
+                      <Layers className="w-4 h-4" />
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="text-center py-4 text-xs text-slate-400 italic">
+                  Failed to load overall business parameters.
+                </div>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

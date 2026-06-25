@@ -10,6 +10,7 @@ import { Button } from "../components/ui/button";
 import { useViewport } from "../hooks/useViewport";
 import { Card } from "../components/ui/card";
 import { useThemeStore, THEMES } from "../store/themeStore";
+import { Input } from "../components/ui/input";
 import {
   Dialog,
   DialogContent,
@@ -54,7 +55,10 @@ import {
   PieChart,
   BookOpen,
   Plus,
-  Minus
+  Minus,
+  Palette,
+  Leaf,
+  ShoppingBag
 } from "lucide-react";
 
 type MenuItem = { code: string; label: string; route: string; sortOrder: number };
@@ -107,8 +111,29 @@ export function MenuPage() {
   const setTheme = useThemeStore((s) => s.setTheme);
   const themeMode = useThemeStore((s) => s.themeMode);
   const setThemeMode = useThemeStore((s) => s.setThemeMode);
+  const defaultCrop = useThemeStore((s) => s.defaultCrop);
+  const setDefaultCrop = useThemeStore((s) => s.setDefaultCrop);
+  const purchaseCharges = useThemeStore((s) => s.purchaseCharges);
+  const setPurchaseCharges = useThemeStore((s) => s.setPurchaseCharges);
+  const salesCharges = useThemeStore((s) => s.salesCharges);
+  const setSalesCharges = useThemeStore((s) => s.setSalesCharges);
+  const fetchSettingsFromServer = useThemeStore((s) => s.fetchSettingsFromServer);
 
+  const [products, setProducts] = useState<any[]>([]);
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
+  const [activeSetupTab, setActiveSetupTab] = useState<"theme" | "crop" | "purchase" | "sales">("crop");
+
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const { data } = await api.get("/products");
+        setProducts(data || []);
+      } catch (err) {
+        console.error("Failed to load products", err);
+      }
+    };
+    loadProducts();
+  }, []);
 
   const isOnline = useNetwork();
   const [syncDialogOpen, setSyncDialogOpen] = useState(false);
@@ -119,7 +144,7 @@ export function MenuPage() {
   const cachedPurchases = useLiveQuery(() => db.purchases.toArray()) ?? [];
   const cachedSales = useLiveQuery(() => db.sales.toArray()) ?? [];
 
-  const [expandedSection, setExpandedSection] = useState<"Primary" | "Secondary" | "Tertiary">("Secondary");
+  const [expandedSection, setExpandedSection] = useState<"Primary" | "Secondary" | "Tertiary">("Primary");
 
   async function handleManualSync() {
     setSyncingManual(true);
@@ -139,7 +164,8 @@ export function MenuPage() {
       setItems(menu);
       setMenu(menu);
     })();
-  }, [setMenu]);
+    fetchSettingsFromServer();
+  }, [setMenu, fetchSettingsFromServer]);
 
   const quickItems = [
     "Staff Attendance",
@@ -151,6 +177,7 @@ export function MenuPage() {
     "Import Bills",
     "Billing Machine",
     "Barcode Stickers",
+    "Product Master",
     "Update Purchase",
     "Tally Export",
   ];
@@ -272,7 +299,10 @@ export function MenuPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => setSetupDialogOpen(true)}
+            onClick={() => {
+              setActiveSetupTab("theme");
+              setSetupDialogOpen(true);
+            }}
             className="font-bold border flex items-center space-x-1.5 h-8 text-xs bg-white shadow-sm"
           >
             <span 
@@ -502,83 +532,231 @@ export function MenuPage() {
       </Dialog>
 
       <Dialog open={setupDialogOpen} onOpenChange={setSetupDialogOpen}>
-        <DialogContent className="sm:max-w-[450px]">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold">System Configuration</DialogTitle>
-            <DialogDescription>
-              Personalize your display options, active color theme, and appearance settings.
+        <DialogContent className="sm:max-w-[800px] p-0 overflow-hidden flex flex-col h-[550px] bg-white border border-slate-200 shadow-2xl rounded-2xl">
+          <DialogHeader className="px-6 pt-5 pb-4 border-b border-slate-100 shrink-0">
+            <DialogTitle className="text-xl font-extrabold tracking-tight text-slate-800 flex items-center gap-2">
+              <Settings className="w-5 h-5 text-[#1e3a8a]" />
+              System Settings & Configuration
+            </DialogTitle>
+            <DialogDescription className="text-xs text-slate-500">
+              Manage your display preferences, crop defaults, and transaction settings.
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-6 my-4">
-            {/* Appearance Mode Control */}
-            <div className="space-y-3 border-b pb-4">
-              <div>
-                <span className="block font-bold text-foreground">Appearance</span>
-                <span className="text-xs text-muted-foreground">Customize how the interface looks on your device.</span>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                {[
-                  { mode: "light", label: "Light" },
-                  { mode: "dark", label: "Dark" },
-                  { mode: "system", label: "System" }
-                ].map(({ mode, label }) => {
-                  const isSelected = themeMode === mode;
-                  return (
-                    <button
-                      key={mode}
-                      onClick={() => setThemeMode(mode as any)}
-                      className={`py-2 px-3 rounded-lg border-2 text-center transition-all hover:bg-muted font-bold text-sm ${
-                        isSelected 
-                          ? "border-primary bg-primary/5 shadow-sm text-foreground" 
-                          : "border-border bg-card text-muted-foreground"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  );
-                })}
-              </div>
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left Sidebar Navigation */}
+            <div className="w-64 bg-slate-50 border-r border-slate-150 p-3 flex flex-col space-y-1 shrink-0">
+              {[
+                { id: "theme", label: "Theme & Display", icon: Palette },
+                { id: "crop", label: "Default Crop", icon: Leaf },
+                { id: "purchase", label: "Purchase Settings", icon: ShoppingBag },
+                { id: "sales", label: "Sales Settings", icon: TrendingUp }
+              ].map((tab) => {
+                const Icon = tab.icon;
+                const isActive = activeSetupTab === tab.id;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveSetupTab(tab.id as any)}
+                    className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg text-xs font-bold transition-all text-left ${
+                      isActive
+                        ? "bg-[#1e3a8a] text-white shadow-sm"
+                        : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
+                    }`}
+                  >
+                    <Icon className="w-4 h-4 shrink-0" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
             </div>
 
-            {/* Theme Color Selector */}
-            <div className="space-y-3">
-              <div>
-                <span className="block font-bold text-foreground">Color Theme</span>
-                <span className="text-xs text-muted-foreground">Choose your active interface palette.</span>
+            {/* Right Content Area */}
+            <div className="flex-1 p-6 overflow-y-auto bg-white flex flex-col">
+              <div className="flex-1">
+                {activeSetupTab === "theme" && (
+                  <div className="space-y-6">
+                    {/* Appearance Mode Control */}
+                    <div className="space-y-3">
+                      <div>
+                        <span className="block font-extrabold text-slate-800 text-sm">Appearance Mode</span>
+                        <span className="text-xs text-slate-500">Customize how the interface looks on your device.</span>
+                      </div>
+                      <div className="grid grid-cols-3 gap-2">
+                        {[
+                          { mode: "light", label: "Light" },
+                          { mode: "dark", label: "Dark" },
+                          { mode: "system", label: "System" }
+                        ].map(({ mode, label }) => {
+                          const isSelected = themeMode === mode;
+                          return (
+                            <button
+                              key={mode}
+                              onClick={() => setThemeMode(mode as any)}
+                              className={`py-2 px-3 rounded-lg border text-center transition-all hover:bg-slate-50 font-bold text-xs ${
+                                isSelected
+                                  ? "border-[#1e3a8a] bg-blue-50/40 text-[#1e3a8a]"
+                                  : "border-slate-200 bg-white text-slate-600"
+                              }`}
+                            >
+                              {label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Theme Color Selector */}
+                    <div className="space-y-3">
+                      <div>
+                        <span className="block font-extrabold text-slate-800 text-sm">Color Theme</span>
+                        <span className="text-xs text-slate-500">Choose your active interface palette.</span>
+                      </div>
+                      <div className="grid grid-cols-2 gap-2.5">
+                        {THEMES.map((theme) => {
+                          const isSelected = theme.id === themeId;
+                          return (
+                            <button
+                              key={theme.id}
+                              onClick={() => setTheme(theme.id)}
+                              className={`flex items-center space-x-3 p-2.5 rounded-lg border text-left transition-all hover:bg-slate-50 ${
+                                isSelected
+                                  ? "border-[#1e3a8a] bg-blue-50/40"
+                                  : "border-slate-200 bg-white"
+                              }`}
+                            >
+                              <span
+                                className="h-3.5 w-3.5 rounded-full border border-black/10 shrink-0"
+                                style={{ backgroundColor: theme.colorHex }}
+                              />
+                              <span className="font-bold text-xs text-slate-700">
+                                {theme.name.split(" (")[0]}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {activeSetupTab === "crop" && (
+                  <div className="space-y-4">
+                    <div className="space-y-3">
+                      <div>
+                        <span className="block font-extrabold text-slate-800 text-sm">Default Crop Selection</span>
+                        <span className="text-xs text-slate-500">Pre-fill the first commodity row on new Purchase entries automatically.</span>
+                      </div>
+                      <select
+                        value={defaultCrop}
+                        onChange={(e) => setDefaultCrop(e.target.value)}
+                        className="w-full bg-white border border-slate-200 rounded-lg p-2.5 text-xs font-bold outline-none focus:border-[#1e3a8a] text-slate-700 cursor-pointer shadow-sm"
+                      >
+                        <option value="">None (Empty by default)</option>
+                        {products.map((p) => (
+                          <option key={p.id} value={p.englishName}>
+                            {p.englishName} {p.marathiName ? `(${p.marathiName})` : ""}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+                )}
+
+                {activeSetupTab === "purchase" && (
+                  <div className="space-y-4">
+                    <div>
+                      <span className="block font-extrabold text-slate-800 text-sm">Default Purchase Charges & Taxes</span>
+                      <span className="text-xs text-slate-500">Configure default values for charges and taxes automatically applied to new purchase bills.</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3 max-h-[310px] overflow-y-auto pr-1">
+                      {Object.keys(purchaseCharges).map((field) => (
+                        <div key={field} className="space-y-1">
+                          <label className="text-[10px] font-bold text-slate-500 block truncate" title={field}>
+                            {field}
+                          </label>
+                          <Input
+                            type="text"
+                            value={purchaseCharges[field] ?? "0.00"}
+                            onChange={(e) => {
+                              const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+                              setPurchaseCharges({
+                                ...purchaseCharges,
+                                [field]: cleaned
+                              });
+                            }}
+                            className="h-8 text-xs font-mono"
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {activeSetupTab === "sales" && (
+                  <div className="space-y-4">
+                    <div>
+                      <span className="block font-extrabold text-slate-800 text-sm">Default Sales Charges & Deductions</span>
+                      <span className="text-xs text-slate-500">Configure default values automatically applied to new patti rows.</span>
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-500 block">Patti Freight</label>
+                        <Input
+                          type="text"
+                          value={salesCharges["pattiFreight"] ?? "0.00"}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+                            setSalesCharges({
+                              ...salesCharges,
+                              pattiFreight: cleaned
+                            });
+                          }}
+                          className="h-8 text-xs font-mono"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-500 block">Commission</label>
+                        <Input
+                          type="text"
+                          value={salesCharges["commission"] ?? "0.00"}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+                            setSalesCharges({
+                              ...salesCharges,
+                              commission: cleaned
+                            });
+                          }}
+                          className="h-8 text-xs font-mono"
+                        />
+                      </div>
+                      <div className="space-y-1">
+                        <label className="text-[10px] font-bold text-slate-500 block">TDS %</label>
+                        <Input
+                          type="text"
+                          value={salesCharges["tdsPercent"] ?? "0.00"}
+                          onChange={(e) => {
+                            const cleaned = e.target.value.replace(/[^0-9.]/g, "");
+                            setSalesCharges({
+                              ...salesCharges,
+                              tdsPercent: cleaned
+                            });
+                          }}
+                          className="h-8 text-xs font-mono"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="grid grid-cols-2 gap-2.5">
-                {THEMES.map((theme) => {
-                  const isSelected = theme.id === themeId;
-                  return (
-                    <button
-                      key={theme.id}
-                      onClick={() => setTheme(theme.id)}
-                      className={`flex items-center space-x-3 p-3 rounded-lg border-2 text-left transition-all hover:bg-muted ${
-                        isSelected 
-                          ? "border-primary bg-primary/5 shadow-sm" 
-                          : "border-border bg-card"
-                      }`}
-                    >
-                      <span 
-                        className="h-4 w-4 rounded-full border border-black/10 shrink-0" 
-                        style={{ backgroundColor: theme.colorHex }}
-                      />
-                      <span className="font-bold text-sm text-foreground">
-                        {theme.name.split(" (")[0]}
-                      </span>
-                    </button>
-                  );
-                })}
+
+              <div className="mt-4 pt-4 border-t border-slate-100 flex justify-end shrink-0">
+                <Button onClick={() => setSetupDialogOpen(false)} className="px-6 font-bold bg-[#1e3a8a] hover:bg-[#1d4ed8] text-white">
+                  Close
+                </Button>
               </div>
             </div>
           </div>
-
-          <DialogFooter>
-            <Button onClick={() => setSetupDialogOpen(false)} className="w-full font-bold">
-              Done
-            </Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
     </div>

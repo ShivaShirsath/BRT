@@ -17,15 +17,21 @@ import { CashWithdrawalPage } from "./pages/CashWithdrawalPage";
 import { CustomerReceiptPage } from "./pages/CustomerReceiptPage";
 import { MiscReceiptPage } from "./pages/MiscReceiptPage";
 import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
+import { VehicleAnalyticsPage } from "./pages/VehicleAnalyticsPage";
+import { FarmerAnalyticsPage } from "./pages/FarmerAnalyticsPage";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import api from "./api/client";
 import { useAuthStore } from "./store/authStore";
 
+import { useThemeStore } from "./store/themeStore";
+import { Toaster } from "./components/ui/Toaster";
+
 function SessionBootstrap({ children }: { children: ReactNode }) {
   const token = useAuthStore((s) => s.token);
   const setAuth = useAuthStore((s) => s.setAuth);
   const logout = useAuthStore((s) => s.logout);
+  const fetchSettingsFromServer = useThemeStore((s) => s.fetchSettingsFromServer);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -37,20 +43,18 @@ function SessionBootstrap({ children }: { children: ReactNode }) {
       try {
         const { data } = await api.get("/auth/me");
         setAuth(data);
+        fetchSettingsFromServer().catch(err => console.error("Failed to fetch settings on bootstrap", err));
       } catch {
         logout();
       } finally {
         setReady(true);
       }
     })();
-  }, [token, setAuth, logout]);
+  }, [token, setAuth, logout, fetchSettingsFromServer]);
 
   if (!ready) return null;
   return <>{children}</>;
 }
-
-import { useThemeStore } from "./store/themeStore";
-import { Toaster } from "./components/ui/Toaster";
 
 export default function App() {
   const themeId = useThemeStore((s) => s.themeId);
@@ -145,6 +149,8 @@ export default function App() {
               <Route path="/customer-receipt" element={<CustomerReceiptPage />} />
               <Route path="/misc-receipt" element={<MiscReceiptPage />} />
               <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
+              <Route path="/analytics/vehicle/:vehicleNo" element={<VehicleAnalyticsPage />} />
+              <Route path="/analytics/farmer/:farmerId" element={<FarmerAnalyticsPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/auth" replace />} />
           </Routes>

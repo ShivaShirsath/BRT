@@ -1,6 +1,7 @@
 package com.brt.purchase;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -10,5 +11,11 @@ public interface PurchaseBillRepository extends JpaRepository<PurchaseBill, java
   List<PurchaseBill> findTop20ByOrderByCreatedAtDesc();
   List<PurchaseBill> findAllByOrderByCreatedAtDesc();
   List<PurchaseBill> findByBillNo(String billNo);
+
+  @Query("SELECT DISTINCT p.detail.vehicleNo FROM PurchaseBill p WHERE p.detail.vehicleNo IS NOT NULL AND p.detail.vehicleNo <> '' AND p.detail.vehicleNo <> '--'")
+  List<String> findDistinctVehicleNumbers();
+
+  List<PurchaseBill> findByDetailVehicleNoIgnoreCase(String vehicleNo);
+  List<PurchaseBill> findByDetailSellerId(Long sellerId);
 }
 

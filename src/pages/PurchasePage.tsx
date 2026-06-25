@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
+import { createPortal } from "react-dom";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
+import { useThemeStore } from "../store/themeStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
@@ -26,6 +28,9 @@ import {
 import { db } from "../lib/db";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 import { useNavigate } from "react-router-dom";
+import { Info } from "lucide-react";
+import { VehicleAnalyticsModal } from "../components/VehicleAnalyticsModal";
+import { FarmerAnalyticsModal } from "../components/FarmerAnalyticsModal";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -102,11 +107,14 @@ export function PurchasePage() {
   const isOnline = useNetwork();
   const addToast = useToastStore((s) => s.addToast);
   const { viewportHeight } = useViewport();
+  const defaultCrop = useThemeStore((s) => s.defaultCrop);
+  const purchaseCharges = useThemeStore((s) => s.purchaseCharges);
 
-  const [billNo, setBillNo] = useState("001186");
-  const [billNoInput, setBillNoInput] = useState("001186");
+  const [billNo, setBillNo] = useState("");
+  const [billNoInput, setBillNoInput] = useState("");
   const [isDirty, setIsDirty] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isLoadedFromDb, setIsLoadedFromDb] = useState(false);
 
   useBeforeUnload(isDirty);
 
@@ -125,37 +133,93 @@ export function PurchasePage() {
   const [date, setDate] = useState(getTodayDateString());
   const [entryType, setEntryType] = useState("Select market");
   const [cessCondition, setCessCondition] = useState("Order");
-  const [seller, setSeller] = useState("");
-  const [vehicleNo, setVehicleNo] = useState("--");
-  const [partyBillNo, setPartyBillNo] = useState("--");
-  const [rows, setRows] = useState<PurchaseItemRow[]>(Array.from({ length: 6 }, () => mkRow()));
+  const [farmer, setFarmer] = useState("");
+  const [vehicleNo, setVehicleNo] = useState("");
+  const [partyBillNo, setPartyBillNo] = useState("");
+  const [rows, setRows] = useState<PurchaseItemRow[]>(Array.from({ length: 2 }, () => mkRow()));
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (defaultCrop) {
+      setRows((prev) => {
+        if (prev[0] && !prev[0].commodity && !prev[0].mark && !prev[0].brand && !prev[0].bags) {
+          return prev.map((r, idx) => idx === 0 ? { ...r, commodity: defaultCrop } : r);
+        }
+        return prev;
+      });
+    }
+  }, [defaultCrop]);
+
+  useEffect(() => {
+    if (!isLoadedFromDb && purchaseCharges && Object.keys(purchaseCharges).length > 0) {
+      setCharges((prev) => {
+        return Object.fromEntries(chargeFields.map((f) => [
+          f,
+          f === "Purchase amt." ? prev[f] : (purchaseCharges[f] ?? "0.00")
+        ]));
+      });
+    }
+  }, [purchaseCharges, isLoadedFromDb]);
+
   const [note, setNote] = useState("");
   const [print, setPrint] = useState(false);
   const [billReceived, setBillReceived] = useState("No");
   const [lockState, setLockState] = useState("No");
-  const [charges, setCharges] = useState<Record<string, string>>(() => Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+  const [charges, setCharges] = useState<Record<string, string>>(() => {
+    const storeCharges = useThemeStore.getState().purchaseCharges;
+    return Object.fromEntries(chargeFields.map((f) => [
+      f,
+      f === "Purchase amt." ? "0.00" : (storeCharges[f] ?? "0.00")
+    ]));
+  });
 
   const [showBillNoDropdown, setShowBillNoDropdown] = useState(false);
   const [allBills, setAllBills] = useState<any[]>([]);
+  const [pastVehicles, setPastVehicles] = useState<string[]>([]);
+  const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
+  const [analyticsVehicleNo, setAnalyticsVehicleNo] = useState("");
+  const [analyticsFarmerId, setAnalyticsFarmerId] = useState<number | null>(null);
+  const [products, setProducts] = useState<any[]>([]);
+  const [activeCommodityRowIndex, setActiveCommodityRowIndex] = useState<number | null>(null);
+  const [commodityDropdownCoords, setCommodityDropdownCoords] = useState<{ top: number; left: number; width: number } | null>(null);
 
   const fetchAllBills = async () => {
     try {
+      let billsList: any[] = [];
       if (isOnline) {
         const { data } = await api.get("/purchase/all");
         if (data && data.rows) {
-          setAllBills(data.rows.map((r: any) => ({ ...r, synced: true })));
+          billsList = data.rows.map((r: any) => ({ ...r, synced: true }));
         }
       } else {
         const offlinePurchases = await db.purchases.toArray();
-        setAllBills(offlinePurchases.map((p) => ({
+        billsList = offlinePurchases.map((p) => ({
           id: p.id,
           billNo: p.billNo,
           date: p.billDate ? p.billDate : "",
           amount: p.charges?.netTotal ?? 0,
           synced: p.synced
-        })));
+        }));
       }
+      setAllBills(billsList);
+
+      // Auto-precede bill number if not already set or loaded
+      let maxNum = -1;
+      let maxStr = "";
+      for (const b of billsList) {
+        const numStr = b.billNo || "";
+        const num = parseInt(numStr, 10);
+        if (!isNaN(num) && num > maxNum) {
+          maxNum = num;
+          maxStr = numStr;
+        }
+      }
+      const nextBill = maxNum !== -1
+        ? String(maxNum + 1).padStart(maxStr.length || 6, "0")
+        : "000001";
+
+      setBillNo((prev) => prev ? prev : nextBill);
+      setBillNoInput((prev) => prev ? prev : nextBill);
     } catch (err) {
       console.error("Failed to load purchase bills", err);
     }
@@ -164,15 +228,6 @@ export function PurchasePage() {
   useEffect(() => {
     fetchAllBills();
   }, [isOnline]);
-
-  const filteredBills = useMemo(() => {
-    if (!billNoInput.trim()) return allBills;
-    const q = billNoInput.toLowerCase();
-    return allBills.filter(b =>
-      (b.billNo && b.billNo.toLowerCase().includes(q)) ||
-      (b.date && b.date.toLowerCase().includes(q))
-    );
-  }, [allBills, billNoInput]);
 
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
@@ -189,23 +244,77 @@ export function PurchasePage() {
   };
 
   useEffect(() => {
-    if (isOnline) {
-      fetchCustomers();
-    }
+    fetchCustomers();
   }, [isOnline]);
 
   useEffect(() => {
-    if (seller && customers.length > 0 && !selectedCustomerId) {
-      const idNum = Number(seller);
+    if (farmer && customers.length > 0 && !selectedCustomerId) {
+      const idNum = Number(farmer);
       if (!isNaN(idNum)) {
         const found = customers.find(c => c.id === idNum);
         if (found) {
-          setSeller(found.name);
+          setFarmer(found.name);
           setSelectedCustomerId(found.id);
         }
       }
     }
-  }, [seller, customers, selectedCustomerId]);
+  }, [farmer, customers, selectedCustomerId]);
+
+  useEffect(() => {
+    const loadVehicles = async () => {
+      try {
+        const { data } = await api.get("/purchase/vehicles");
+        setPastVehicles(data || []);
+      } catch (err) {
+        console.error("Failed to load past vehicles", err);
+        try {
+          const purchases = await db.purchases.toArray();
+          const sales = await db.sales.toArray();
+          const vehicles = new Set<string>();
+          purchases.forEach(p => {
+            if (p.vehicleNo && p.vehicleNo.trim() && p.vehicleNo.trim() !== "--") {
+              vehicles.add(p.vehicleNo.trim());
+            }
+          });
+          sales.forEach(s => {
+            if (s.payload && s.payload.vehicleNo && s.payload.vehicleNo.trim() && s.payload.vehicleNo.trim() !== "--") {
+              vehicles.add(s.payload.vehicleNo.trim());
+            }
+          });
+          setPastVehicles(Array.from(vehicles));
+        } catch (offlineErr) {
+          console.error("Offline vehicle load failed", offlineErr);
+        }
+      }
+    };
+    const loadProducts = async () => {
+      try {
+        const { data } = await api.get("/products");
+        setProducts(data || []);
+      } catch (err) {
+        console.error("Failed to load products", err);
+      }
+    };
+    loadVehicles();
+    loadProducts();
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setActiveCommodityRowIndex(null);
+    };
+    const mainEl = document.querySelector("main");
+    if (mainEl) {
+      mainEl.addEventListener("scroll", handleScroll);
+    }
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      if (mainEl) {
+        mainEl.removeEventListener("scroll", handleScroll);
+      }
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const setDateDirty = (val: string) => {
     setDate(val);
@@ -219,8 +328,8 @@ export function PurchasePage() {
     setCessCondition(val);
     setIsDirty(true);
   };
-  const setSellerDirty = (val: string) => {
-    setSeller(val);
+  const setFarmerDirty = (val: string) => {
+    setFarmer(val);
     setIsDirty(true);
   };
   const setVehicleNoDirty = (val: string) => {
@@ -235,11 +344,6 @@ export function PurchasePage() {
     setNote(val);
     setIsDirty(true);
   };
-  const setChargesDirty = (val: Record<string, string> | ((prev: Record<string, string>) => Record<string, string>)) => {
-    setCharges(val);
-    setIsDirty(true);
-  };
-
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
@@ -355,7 +459,7 @@ export function PurchasePage() {
       amount: parseNumber(r.netWt) * parseNumber(r.rate),
     }));
 
-    const parsedSellerId = selectedCustomerId ?? (/^\d+$/.test(seller.trim()) ? Number(seller.trim()) : null);
+    const parsedFarmerId = selectedCustomerId ?? (/^\d+$/.test(farmer.trim()) ? Number(farmer.trim()) : null);
 
     const chargesMap: Record<string, string> = {
       "Purchase amt.": "purchaseAmount",
@@ -393,7 +497,7 @@ export function PurchasePage() {
         businessDate: toIsoDate(date),
         entryType,
         cessCondition,
-        sellerId: parsedSellerId,
+        sellerId: parsedFarmerId,
         vehicleNo: vehicleNo.trim(),
         partyBillNo: partyBillNo.trim(),
         note: note.trim(),
@@ -414,6 +518,13 @@ export function PurchasePage() {
       }
       setIsDirty(false);
       fetchAllBills();
+
+      const num = parseInt(billNo, 10);
+      let nextBill = billNo;
+      if (!isNaN(num)) {
+        nextBill = String(num + 1).padStart(billNo.length, "0");
+      }
+      resetForm(nextBill);
     } catch (e: any) {
       const errMsg = e?.response?.data?.error ?? "Failed to save purchase";
       setError(errMsg);
@@ -424,6 +535,7 @@ export function PurchasePage() {
   }
 
   function resetForm(keepBillNo: string = "") {
+    setIsLoadedFromDb(false);
     setPurchaseId(
       typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
@@ -433,18 +545,41 @@ export function PurchasePage() {
           return v.toString(16);
         })
     );
-    setBillNoInput(keepBillNo);
-    setBillNo(keepBillNo);
+    let targetBillNo = keepBillNo;
+    if (!targetBillNo) {
+      let maxNum = -1;
+      let maxStr = "";
+      for (const b of allBills) {
+        const numStr = b.billNo || "";
+        const num = parseInt(numStr, 10);
+        if (!isNaN(num) && num > maxNum) {
+          maxNum = num;
+          maxStr = numStr;
+        }
+      }
+      targetBillNo = maxNum !== -1
+        ? String(maxNum + 1).padStart(maxStr.length || 6, "0")
+        : "000001";
+    }
+    setBillNoInput(targetBillNo);
+    setBillNo(targetBillNo);
     setDate(getTodayDateString());
     setEntryType("Select market");
     setCessCondition("Order");
-    setSeller("");
+    setFarmer("");
     setSelectedCustomerId(null);
-    setVehicleNo("--");
-    setPartyBillNo("--");
-    setRows(Array.from({ length: 6 }, () => mkRow()));
+    setVehicleNo("");
+    setPartyBillNo("");
+    const initialRows = Array.from({ length: 2 }, () => mkRow());
+    if (defaultCrop) {
+      initialRows[0].commodity = defaultCrop;
+    }
+    setRows(initialRows);
     setNote("");
-    setCharges(Object.fromEntries(chargeFields.map((f) => [f, "0.00"])));
+    setCharges(Object.fromEntries(chargeFields.map((f) => [
+      f,
+      f === "Purchase amt." ? "0.00" : (purchaseCharges[f] ?? "0.00")
+    ])));
     setIsDirty(false);
     setMessage("");
     setError("");
@@ -454,7 +589,7 @@ export function PurchasePage() {
     try {
       const { data } = await api.post("/customers", formData);
       setCustomers((prev) => [...prev, data]);
-      setSeller(data.name);
+      setFarmer(data.name);
       setSelectedCustomerId(data.id);
       setIsDirty(true);
       setIsCustomerModalOpen(false);
@@ -509,15 +644,16 @@ export function PurchasePage() {
     try {
       const { data } = await api.get(`/purchase/by-bill-no/${num.trim()}`);
       if (data && data.id) {
+        setIsLoadedFromDb(true);
         setPurchaseId(data.id);
         setBillNo(data.billNo || data.voucherNo || "");
         setBillNoInput(data.billNo || data.voucherNo || "");
         setEntryType(data.entryType || "Select market");
         setCessCondition(data.cessCondition || "Order");
-        setSeller(data.sellerId ? String(data.sellerId) : "");
+        setFarmer(data.sellerId ? String(data.sellerId) : "");
         setSelectedCustomerId(data.sellerId || null);
-        setVehicleNo(data.vehicleNo || "--");
-        setPartyBillNo(data.partyBillNo || "--");
+        setVehicleNo(data.vehicleNo && data.vehicleNo !== "--" ? data.vehicleNo : "");
+        setPartyBillNo(data.partyBillNo && data.partyBillNo !== "--" ? data.partyBillNo : "");
         setNote(data.note || "");
 
         if (data.businessDate) {
@@ -541,12 +677,12 @@ export function PurchasePage() {
             netWt: it.netWeight ? String(it.netWeight) : "",
             rate: it.rate ? String(it.rate) : "",
           }));
-          while (mappedRows.length < 6) {
+          while (mappedRows.length < 2) {
             mappedRows.push(mkRow());
           }
           setRows(mappedRows);
         } else {
-          setRows(Array.from({ length: 6 }, () => mkRow()));
+          setRows(Array.from({ length: 2 }, () => mkRow()));
         }
 
         if (data.charges) {
@@ -645,34 +781,25 @@ export function PurchasePage() {
         )}
 
         <Card>
-          <CardHeader className="p-4 border-b">
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Bill Details</CardTitle>
+          <CardHeader className="p-4 border-b flex flex-row justify-between items-center h-14">
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">Bill Details</CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
             <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Bill no.</label>
               <Input
                 value={billNoInput}
-                onChange={(e) => {
-                  setBillNoInput(e.target.value);
-                  setShowBillNoDropdown(true);
-                }}
+                readOnly
                 onFocus={() => setShowBillNoDropdown(true)}
                 onBlur={() => {
                   setTimeout(() => setShowBillNoDropdown(false), 200);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleBillNoChange(billNoInput);
-                    setShowBillNoDropdown(false);
-                  }
-                }}
-                className="w-full"
-                placeholder="e.g., 001234"
+                className="w-full bg-slate-50 cursor-not-allowed font-mono"
+                placeholder="Auto-generated"
               />
               {showBillNoDropdown && (
                 <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
-                  {filteredBills.map((b) => (
+                  {allBills.map((b) => (
                     <div
                       key={b.id}
                       onMouseDown={() => {
@@ -685,7 +812,7 @@ export function PurchasePage() {
                       <span className="text-xs text-muted-foreground">{b.date}</span>
                     </div>
                   ))}
-                  {filteredBills.length === 0 && (
+                  {allBills.length === 0 && (
                     <div className="px-3 py-2 text-xs text-muted-foreground text-center">
                       No matching bills found
                     </div>
@@ -738,11 +865,11 @@ export function PurchasePage() {
               </Select>
             </div>
             <div className="space-y-1 md:col-span-2 relative">
-              <label className="text-xs font-semibold text-slate-500">Seller</label>
+              <label className="text-xs font-semibold text-slate-500">Farmer</label>
               <Input
-                value={seller}
+                value={farmer}
                 onChange={(e) => {
-                  setSellerDirty(e.target.value);
+                  setFarmerDirty(e.target.value);
                   setSelectedCustomerId(null);
                   setShowCustomerDropdown(true);
                 }}
@@ -750,26 +877,38 @@ export function PurchasePage() {
                 onBlur={() => {
                   setTimeout(() => setShowCustomerDropdown(false), 200);
                 }}
-                placeholder="Search Customer"
+                placeholder="Search Farmer"
               />
               {showCustomerDropdown && (
                 <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
                   {customers
                     .filter((c) =>
-                      c.name && c.name.toLowerCase().includes(seller.toLowerCase())
+                      c.name && c.name.toLowerCase().includes(farmer.toLowerCase())
                     )
                     .map((c) => (
                       <div
                         key={c.id}
                         onMouseDown={() => {
-                          setSeller(c.name);
+                          setFarmer(c.name);
                           setSelectedCustomerId(c.id);
                           setIsDirty(true);
                           setShowCustomerDropdown(false);
                         }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
                       >
-                        {c.name}
+                        <span>{c.name}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsFarmerId(c.id);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Farmer Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                   <div
@@ -779,18 +918,63 @@ export function PurchasePage() {
                     }}
                     className="px-3 py-2 text-sm font-semibold text-primary cursor-pointer hover:bg-accent border-t"
                   >
-                    + Add New Customer
+                    + Add New Farmer
                   </div>
                 </div>
               )}
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
               <Input
                 value={vehicleNo}
-                onChange={(e) => setVehicleNoDirty(e.target.value)}
+                onChange={(e) => {
+                  setVehicleNoDirty(e.target.value);
+                  setShowVehicleDropdown(true);
+                }}
+                onFocus={() => setShowVehicleDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowVehicleDropdown(false), 200);
+                }}
                 placeholder="e.g., MH-12-AB-1234"
               />
+              {showVehicleDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-40 overflow-y-auto">
+                  {pastVehicles
+                    .filter((v) =>
+                      v.toLowerCase().includes(vehicleNo.toLowerCase())
+                    )
+                    .map((v) => (
+                      <div
+                        key={v}
+                        onMouseDown={() => {
+                          setVehicleNo(v);
+                          setIsDirty(true);
+                          setShowVehicleDropdown(false);
+                        }}
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
+                      >
+                        <span>{v}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsVehicleNo(v);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Vehicle Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
+                      </div>
+                    ))}
+                  {pastVehicles.filter((v) => v.toLowerCase().includes(vehicleNo.toLowerCase())).length === 0 && (
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">
+                      No matching vehicles
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Party Bill No.</label>
@@ -801,152 +985,202 @@ export function PurchasePage() {
               />
             </div>
           </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="p-4 border-b flex flex-row justify-between items-center">
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Items</CardTitle>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={addRow}>+ Add row</Button>
-              <Button variant="outline" size="sm" onClick={removeSelectedRow}>Remove</Button>
-            </div>
-          </CardHeader>
-          <CardContent className="p-4 space-y-4">
-            <div className="border rounded-md overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-12 text-center">#</TableHead>
-                    <TableHead>Commodity</TableHead>
-                    <TableHead>Mark</TableHead>
-                    <TableHead>Brand</TableHead>
-                    <TableHead className="w-20">Bags</TableHead>
-                    <TableHead className="w-24">Avg. Wt.</TableHead>
-                    <TableHead className="w-24">Pur. Wt.</TableHead>
-                    <TableHead className="w-32">Packing Weight</TableHead>
-                    <TableHead className="w-24">Net Wt.</TableHead>
-                    <TableHead className="w-24">Rate</TableHead>
-                    <TableHead className="w-32 text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {rows.map((r, rowIndex) => {
-                    const amount = (parseNumber(r.netWt) * parseNumber(r.rate)).toFixed(2);
-                    const active = selectedRowIndex === rowIndex;
-                    return (
-                      <TableRow
-                        key={rowIndex}
-                        onClick={() => setSelectedRowIndex(rowIndex)}
-                        className={active ? "bg-muted/50" : ""}
-                      >
-                        <TableCell className="text-center font-medium">{rowIndex + 1}</TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.commodity}
-                            onChange={(e) => setCell(rowIndex, "commodity", e.target.value)}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
-                            placeholder="e.g., Onion"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.mark}
-                            onChange={(e) => setCell(rowIndex, "mark", e.target.value)}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
-                            placeholder="e.g., A1"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.brand}
-                            onChange={(e) => setCell(rowIndex, "brand", e.target.value)}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
-                            placeholder="e.g., Best"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.bags}
-                            onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.avgWt}
-                            onChange={(e) => setCell(rowIndex, "avgWt", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.purWt}
-                            onChange={(e) => setCell(rowIndex, "purWt", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.packingWeight}
-                            onChange={(e) => setCell(rowIndex, "packingWeight", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.netWt}
-                            onChange={(e) => setCell(rowIndex, "netWt", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="p-1">
-                          <input
-                            value={r.rate}
-                            onChange={(e) => setCell(rowIndex, "rate", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
-                          />
-                        </TableCell>
-                        <TableCell className="text-right font-mono text-sm font-semibold">{amount}</TableCell>
-                      </TableRow>
-                    );
-                  })}
-                </TableBody>
-              </Table>
-            </div>
-            <Input
-              value={note}
-              onChange={(e) => setNoteDirty(e.target.value)}
-              placeholder="Add details/note..."
-              className="bg-slate-100 dark:bg-slate-900 border-0"
-            />
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="p-4 border-b">
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Charges & Taxes</CardTitle>
-          </CardHeader>
-          <CardContent className="p-4 space-y-4">
-            <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-3">
-              {chargeFields.map((f) => (
-                <div key={f} className="space-y-1">
-                  <label className="text-[10px] font-bold uppercase tracking-wide text-slate-500 block truncate" title={f}>{f}</label>
-                  <Input
-                    value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
-                    onChange={(e) => setChargesDirty((c) => ({ ...c, [f]: sanitizeNumeric(e.target.value) }))}
-                    disabled={f === "Purchase amt."}
-                    className="h-8 text-xs font-mono"
-                  />
+        </Card>        <div className="grid grid-cols-1 lg:grid-cols-10 gap-6 items-start">
+          {/* Items Card (60% proportion) */}
+          <div className="lg:col-span-6">
+            <Card>
+              <CardHeader className="p-4 border-b flex flex-row justify-between items-center h-14">
+                <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">Items</CardTitle>
+                <div className="flex space-x-2">
+                  <Button variant="outline" size="sm" onClick={addRow} className="h-7 px-2.5 text-xs">+ Add row</Button>
+                  <Button variant="outline" size="sm" onClick={removeSelectedRow} className="h-7 px-2.5 text-xs">Remove</Button>
                 </div>
-              ))}
-            </div>
-            <div className="flex justify-end space-x-6 text-sm font-semibold border-t pt-4">
-              <span>Total: <span className="font-mono text-base">₹ {total.toFixed(2)}</span></span>
-              <span className="text-slate-400">|</span>
-              <span className="text-primary">Net Total: <span className="font-mono text-base">₹ {netTotal.toFixed(2)}</span></span>
-            </div>
-          </CardContent>
-        </Card>
+              </CardHeader>
+              <CardContent className="p-4 space-y-4">
+                <div className="border rounded-md overflow-x-auto">
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead className="w-12 text-center">#</TableHead>
+                        <TableHead>Commodity</TableHead>
+                        <TableHead>Mark</TableHead>
+                        <TableHead>Brand</TableHead>
+                        <TableHead className="w-20">Qty</TableHead>
+                        <TableHead className="w-24">Avg. Wt.</TableHead>
+                        <TableHead className="w-24">Pur. Wt.</TableHead>
+                        <TableHead className="w-32">Packing Weight</TableHead>
+                        <TableHead className="w-24">Net Wt.</TableHead>
+                        <TableHead className="w-24">Rate</TableHead>
+                        <TableHead className="w-32 text-right">Amount</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {rows.map((r, rowIndex) => {
+                        const amount = (parseNumber(r.netWt) * parseNumber(r.rate)).toFixed(2);
+                        const active = selectedRowIndex === rowIndex;
+                        return (
+                          <TableRow
+                            key={rowIndex}
+                            onClick={() => setSelectedRowIndex(rowIndex)}
+                            className={active ? "bg-muted/50" : ""}
+                          >
+                            <TableCell className="text-center font-medium">{rowIndex + 1}</TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.commodity}
+                                onChange={(e) => setCell(rowIndex, "commodity", e.target.value)}
+                                onFocus={(e) => {
+                                  const rect = e.currentTarget.getBoundingClientRect();
+                                  setCommodityDropdownCoords({
+                                    top: rect.bottom,
+                                    left: rect.left,
+                                    width: rect.width,
+                                  });
+                                  setActiveCommodityRowIndex(rowIndex);
+                                }}
+                                onClick={(e) => {
+                                  const rect = e.currentTarget.getBoundingClientRect();
+                                  setCommodityDropdownCoords({
+                                    top: rect.bottom,
+                                    left: rect.left,
+                                    width: rect.width,
+                                  });
+                                  setActiveCommodityRowIndex(rowIndex);
+                                }}
+                                onBlur={() => {
+                                  setTimeout(() => {
+                                    setActiveCommodityRowIndex(null);
+                                    setRows((prev) => {
+                                      return prev.map((row, idx) => {
+                                        if (idx === rowIndex) {
+                                          const trimmed = row.commodity.trim().toLowerCase();
+                                          if (!trimmed) return row;
+                                          const matched = products.find(
+                                            (p) => p.englishName?.toLowerCase() === trimmed
+                                          );
+                                          if (!matched) {
+                                            return { ...row, commodity: "" };
+                                          } else {
+                                            return { ...row, commodity: matched.englishName };
+                                          }
+                                        }
+                                        return row;
+                                      });
+                                    });
+                                  }, 200);
+                                }}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                                placeholder="e.g., Onion"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.mark}
+                                onChange={(e) => setCell(rowIndex, "mark", e.target.value)}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                                placeholder="e.g., A1"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.brand}
+                                onChange={(e) => setCell(rowIndex, "brand", e.target.value)}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none"
+                                placeholder="e.g., Best"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.bags}
+                                onChange={(e) => setCell(rowIndex, "bags", sanitizeInteger(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.avgWt}
+                                onChange={(e) => setCell(rowIndex, "avgWt", sanitizeNumeric(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.purWt}
+                                onChange={(e) => setCell(rowIndex, "purWt", sanitizeNumeric(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.packingWeight}
+                                onChange={(e) => setCell(rowIndex, "packingWeight", sanitizeNumeric(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.netWt}
+                                onChange={(e) => setCell(rowIndex, "netWt", sanitizeNumeric(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="p-1">
+                              <input
+                                value={r.rate}
+                                onChange={(e) => setCell(rowIndex, "rate", sanitizeNumeric(e.target.value))}
+                                className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                              />
+                            </TableCell>
+                            <TableCell className="text-right font-mono text-sm font-semibold">{amount}</TableCell>
+                          </TableRow>
+                        );
+                      })}
+                    </TableBody>
+                  </Table>
+                </div>
+                <Input
+                  value={note}
+                  onChange={(e) => setNoteDirty(e.target.value)}
+                  placeholder="Add details/note..."
+                  className="bg-slate-100 dark:bg-slate-900 border-0"
+                />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Charges & Taxes Card (40% proportion) */}
+          <div className="lg:col-span-4">
+            <Card>
+              <CardHeader className="p-4 border-b flex flex-row justify-between items-center h-14">
+                <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">Charges & Taxes</CardTitle>
+              </CardHeader>
+              <CardContent className="p-4 space-y-4">
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                  {chargeFields.map((f) => (
+                    <div key={f} className="space-y-1">
+                      <label className="text-[9px] font-bold uppercase tracking-wide text-slate-500 block truncate" title={f}>{f}</label>
+                      <Input
+                        value={f === "Purchase amt." ? total.toFixed(2) : charges[f]}
+                        readOnly
+                        className="h-8 text-xs font-mono bg-slate-50 cursor-not-allowed text-slate-600"
+                      />
+                    </div>
+                  ))}
+                </div>
+                <div className="flex flex-col space-y-2 border-t pt-4 text-xs font-semibold">
+                  <div className="flex justify-between items-center">
+                    <span className="text-slate-500">Total Amount:</span>
+                    <span className="font-mono text-slate-700">₹ {total.toFixed(2)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-[#1e3a8a] border-t border-dashed pt-2.5">
+                    <span className="font-bold text-sm">Net Total Payable:</span>
+                    <span className="font-mono text-base font-extrabold">₹ {netTotal.toFixed(2)}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
 
         <div className="sticky bottom-0 z-40 shrink-0 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-t py-4 px-6 mb-0">
           <div className="flex items-center space-x-6">
@@ -1011,8 +1245,70 @@ export function PurchasePage() {
         open={isCustomerModalOpen}
         onClose={() => setIsCustomerModalOpen(false)}
         onSave={handleCreateCustomer}
-        initialData={{ name: seller }}
+        initialData={{ name: farmer }}
       />
+
+      <VehicleAnalyticsModal
+        open={!!analyticsVehicleNo}
+        onClose={() => setAnalyticsVehicleNo("")}
+        vehicleNo={analyticsVehicleNo}
+      />
+
+      <FarmerAnalyticsModal
+        open={analyticsFarmerId !== null}
+        onClose={() => setAnalyticsFarmerId(null)}
+        farmerId={analyticsFarmerId}
+      />
+
+      {activeCommodityRowIndex !== null && commodityDropdownCoords && createPortal(
+        <div
+          className="fixed z-[9999] bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto"
+          style={{
+            top: `${commodityDropdownCoords.top}px`,
+            left: `${commodityDropdownCoords.left}px`,
+            width: `${commodityDropdownCoords.width}px`,
+          }}
+        >
+          {products
+            .filter((p) => {
+              const currentVal = rows[activeCommodityRowIndex]?.commodity || "";
+              if (!currentVal.trim()) return true;
+              const isExactMatch = products.some(
+                (prod) => prod.englishName?.toLowerCase() === currentVal.toLowerCase()
+              );
+              if (isExactMatch) return true;
+              return (p.englishName && p.englishName.toLowerCase().includes(currentVal.toLowerCase())) ||
+                     (p.marathiName && p.marathiName.toLowerCase().includes(currentVal.toLowerCase()));
+            })
+            .map((p) => (
+              <div
+                key={p.id}
+                onMouseDown={() => {
+                  setCell(activeCommodityRowIndex, "commodity", p.englishName);
+                  setActiveCommodityRowIndex(null);
+                }}
+                className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground text-left"
+              >
+                {p.englishName} {p.marathiName ? `(${p.marathiName})` : ""}
+              </div>
+            ))}
+          {products.filter((p) => {
+            const currentVal = rows[activeCommodityRowIndex]?.commodity || "";
+            if (!currentVal.trim()) return true;
+            const isExactMatch = products.some(
+              (prod) => prod.englishName?.toLowerCase() === currentVal.toLowerCase()
+            );
+            if (isExactMatch) return true;
+            return (p.englishName && p.englishName.toLowerCase().includes(currentVal.toLowerCase())) ||
+                   (p.marathiName && p.marathiName.toLowerCase().includes(currentVal.toLowerCase()));
+          }).length === 0 && (
+            <div className="px-3 py-2 text-xs text-muted-foreground text-center">
+              No matching products
+            </div>
+          )}
+        </div>,
+        document.body
+      )}
     </div>
   );
 }
