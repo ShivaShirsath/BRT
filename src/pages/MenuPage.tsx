@@ -144,7 +144,7 @@ export function MenuPage() {
   const cachedPurchases = useLiveQuery(() => db.purchases.toArray()) ?? [];
   const cachedSales = useLiveQuery(() => db.sales.toArray()) ?? [];
 
-  const [expandedSection, setExpandedSection] = useState<"Primary" | "Secondary" | "Tertiary">("Secondary");
+  const [expandedSection, setExpandedSection] = useState<"Primary" | "Secondary" | "Tertiary">("Primary");
 
   async function handleManualSync() {
     setSyncingManual(true);

@@ -17,6 +17,8 @@ import { CashWithdrawalPage } from "./pages/CashWithdrawalPage";
 import { CustomerReceiptPage } from "./pages/CustomerReceiptPage";
 import { MiscReceiptPage } from "./pages/MiscReceiptPage";
 import { PaymentVoucherPage } from "./pages/PaymentVoucherPage";
+import { VehicleAnalyticsPage } from "./pages/VehicleAnalyticsPage";
+import { FarmerAnalyticsPage } from "./pages/FarmerAnalyticsPage";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 import api from "./api/client";
@@ -147,6 +149,8 @@ export default function App() {
               <Route path="/customer-receipt" element={<CustomerReceiptPage />} />
               <Route path="/misc-receipt" element={<MiscReceiptPage />} />
               <Route path="/payment-voucher" element={<PaymentVoucherPage />} />
+              <Route path="/analytics/vehicle/:vehicleNo" element={<VehicleAnalyticsPage />} />
+              <Route path="/analytics/farmer/:farmerId" element={<FarmerAnalyticsPage />} />
             </Route>
             <Route path="*" element={<Navigate to="/auth" replace />} />
           </Routes>

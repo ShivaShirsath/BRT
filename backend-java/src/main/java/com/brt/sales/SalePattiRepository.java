@@ -11,5 +11,8 @@ public interface SalePattiRepository extends JpaRepository<SalePatti, java.util.
 
     @Query("SELECT DISTINCT s.detail.vehicleNo FROM SalePatti s WHERE s.detail.vehicleNo IS NOT NULL AND s.detail.vehicleNo <> '' AND s.detail.vehicleNo <> '--'")
     List<String> findDistinctVehicleNumbers();
+
+    List<SalePatti> findByDetailVehicleNoIgnoreCase(String vehicleNo);
+    List<SalePatti> findByDetailCustomerId(Long customerId);
 }
 

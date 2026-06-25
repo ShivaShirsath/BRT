@@ -27,6 +27,9 @@ import {
 import { db } from "../lib/db";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 import { useNavigate } from "react-router-dom";
+import { Info } from "lucide-react";
+import { VehicleAnalyticsModal } from "../components/VehicleAnalyticsModal";
+import { FarmerAnalyticsModal } from "../components/FarmerAnalyticsModal";
 
 type SalesRow = {
   bookDate: string;
@@ -160,6 +163,8 @@ export function SalesPage() {
   const [allSales, setAllSales] = useState<any[]>([]);
   const [pastVehicles, setPastVehicles] = useState<string[]>([]);
   const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
+  const [analyticsVehicleNo, setAnalyticsVehicleNo] = useState("");
+  const [analyticsFarmerId, setAnalyticsFarmerId] = useState<number | null>(null);
 
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
@@ -760,9 +765,21 @@ export function SalesPage() {
                           setIsDirty(true);
                           setShowCustomerDropdown(false);
                         }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
                       >
-                        {c.name}
+                        <span>{c.name}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsFarmerId(c.id);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Customer Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                   <div
@@ -809,9 +826,21 @@ export function SalesPage() {
                           setIsDirty(true);
                           setShowVehicleDropdown(false);
                         }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
                       >
-                        {v}
+                        <span>{v}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsVehicleNo(v);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Vehicle Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                   {pastVehicles.filter((v) => v.toLowerCase().includes(vehicleNo.toLowerCase())).length === 0 && (
@@ -1076,6 +1105,18 @@ export function SalesPage() {
         onClose={() => setIsCustomerModalOpen(false)}
         onSave={handleCreateCustomer}
         initialData={{ accountType: "Customer" }}
+      />
+
+      <VehicleAnalyticsModal
+        open={!!analyticsVehicleNo}
+        onClose={() => setAnalyticsVehicleNo("")}
+        vehicleNo={analyticsVehicleNo}
+      />
+
+      <FarmerAnalyticsModal
+        open={analyticsFarmerId !== null}
+        onClose={() => setAnalyticsFarmerId(null)}
+        farmerId={analyticsFarmerId}
       />
     </div>
   );

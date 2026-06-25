@@ -58,4 +58,25 @@ public class PurchaseController {
     if (principal == null) throw new IllegalArgumentException("Unauthorized");
     return purchaseService.getUniqueVehicleNumbers();
   }
+
+  @GetMapping("/analytics/vehicle/{vehicleNo}")
+  public Map<String, Object> getVehicleAnalytics(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable String vehicleNo) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return purchaseService.getVehicleAnalytics(vehicleNo);
+  }
+
+  @GetMapping("/analytics/farmer/{farmerId}")
+  public Map<String, Object> getFarmerAnalytics(@AuthenticationPrincipal JwtPrincipal principal, @PathVariable Long farmerId) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return purchaseService.getFarmerAnalytics(farmerId);
+  }
+
+  @GetMapping("/analytics/overall")
+  public Map<String, Object> getOverallAnalytics(
+      @AuthenticationPrincipal JwtPrincipal principal,
+      @RequestParam(value = "startDate", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate startDate,
+      @RequestParam(value = "endDate", required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate endDate) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return purchaseService.getOverallAnalytics(startDate, endDate);
+  }
 }

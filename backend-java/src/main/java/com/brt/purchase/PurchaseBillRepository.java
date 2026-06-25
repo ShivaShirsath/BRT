@@ -14,5 +14,8 @@ public interface PurchaseBillRepository extends JpaRepository<PurchaseBill, java
 
   @Query("SELECT DISTINCT p.detail.vehicleNo FROM PurchaseBill p WHERE p.detail.vehicleNo IS NOT NULL AND p.detail.vehicleNo <> '' AND p.detail.vehicleNo <> '--'")
   List<String> findDistinctVehicleNumbers();
+
+  List<PurchaseBill> findByDetailVehicleNoIgnoreCase(String vehicleNo);
+  List<PurchaseBill> findByDetailSellerId(Long sellerId);
 }
 

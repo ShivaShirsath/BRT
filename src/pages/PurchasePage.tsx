@@ -28,6 +28,9 @@ import {
 import { db } from "../lib/db";
 import { AccountGenerationModal } from "../components/AccountGenerationModal";
 import { useNavigate } from "react-router-dom";
+import { Info } from "lucide-react";
+import { VehicleAnalyticsModal } from "../components/VehicleAnalyticsModal";
+import { FarmerAnalyticsModal } from "../components/FarmerAnalyticsModal";
 
 type PurchaseItemRow = {
   commodity: string;
@@ -174,6 +177,8 @@ export function PurchasePage() {
   const [allBills, setAllBills] = useState<any[]>([]);
   const [pastVehicles, setPastVehicles] = useState<string[]>([]);
   const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
+  const [analyticsVehicleNo, setAnalyticsVehicleNo] = useState("");
+  const [analyticsFarmerId, setAnalyticsFarmerId] = useState<number | null>(null);
   const [products, setProducts] = useState<any[]>([]);
   const [activeCommodityRowIndex, setActiveCommodityRowIndex] = useState<number | null>(null);
   const [commodityDropdownCoords, setCommodityDropdownCoords] = useState<{ top: number; left: number; width: number } | null>(null);
@@ -889,9 +894,21 @@ export function PurchasePage() {
                           setIsDirty(true);
                           setShowCustomerDropdown(false);
                         }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
                       >
-                        {c.name}
+                        <span>{c.name}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsFarmerId(c.id);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Farmer Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                   <div
@@ -934,9 +951,21 @@ export function PurchasePage() {
                           setIsDirty(true);
                           setShowVehicleDropdown(false);
                         }}
-                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground flex justify-between items-center"
                       >
-                        {v}
+                        <span>{v}</span>
+                        <button
+                          type="button"
+                          onMouseDown={(e) => {
+                            e.stopPropagation();
+                            e.preventDefault();
+                            setAnalyticsVehicleNo(v);
+                          }}
+                          className="p-1 hover:bg-muted rounded text-muted-foreground hover:text-foreground transition-colors"
+                          title="View Vehicle Analytics"
+                        >
+                          <Info className="h-4 w-4" />
+                        </button>
                       </div>
                     ))}
                   {pastVehicles.filter((v) => v.toLowerCase().includes(vehicleNo.toLowerCase())).length === 0 && (
@@ -1217,6 +1246,18 @@ export function PurchasePage() {
         onClose={() => setIsCustomerModalOpen(false)}
         onSave={handleCreateCustomer}
         initialData={{ name: farmer }}
+      />
+
+      <VehicleAnalyticsModal
+        open={!!analyticsVehicleNo}
+        onClose={() => setAnalyticsVehicleNo("")}
+        vehicleNo={analyticsVehicleNo}
+      />
+
+      <FarmerAnalyticsModal
+        open={analyticsFarmerId !== null}
+        onClose={() => setAnalyticsFarmerId(null)}
+        farmerId={analyticsFarmerId}
       />
 
       {activeCommodityRowIndex !== null && commodityDropdownCoords && createPortal(
