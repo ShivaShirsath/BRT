@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
+import api from "../api/client";
 
 export type ThemeId = "9b0ab864" | "e03d68e7" | "1bfe07e5" | "34f7e1f7" | "1bf014bc" | "418a8650" | "dffd2629" | "f73e0bf6" | "737b8680";
 
@@ -24,11 +25,47 @@ export const THEMES: Theme[] = [
   { id: "737b8680", name: "Soft Pop (Rose)", className: "theme-737b8680", colorHex: "#e11d48" }
 ];
 
+export const DEFAULT_PURCHASE_CHARGES: Record<string, string> = {
+  "M. Tax": "0.00",
+  "Commission": "0.00",
+  "Pur. Comm": "0.00",
+  "Freight": "0.00",
+  "Packing": "0.00",
+  "Loading": "0.00",
+  "Leivy": "0.00",
+  "Tolai": "0.00",
+  "Hamali": "0.00",
+  "Discount": "0.00",
+  "IGST": "0.00",
+  "SGST": "0.00",
+  "CGST": "0.00",
+  "TDS": "0.00",
+  "Khandani": "0.00",
+  "Our expenses": "0.00",
+  "Exp. 2": "0.00",
+  "Exp. 3": "0.00",
+  "Exp. 4": "0.00",
+};
+
+export const DEFAULT_SALES_CHARGES: Record<string, string> = {
+  "pattiFreight": "0.00",
+  "commission": "0.00",
+  "tdsPercent": "0.00",
+};
+
 type ThemeState = {
   themeId: ThemeId;
   themeMode: ThemeMode;
+  defaultCrop: string;
+  purchaseCharges: Record<string, string>;
+  salesCharges: Record<string, string>;
   setTheme: (id: ThemeId) => void;
   setThemeMode: (mode: ThemeMode) => void;
+  setDefaultCrop: (crop: string) => void;
+  setPurchaseCharges: (charges: Record<string, string>) => void;
+  setSalesCharges: (charges: Record<string, string>) => void;
+  fetchSettingsFromServer: () => Promise<void>;
+  saveSettingsToServer: (updates: Partial<Pick<ThemeState, "defaultCrop" | "purchaseCharges" | "salesCharges">>) => Promise<void>;
 };
 
 export const useThemeStore = create<ThemeState>()(
@@ -36,8 +73,60 @@ export const useThemeStore = create<ThemeState>()(
     (set) => ({
       themeId: "9b0ab864",
       themeMode: "system",
+      defaultCrop: "",
+      purchaseCharges: { ...DEFAULT_PURCHASE_CHARGES },
+      salesCharges: { ...DEFAULT_SALES_CHARGES },
       setTheme: (themeId) => set({ themeId }),
       setThemeMode: (themeMode) => set({ themeMode }),
+      setDefaultCrop: (defaultCrop) => {
+        set({ defaultCrop });
+        api.post("/settings", { defaultCrop }).catch(err => console.error("Failed to sync defaultCrop", err));
+      },
+      setPurchaseCharges: (purchaseCharges) => {
+        set({ purchaseCharges });
+        api.post("/settings", { purchaseCharges }).catch(err => console.error("Failed to sync purchaseCharges", err));
+      },
+      setSalesCharges: (salesCharges) => {
+        set({ salesCharges });
+        api.post("/settings", { salesCharges }).catch(err => console.error("Failed to sync salesCharges", err));
+      },
+      fetchSettingsFromServer: async () => {
+        try {
+          const { data } = await api.get("/settings");
+          if (data) {
+            set({
+              defaultCrop: data.defaultCrop || "",
+              purchaseCharges: (data.purchaseCharges && Object.keys(data.purchaseCharges).length > 0)
+                ? data.purchaseCharges
+                : { ...DEFAULT_PURCHASE_CHARGES },
+              salesCharges: (data.salesCharges && Object.keys(data.salesCharges).length > 0)
+                ? data.salesCharges
+                : { ...DEFAULT_SALES_CHARGES },
+            });
+          }
+        } catch (err) {
+          console.error("Failed to fetch settings from server", err);
+        }
+      },
+      saveSettingsToServer: async (updates) => {
+        try {
+          const { data } = await api.post("/settings", updates);
+          if (data) {
+            set({
+              defaultCrop: data.defaultCrop || "",
+              purchaseCharges: (data.purchaseCharges && Object.keys(data.purchaseCharges).length > 0)
+                ? data.purchaseCharges
+                : { ...DEFAULT_PURCHASE_CHARGES },
+              salesCharges: (data.salesCharges && Object.keys(data.salesCharges).length > 0)
+                ? data.salesCharges
+                : { ...DEFAULT_SALES_CHARGES },
+            });
+          }
+        } catch (err) {
+          console.error("Failed to save settings to server", err);
+          set(updates);
+        }
+      },
     }),
     {
       name: "brt-theme-settings",

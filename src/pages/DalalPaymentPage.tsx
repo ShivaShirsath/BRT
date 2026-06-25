@@ -270,13 +270,13 @@ export function DalalPaymentPage() {
 
     // Check if we have an existing voucher to get its ID, or generate a new UUID
     const existingVoucher = vouchers.find((v: any) => v.billNo === billNoInput.trim());
-    const id = existingVoucher && (existingVoucher as any).id 
-      ? (existingVoucher as any).id 
+    const id = existingVoucher && (existingVoucher as any).id
+      ? (existingVoucher as any).id
       : (window.crypto && window.crypto.randomUUID ? window.crypto.randomUUID() : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-          const r = (Math.random() * 16) | 0;
-          const v = c === "x" ? r : (r & 0x3) | 0x8;
-          return v.toString(16);
-        }));
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+      }));
 
     const payload = {
       id,
@@ -733,11 +733,10 @@ export function DalalPaymentPage() {
                       key={bk}
                       type="button"
                       onClick={() => setSelectedBank(bk)}
-                      className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${
-                        selectedBank === bk
+                      className={`px-3 py-1.5 rounded text-xs font-bold border transition-colors shadow-xs ${selectedBank === bk
                           ? "bg-primary border-primary text-primary-foreground"
                           : "bg-background border-border text-foreground hover:bg-accent"
-                      }`}
+                        }`}
                     >
                       {bk}
                     </button>
@@ -889,6 +888,11 @@ export function DalalPaymentPage() {
           </Button>
         </div>
       </footer>
+      <AccountGenerationModal
+        open={isAccountModalOpen}
+        onClose={() => setIsAccountModalOpen(false)}
+        onSave={handleCreateCustomerAccount}
+      />
     </div>
   );
 }

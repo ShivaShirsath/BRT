@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import api from "../api/client";
 import { useAuthStore } from "../store/authStore";
+import { useThemeStore } from "../store/themeStore";
 import { useNetwork } from "../hooks/useNetwork";
 import { z } from "zod";
 import { ValidationErrorsDialog } from "../components/ValidationErrorsDialog";
@@ -38,15 +39,15 @@ type SalesRow = {
   tdsPercent: string;
 };
 
-const mkRow = (): SalesRow => ({
+const mkRow = (defaultFreight = "", defaultCommission = "", defaultTds = ""): SalesRow => ({
   bookDate: "",
   pattiNo: "",
   pattiDate: "",
   bags: "",
   pattiWt: "",
-  pattiFreight: "",
-  commission: "",
-  tdsPercent: "",
+  pattiFreight: defaultFreight,
+  commission: defaultCommission,
+  tdsPercent: defaultTds,
 });
 
 function getTodayDateString(): string {
@@ -83,7 +84,7 @@ const salesSchema = z.object({
       net: z.number().nonnegative("Net amount cannot be negative. Deductions exceed Gross Weight/Value."),
     })
   ).min(1, "Add at least one patti row"),
-  totalQty: z.number().gt(0, "Total bags must be greater than zero"),
+  totalQty: z.number().gt(0, "Total Qty must be greater than zero"),
   avgRate: z.number().nonnegative("Calculated average rate cannot be negative. Please check patti weight, freight, and commission inputs."),
 });
 
@@ -96,6 +97,7 @@ export function SalesPage() {
 
   const [isDirty, setIsDirty] = useState(false);
   const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [isLoadedFromDb, setIsLoadedFromDb] = useState(false);
 
   useBeforeUnload(isDirty);
 
@@ -116,11 +118,31 @@ export function SalesPage() {
   const [vehicleNo, setVehicleNo] = useState("--");
   const [partyBillNo, setPartyBillNo] = useState("--");
   const [date, setDate] = useState(getTodayDateString());
-  const [voucherNo, setVoucherNo] = useState("001186");
-  const [voucherNoInput, setVoucherNoInput] = useState("001186");
+  const [voucherNo, setVoucherNo] = useState("");
+  const [voucherNoInput, setVoucherNoInput] = useState("");
 
-  const [rows, setRows] = useState<SalesRow[]>(Array.from({ length: 6 }, () => mkRow()));
+  const salesCharges = useThemeStore((s) => s.salesCharges);
+
+  const [rows, setRows] = useState<SalesRow[]>(() => {
+    const storeCharges = useThemeStore.getState().salesCharges;
+    return Array.from({ length: 2 }, () => mkRow(
+      storeCharges.pattiFreight ?? "0.00",
+      storeCharges.commission ?? "0.00",
+      storeCharges.tdsPercent ?? "0.00"
+    ));
+  });
   const [selectedRowIndex, setSelectedRowIndex] = useState<number>(0);
+
+  useEffect(() => {
+    if (!isLoadedFromDb && salesCharges && Object.keys(salesCharges).length > 0) {
+      setRows((prev) => prev.map(row => ({
+        ...row,
+        pattiFreight: salesCharges.pattiFreight ?? "0.00",
+        commission: salesCharges.commission ?? "0.00",
+        tdsPercent: salesCharges.tdsPercent ?? "0.00",
+      })));
+    }
+  }, [salesCharges, isLoadedFromDb]);
 
   const [transport, setTransport] = useState(false);
   const [remark, setRemark] = useState(false);
@@ -136,6 +158,8 @@ export function SalesPage() {
 
   const [showVoucherDropdown, setShowVoucherDropdown] = useState(false);
   const [allSales, setAllSales] = useState<any[]>([]);
+  const [pastVehicles, setPastVehicles] = useState<string[]>([]);
+  const [showVehicleDropdown, setShowVehicleDropdown] = useState(false);
 
   const [isCustomerModalOpen, setIsCustomerModalOpen] = useState(false);
   const [customers, setCustomers] = useState<any[]>([]);
@@ -144,14 +168,15 @@ export function SalesPage() {
 
   const fetchAllSales = async () => {
     try {
+      let salesList: any[] = [];
       if (isOnline) {
         const { data } = await api.get("/sales/all");
         if (data && data.rows) {
-          setAllSales(data.rows.map((r: any) => ({ ...r, synced: true })));
+          salesList = data.rows.map((r: any) => ({ ...r, synced: true }));
         }
       } else {
         const offlineSales = await db.sales.toArray();
-        setAllSales(offlineSales.map((p) => {
+        salesList = offlineSales.map((p) => {
           let dateStr = "";
           let amountVal = 0;
           if (p.payload) {
@@ -170,8 +195,27 @@ export function SalesPage() {
             amount: amountVal,
             synced: p.synced
           };
-        }));
+        });
       }
+      setAllSales(salesList);
+
+      // Auto-precede voucher number if not already set or loaded
+      let maxNum = -1;
+      let maxStr = "";
+      for (const s of salesList) {
+        const numStr = s.salePattiNo || "";
+        const num = parseInt(numStr, 10);
+        if (!isNaN(num) && num > maxNum) {
+          maxNum = num;
+          maxStr = numStr;
+        }
+      }
+      const nextVoucher = maxNum !== -1
+        ? String(maxNum + 1).padStart(maxStr.length || 6, "0")
+        : "000001";
+
+      setVoucherNo((prev) => prev ? prev : nextVoucher);
+      setVoucherNoInput((prev) => prev ? prev : nextVoucher);
     } catch (err) {
       console.error("Failed to load sale pattis", err);
     }
@@ -209,14 +253,35 @@ export function SalesPage() {
     }
   }, [customer, customers, selectedCustomerId]);
 
-  const filteredSales = useMemo(() => {
-    if (!voucherNoInput.trim()) return allSales;
-    const q = voucherNoInput.toLowerCase();
-    return allSales.filter(b =>
-      (b.salePattiNo && b.salePattiNo.toLowerCase().includes(q)) ||
-      (b.date && b.date.toLowerCase().includes(q))
-    );
-  }, [allSales, voucherNoInput]);
+  useEffect(() => {
+    const loadVehicles = async () => {
+      try {
+        const { data } = await api.get("/purchase/vehicles");
+        setPastVehicles(data || []);
+      } catch (err) {
+        console.error("Failed to load past vehicles", err);
+        try {
+          const purchases = await db.purchases.toArray();
+          const sales = await db.sales.toArray();
+          const vehicles = new Set<string>();
+          purchases.forEach(p => {
+            if (p.vehicleNo && p.vehicleNo.trim() && p.vehicleNo.trim() !== "--") {
+              vehicles.add(p.vehicleNo.trim());
+            }
+          });
+          sales.forEach(s => {
+            if (s.payload && s.payload.vehicleNo && s.payload.vehicleNo.trim() && s.payload.vehicleNo.trim() !== "--") {
+              vehicles.add(s.payload.vehicleNo.trim());
+            }
+          });
+          setPastVehicles(Array.from(vehicles));
+        } catch (offlineErr) {
+          console.error("Offline vehicle load failed", offlineErr);
+        }
+      }
+    };
+    loadVehicles();
+  }, []);
 
   const setDateDirty = (val: string) => {
     setDate(val);
@@ -245,7 +310,11 @@ export function SalesPage() {
   }
 
   function addRow() {
-    setRows((prev) => [...prev, mkRow()]);
+    setRows((prev) => [...prev, mkRow(
+      salesCharges.pattiFreight ?? "0.00",
+      salesCharges.commission ?? "0.00",
+      salesCharges.tdsPercent ?? "0.00"
+    )]);
     setSelectedRowIndex(rows.length);
     setIsDirty(true);
   }
@@ -299,14 +368,15 @@ export function SalesPage() {
   const pattiNetTotal = useMemo(() => rows.reduce((sum, r) => sum + rowNet(r), 0), [rows]);
 
   function resetForm(keepVoucherNo: string = "") {
+    setIsLoadedFromDb(false);
     setSalesId(
       typeof window !== "undefined" && window.crypto && window.crypto.randomUUID
         ? window.crypto.randomUUID()
         : "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-            const r = (Math.random() * 16) | 0;
-            const v = c === "x" ? r : (r & 0x3) | 0x8;
-            return v.toString(16);
-          })
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        })
     );
     setCustomer("");
     setSelectedCustomerId(null);
@@ -314,13 +384,34 @@ export function SalesPage() {
     setVehicleNo("--");
     setPartyBillNo("--");
     setDate(getTodayDateString());
-    setRows(Array.from({ length: 6 }, () => mkRow()));
+    setRows(Array.from({ length: 2 }, () => mkRow(
+      salesCharges.pattiFreight ?? "0.00",
+      salesCharges.commission ?? "0.00",
+      salesCharges.tdsPercent ?? "0.00"
+    )));
     setSalesComplete("Yes");
     setRemark(false);
     setMessage("");
     setError("");
-    setVoucherNoInput(keepVoucherNo);
-    setVoucherNo(keepVoucherNo);
+
+    let targetVoucherNo = keepVoucherNo;
+    if (!targetVoucherNo) {
+      let maxNum = -1;
+      let maxStr = "";
+      for (const s of allSales) {
+        const numStr = s.salePattiNo || "";
+        const num = parseInt(numStr, 10);
+        if (!isNaN(num) && num > maxNum) {
+          maxNum = num;
+          maxStr = numStr;
+        }
+      }
+      targetVoucherNo = maxNum !== -1
+        ? String(maxNum + 1).padStart(maxStr.length || 6, "0")
+        : "000001";
+    }
+    setVoucherNoInput(targetVoucherNo);
+    setVoucherNo(targetVoucherNo);
     setIsDirty(false);
   }
 
@@ -332,6 +423,7 @@ export function SalesPage() {
     try {
       const { data } = await api.get(`/sales/by-patti-no/${num.trim()}`);
       if (data && data.id) {
+        setIsLoadedFromDb(true);
         setSalesId(data.id);
         setCustomer(data.customerAcno || "");
         setSelectedCustomerId(data.customerAcno ? Number(data.customerAcno) : null);
@@ -340,7 +432,7 @@ export function SalesPage() {
         setPartyBillNo(data.partyBillNo || "--");
         setSalesComplete(data.salesComplete ? "Yes" : "No");
         setRemark(!!data.remark);
-        
+
         if (data.businessDate) {
           const parts = data.businessDate.split("-");
           if (parts.length === 3) {
@@ -367,12 +459,12 @@ export function SalesPage() {
             commission: it.commission || "",
             tdsPercent: it.tdsPercent || "",
           }));
-          while (mappedRows.length < 6) {
+          while (mappedRows.length < 2) {
             mappedRows.push(mkRow());
           }
           setRows(mappedRows);
         } else {
-          setRows(Array.from({ length: 6 }, () => mkRow()));
+          setRows(Array.from({ length: 2 }, () => mkRow()));
         }
         setMessage(`Loaded details for Voucher no. ${data.voucherNo}`);
         setError("");
@@ -507,7 +599,7 @@ export function SalesPage() {
       }
       setIsDirty(false);
       fetchAllSales();
-      
+
       const num = parseInt(voucherNo, 10);
       let nextVoucher = voucherNo;
       if (!isNaN(num)) {
@@ -599,34 +691,25 @@ export function SalesPage() {
         )}
 
         <Card>
-          <CardHeader className="p-4 border-b">
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Patti Details</CardTitle>
+          <CardHeader className="p-4 border-b flex flex-row justify-between items-center h-14">
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">Patti Details</CardTitle>
           </CardHeader>
           <CardContent className="p-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-6 gap-4">
             <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Voucher No.</label>
               <Input
                 value={voucherNoInput}
-                onChange={(e) => {
-                  setVoucherNoInput(e.target.value);
-                  setShowVoucherDropdown(true);
-                }}
+                readOnly
                 onFocus={() => setShowVoucherDropdown(true)}
                 onBlur={() => {
                   setTimeout(() => setShowVoucherDropdown(false), 200);
                 }}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    handleVoucherNoChange(voucherNoInput);
-                    setShowVoucherDropdown(false);
-                  }
-                }}
-                className="w-full"
-                placeholder="e.g., 001234"
+                className="w-full bg-slate-50 cursor-not-allowed font-mono"
+                placeholder="Auto-generated"
               />
               {showVoucherDropdown && (
                 <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-60 overflow-y-auto">
-                  {filteredSales.map((b) => (
+                  {allSales.map((b) => (
                     <div
                       key={b.id}
                       onMouseDown={() => {
@@ -639,7 +722,7 @@ export function SalesPage() {
                       <span className="text-xs text-muted-foreground">{b.date}</span>
                     </div>
                   ))}
-                  {filteredSales.length === 0 && (
+                  {allSales.length === 0 && (
                     <div className="px-3 py-2 text-xs text-muted-foreground text-center">
                       No matching vouchers found
                     </div>
@@ -698,9 +781,46 @@ export function SalesPage() {
               <label className="text-xs font-semibold text-slate-500">Delivered to</label>
               <Input value={deliveredTo} onChange={(e) => setDeliveredToDirty(e.target.value)} />
             </div>
-            <div className="space-y-1">
+            <div className="space-y-1 relative">
               <label className="text-xs font-semibold text-slate-500">Vehicle No.</label>
-              <Input value={vehicleNo} onChange={(e) => setVehicleNoDirty(e.target.value)} />
+              <Input
+                value={vehicleNo}
+                onChange={(e) => {
+                  setVehicleNoDirty(e.target.value);
+                  setShowVehicleDropdown(true);
+                }}
+                onFocus={() => setShowVehicleDropdown(true)}
+                onBlur={() => {
+                  setTimeout(() => setShowVehicleDropdown(false), 200);
+                }}
+                placeholder="e.g., MH-12-AB-1234"
+              />
+              {showVehicleDropdown && (
+                <div className="absolute z-[100] w-full mt-1 bg-popover text-popover-foreground border rounded-md shadow-md max-h-40 overflow-y-auto">
+                  {pastVehicles
+                    .filter((v) =>
+                      v.toLowerCase().includes(vehicleNo.toLowerCase())
+                    )
+                    .map((v) => (
+                      <div
+                        key={v}
+                        onMouseDown={() => {
+                          setVehicleNo(v);
+                          setIsDirty(true);
+                          setShowVehicleDropdown(false);
+                        }}
+                        className="px-3 py-2 text-sm cursor-pointer hover:bg-accent hover:text-accent-foreground"
+                      >
+                        {v}
+                      </div>
+                    ))}
+                  {pastVehicles.filter((v) => v.toLowerCase().includes(vehicleNo.toLowerCase())).length === 0 && (
+                    <div className="px-3 py-2 text-xs text-muted-foreground text-center">
+                      No matching vehicles
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
             <div className="space-y-1">
               <label className="text-xs font-semibold text-slate-500">Party Bill No.</label>
@@ -740,11 +860,11 @@ export function SalesPage() {
         </Card>
 
         <Card>
-          <CardHeader className="p-4 border-b flex flex-row justify-between items-center">
-            <CardTitle className="text-base font-bold uppercase tracking-wider text-muted-foreground">Patti Items</CardTitle>
+          <CardHeader className="p-4 border-b flex flex-row justify-between items-center h-14">
+            <CardTitle className="text-sm font-semibold uppercase tracking-wider text-slate-500">Patti Items</CardTitle>
             <div className="flex space-x-2">
-              <Button variant="outline" size="sm" onClick={addRow}>+ Add row</Button>
-              <Button variant="outline" size="sm" onClick={removeSelectedRow}>Remove</Button>
+              <Button variant="outline" size="sm" onClick={addRow} className="h-7 px-2.5 text-xs">+ Add row</Button>
+              <Button variant="outline" size="sm" onClick={removeSelectedRow} className="h-7 px-2.5 text-xs">Remove</Button>
             </div>
           </CardHeader>
           <CardContent className="p-4 space-y-4">
@@ -756,7 +876,7 @@ export function SalesPage() {
                     <TableHead>Book date</TableHead>
                     <TableHead>Patti no.</TableHead>
                     <TableHead>Patti date</TableHead>
-                    <TableHead className="w-20">Bags</TableHead>
+                    <TableHead className="w-20">Qty</TableHead>
                     <TableHead className="w-24">Patti wt.</TableHead>
                     <TableHead className="w-24">Patti freight</TableHead>
                     <TableHead className="w-24">Commission</TableHead>
@@ -860,22 +980,22 @@ export function SalesPage() {
                         <TableCell className="p-1">
                           <input
                             value={r.pattiFreight}
-                            onChange={(e) => setCell(rowIndex, "pattiFreight", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                            readOnly
+                            className="w-full bg-slate-50 cursor-not-allowed text-slate-600 border-0 rounded px-2 py-1 text-sm outline-none font-mono"
                           />
                         </TableCell>
                         <TableCell className="p-1">
                           <input
                             value={r.commission}
-                            onChange={(e) => setCell(rowIndex, "commission", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                            readOnly
+                            className="w-full bg-slate-50 cursor-not-allowed text-slate-600 border-0 rounded px-2 py-1 text-sm outline-none font-mono"
                           />
                         </TableCell>
                         <TableCell className="p-1">
                           <input
                             value={r.tdsPercent}
-                            onChange={(e) => setCell(rowIndex, "tdsPercent", sanitizeNumeric(e.target.value))}
-                            className="w-full bg-transparent border-0 focus:ring-1 focus:ring-ring rounded px-2 py-1 text-sm outline-none font-mono"
+                            readOnly
+                            className="w-full bg-slate-50 cursor-not-allowed text-slate-600 border-0 rounded px-2 py-1 text-sm outline-none font-mono"
                           />
                         </TableCell>
                         <TableCell className="text-right font-mono text-sm">{tds}</TableCell>

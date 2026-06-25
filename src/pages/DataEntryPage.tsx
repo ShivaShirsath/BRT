@@ -29,7 +29,6 @@ import {
   CheckSquare,
   Layers,
   ArrowUpCircle,
-  Users,
   Train,
   FileLock2,
   AppWindow,
@@ -77,6 +76,7 @@ export function DataEntryPage() {
     "Import Bills",
     "Billing Machine",
     "Barcode Stickers",
+    "Product Master",
     "Update Purchase",
     "Tally Export",
   ];
@@ -122,6 +122,7 @@ export function DataEntryPage() {
     { label: "Opening Stock Entry", icon: Layers, color: "text-yellow-600 bg-yellow-50 border-yellow-100" },
     { label: "Cash withdrawal", icon: ArrowUpCircle, color: "text-rose-600 bg-rose-50 border-rose-100" },
     { label: "Accounts Master", icon: UserPlus, color: "text-indigo-600 bg-indigo-50 border-indigo-100" },
+    { label: "Product Master", icon: Package, color: "text-blue-600 bg-blue-50 border-blue-100" },
     { label: "Railway Freight Entry", icon: Train, color: "text-amber-600 bg-amber-50 border-amber-100" },
     { label: "Customer Receipt", icon: Banknote, color: "text-teal-600 bg-teal-50 border-teal-100" },
     { label: "Release Records (LAN)", icon: FileLock2, color: "text-purple-600 bg-purple-50 border-purple-100" },
@@ -144,6 +145,7 @@ export function DataEntryPage() {
     if (title === "Customer Receipt") return "/customer-receipt";
     if (title === "Miscellaneous Receipt") return "/misc-receipt";
     if (title === "Payment Voucher") return "/payment-voucher";
+    if (title === "Product Master") return "/product-entry";
     if (title === "Exit") return "/menu";
     return null;
   }
@@ -232,8 +234,8 @@ export function DataEntryPage() {
                 <div
                   onClick={() => setExpandedSection(isExpanded ? "Primary" : section.id)}
                   className={`flex items-center justify-between px-3 py-2.5 rounded-lg text-sm font-bold cursor-pointer transition-colors ${isExpanded
-                      ? "bg-slate-100 text-[#1e293b] border border-slate-200"
-                      : "text-slate-600 hover:bg-slate-50"
+                    ? "bg-slate-100 text-[#1e293b] border border-slate-200"
+                    : "text-slate-600 hover:bg-slate-50"
                     }`}
                 >
                   <div className="flex items-center">
@@ -256,8 +258,8 @@ export function DataEntryPage() {
                           key={item}
                           onClick={() => handleItemAction(item)}
                           className={`text-xs py-1.5 px-3 rounded cursor-pointer font-medium transition-colors ${isSelected
-                              ? "bg-slate-200/60 text-[#1e3a8a] font-bold"
-                              : "text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50"
+                            ? "bg-slate-200/60 text-[#1e3a8a] font-bold"
+                            : "text-slate-600 hover:text-[#1e3a8a] hover:bg-slate-50"
                             }`}
                         >
                           {item}

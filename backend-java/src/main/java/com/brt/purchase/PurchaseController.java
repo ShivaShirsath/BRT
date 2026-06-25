@@ -52,4 +52,10 @@ public class PurchaseController {
       "amount", p.getCharges() != null ? p.getCharges().getNetTotal() : null
     )).toList());
   }
+
+  @GetMapping("/vehicles")
+  public java.util.List<String> getVehicles(@AuthenticationPrincipal JwtPrincipal principal) {
+    if (principal == null) throw new IllegalArgumentException("Unauthorized");
+    return purchaseService.getUniqueVehicleNumbers();
+  }
 }

@@ -2,6 +2,7 @@ package com.brt.purchase;
 
 import com.brt.product.Product;
 import com.brt.product.ProductRepository;
+import com.brt.sales.SalePattiRepository;
 import com.brt.security.JwtPrincipal;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,10 +16,12 @@ import java.util.List;
 public class PurchaseService {
   private final PurchaseBillRepository purchases;
   private final ProductRepository productRepository;
+  private final SalePattiRepository salePattiRepository;
 
-  public PurchaseService(PurchaseBillRepository purchases, ProductRepository productRepository) {
+  public PurchaseService(PurchaseBillRepository purchases, ProductRepository productRepository, SalePattiRepository salePattiRepository) {
     this.purchases = purchases;
     this.productRepository = productRepository;
+    this.salePattiRepository = salePattiRepository;
   }
 
   public PurchaseBill create(JwtPrincipal principal, PurchaseRequest req) {
@@ -234,5 +237,13 @@ public class PurchaseService {
 
   public List<PurchaseBill> getAll() {
     return purchases.findAllByOrderByCreatedAtDesc();
+  }
+
+  public java.util.List<String> getUniqueVehicleNumbers() {
+    java.util.Set<String> vehicles = new java.util.TreeSet<>(String.CASE_INSENSITIVE_ORDER);
+    vehicles.addAll(purchases.findDistinctVehicleNumbers());
+    vehicles.addAll(salePattiRepository.findDistinctVehicleNumbers());
+    vehicles.removeIf(v -> v == null || v.trim().isEmpty() || "--".equals(v.trim()));
+    return new java.util.ArrayList<>(vehicles);
   }
 }
